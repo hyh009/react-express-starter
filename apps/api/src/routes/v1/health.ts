@@ -20,7 +20,7 @@ const router = Router();
  *                   type: string
  *                   example: ok
  */
-router.get('/health', (req, res) => {
+router.get('/', (req, res) => {
   res.json({ status: 'ok' });
 });
 
