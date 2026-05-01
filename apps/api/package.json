@@ -8,7 +8,10 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc && tsc-alias",
     "lint": "eslint \"src/**/*.ts\"",
-    "lint:fix": "eslint \"src/**/*.ts\" --fix"
+    "lint:fix": "eslint \"src/**/*.ts\" --fix",
+    "up": "docker compose -f docker/docker-compose.mongo.yml -f docker/docker-compose.redis.yml up -d",
+    "down": "docker compose down",
+    "logs": "docker compose logs -f"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +21,8 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "mongoose": "^9.6.1",
+    "redis": "^5.12.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
