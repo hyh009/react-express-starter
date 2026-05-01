@@ -1,4 +1,5 @@
 // apps/api/src/routes/v1/health.ts
+import { healthService } from '@src/services/health.service';
 import { Router } from 'express';
 
 const router = Router();
@@ -20,8 +21,9 @@ const router = Router();
  *                   type: string
  *                   example: ok
  */
-router.get('/', (req, res) => {
-  res.json({ status: 'ok' });
+router.get('/', async (req, res) => {
+  const status = await healthService.getHealthStatus();
+  res.json(status);
 });
 
 export default router;
