@@ -1,5 +1,5 @@
-import routes from '@src/routes';
 import { errorHandler } from '@src/middlewares/error';
+import routes from '@src/routes';
 import { NotFoundError } from '@src/utils/errors';
 import { setupSwagger } from '@src/utils/swagger';
 import cors from 'cors';
