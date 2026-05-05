@@ -1,116 +1,138 @@
-# 🚀 Node.js Monorepo Starter (Express + TypeScript)
+# Node.js Monorepo Starter
 
-A minimal **backend starter template** using:
+Backend starter template using Express, TypeScript, and pnpm workspaces.
 
-- Express
-- TypeScript
-- pnpm workspace (monorepo)
-- Modular routing with API versioning
+## Features
 
----
+- Express API with versioned routes under `/api/v1`
+- TypeScript with `NodeNext` module resolution
+- Path alias support with `@src/*`
+- MongoDB and Redis Docker Compose setup
+- Centralized environment validation with Zod
+- Structured logging with Pino
+- Request ID and request completion logging middleware
+- Centralized `AppError` error handling
+- Swagger/OpenAPI documentation
+- Basic API security middleware with Helmet, CORS, cookie parsing, and JSON body limits
+- Vitest and Supertest API test setup
 
-## 📦 Features
+## Project Structure
 
-- 🧱 Clean folder structure
-- 🔀 Versioned API (`/api/v1`)
-- ⚡ Fast dev with `tsx`
-- 🔧 Path alias support (`@src/*`)
-- 📁 Ready for scaling (service / repo layer)
-
----
-
-## 📁 Project Structure
-
-```
+```txt
 .
 ├─ apps/
 │  └─ api/
+│     ├─ docker/
 │     ├─ src/
+│     │  ├─ config/
+│     │  ├─ middlewares/
 │     │  ├─ routes/
-│     │  │  ├─ index.ts
-│     │  │  └─ v1/
-│     │  │     ├─ index.ts
-│     │  │     └─ health.ts
-│     │  ├─ server.ts
-│     │  └─ ...
-│     ├─ tsconfig.json
-│     └─ package.json
+│     │  ├─ services/
+│     │  ├─ types/
+│     │  └─ utils/
+│     ├─ tests/
+│     ├─ package.json
+│     └─ tsconfig.json
+├─ docs/
+│  └─ agent/
 ├─ package.json
+├─ pnpm-lock.yaml
 ├─ pnpm-workspace.yaml
 └─ README.md
 ```
 
----
+## Getting Started
 
-## 🚀 Getting Started
+Install dependencies:
 
-### Install dependencies
-
-```
+```bash
 pnpm install
 ```
 
----
+Create the API environment file:
 
-### Start development server
-
+```bash
+cp apps/api/.env.example apps/api/.env
 ```
+
+Start MongoDB and Redis:
+
+```bash
+pnpm --filter api up
+```
+
+Start the API development server:
+
+```bash
 pnpm --filter api dev
 ```
 
----
+Test the health endpoint:
 
-### Test API
-
-```
-curl http://localhost:3001/api/v1/health
+```bash
+curl http://localhost:9000/api/v1/health
 ```
 
----
+Open Swagger docs:
 
-## ⚙️ Available Scripts (API)
-
-```json
-{
-  "dev": "tsx watch src/server.ts",
-  "build": "tsc && tsc-alias",
-  "start": "node dist/server.js"
-}
+```txt
+http://localhost:9000/docs
 ```
 
----
+## API Scripts
 
-## 🌐 API Structure
+Run commands from the repository root:
 
+```bash
+pnpm --filter api dev
+pnpm --filter api build
+pnpm --filter api lint
+pnpm --filter api lint:fix
+pnpm --filter api test
+pnpm --filter api test:watch
+pnpm --filter api up
+pnpm --filter api down
+pnpm --filter api logs
 ```
-/api → /v1 → /health
+
+## Environment Variables
+
+The API validates environment variables on startup.
+
+Create `apps/api/.env` from `apps/api/.env.example`:
+
+```env
+NODE_ENV=development
+PORT=9000
+LOG_LEVEL=info
+CORS_ORIGIN=http://localhost:5173
+MONGODB_URI=mongodb://mongo:27017/app_db?replicaSet=rs0
+REDIS_URL=redis://localhost:6379
+```
+
+## API Routes
+
+```txt
+/api
+└─ /v1
+   └─ /health
 ```
 
 Example:
 
-```
+```txt
 GET /api/v1/health
 ```
 
----
+## Path Alias
 
-## 🔧 Environment Variables
-
-Create `.env` inside `apps/api`:
-
-```env
-PORT=3001
-```
-
----
-
-## 🛠 Path Alias
+Use `@src/*` for API source imports:
 
 ```ts
-import routes from "@src/routes";
+import routes from '@src/routes';
 ```
 
-Configured in `tsconfig.json`:
+Configured in `apps/api/tsconfig.json`:
 
 ```json
 "paths": {
