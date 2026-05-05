@@ -1,10 +1,12 @@
 # Node.js Monorepo Starter
 
-Backend starter template using Express, TypeScript, and pnpm workspaces.
+Full-stack starter template using React, Vite, Express, TypeScript, and pnpm workspaces.
 
 ## Features
 
 - Express API with versioned routes under `/api/v1`
+- React frontend powered by Vite and TypeScript
+- Frontend structure for app composition, layout components, pages, and API services
 - TypeScript with `NodeNext` module resolution
 - Path alias support with `@src/*`
 - MongoDB and Redis Docker Compose setup
@@ -21,18 +23,28 @@ Backend starter template using Express, TypeScript, and pnpm workspaces.
 ```txt
 .
 ├─ apps/
-│  └─ api/
-│     ├─ docker/
+│  ├─ api/
+│  │  ├─ docker/
+│  │  ├─ src/
+│  │  │  ├─ config/
+│  │  │  ├─ middlewares/
+│  │  │  ├─ routes/
+│  │  │  ├─ services/
+│  │  │  ├─ types/
+│  │  │  └─ utils/
+│  │  ├─ tests/
+│  │  ├─ package.json
+│  │  └─ tsconfig.json
+│  └─ web/
+│     ├─ public/
 │     ├─ src/
-│     │  ├─ config/
-│     │  ├─ middlewares/
-│     │  ├─ routes/
+│     │  ├─ app/
+│     │  ├─ components/
+│     │  ├─ pages/
 │     │  ├─ services/
-│     │  ├─ types/
-│     │  └─ utils/
-│     ├─ tests/
+│     │  └─ styles/
 │     ├─ package.json
-│     └─ tsconfig.json
+│     └─ vite.config.ts
 ├─ docs/
 │  └─ agent/
 ├─ package.json
@@ -55,6 +67,12 @@ Create the API environment file:
 cp apps/api/.env.example apps/api/.env
 ```
 
+Create the web environment file:
+
+```bash
+cp apps/web/.env.example apps/web/.env
+```
+
 Start MongoDB and Redis:
 
 ```bash
@@ -65,6 +83,18 @@ Start the API development server:
 
 ```bash
 pnpm --filter api run dev
+```
+
+Start the web development server:
+
+```bash
+pnpm --filter web run dev
+```
+
+Start all development servers:
+
+```bash
+pnpm run dev
 ```
 
 Test the health endpoint:
@@ -79,20 +109,22 @@ Open Swagger docs:
 http://localhost:9000/docs
 ```
 
-## API Scripts
+## Workspace Scripts
 
 Run commands from the repository root:
 
 ```bash
+pnpm run dev
+pnpm run build
+pnpm run lint
+pnpm run test
+```
+
+Run a command for one package:
+
+```bash
 pnpm --filter api run dev
-pnpm --filter api run build
-pnpm --filter api run lint
-pnpm --filter api run lint:fix
-pnpm --filter api run test
-pnpm --filter api run test:watch
-pnpm --filter api run up
-pnpm --filter api run down
-pnpm --filter api run logs
+pnpm --filter web run dev
 ```
 
 ## Environment Variables
@@ -108,6 +140,12 @@ LOG_LEVEL=info
 CORS_ORIGIN=http://localhost:5173
 MONGODB_URI=mongodb://localhost:27017/app_db?replicaSet=rs0
 REDIS_URL=redis://localhost:6379
+```
+
+The web app reads its API base URL from `apps/web/.env`:
+
+```env
+VITE_API_BASE_URL=http://localhost:9000
 ```
 
 ## API Routes
