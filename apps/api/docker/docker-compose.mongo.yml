@@ -10,7 +10,7 @@ services:
         echo "try { rs.status() } catch (e) {
           rs.initiate({
             _id: 'rs0',
-            members: [{ _id: 0, host: 'mongo:27017' }]
+            members: [{ _id: 0, host: 'localhost:27017' }]
           })
         }" | mongosh --port 27017 --quiet
       interval: 5s
