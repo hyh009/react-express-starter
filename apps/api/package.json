@@ -11,8 +11,8 @@
     "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" \"vitest.config.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
     "up": "docker compose -f docker/docker-compose.mongo.yml -f docker/docker-compose.redis.yml up -d",
-    "down": "docker compose down",
-    "logs": "docker compose logs -f"
+    "down": "docker compose -f docker/docker-compose.mongo.yml -f docker/docker-compose.redis.yml down",
+    "logs": "docker compose -f docker/docker-compose.mongo.yml -f docker/docker-compose.redis.yml logs -f"
   },
   "keywords": [],
   "author": "",
@@ -29,7 +29,7 @@
     "redis": "^5.12.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "zod": "^4.4.1"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
