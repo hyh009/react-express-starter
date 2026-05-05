@@ -98,9 +98,9 @@ If new test paths are added, make sure TypeScript and ESLint still include them.
 Run:
 
 ```bash
-pnpm --filter api test
-pnpm --filter api lint
-pnpm --filter api build
+pnpm --filter api run test
+pnpm --filter api run lint
+pnpm --filter api run build
 ```
 
 `supertest` may require permission to open a local ephemeral listener in sandboxed environments.

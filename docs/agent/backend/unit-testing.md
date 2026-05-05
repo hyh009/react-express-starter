@@ -59,7 +59,7 @@ Do not use real secrets in tests.
 Run:
 
 ```bash
-pnpm --filter api test
-pnpm --filter api lint
-pnpm --filter api build
+pnpm --filter api run test
+pnpm --filter api run lint
+pnpm --filter api run build
 ```

@@ -58,13 +58,13 @@ cp apps/api/.env.example apps/api/.env
 Start MongoDB and Redis:
 
 ```bash
-pnpm --filter api up
+pnpm --filter api run up
 ```
 
 Start the API development server:
 
 ```bash
-pnpm --filter api dev
+pnpm --filter api run dev
 ```
 
 Test the health endpoint:
@@ -84,15 +84,15 @@ http://localhost:9000/docs
 Run commands from the repository root:
 
 ```bash
-pnpm --filter api dev
-pnpm --filter api build
-pnpm --filter api lint
-pnpm --filter api lint:fix
-pnpm --filter api test
-pnpm --filter api test:watch
-pnpm --filter api up
-pnpm --filter api down
-pnpm --filter api logs
+pnpm --filter api run dev
+pnpm --filter api run build
+pnpm --filter api run lint
+pnpm --filter api run lint:fix
+pnpm --filter api run test
+pnpm --filter api run test:watch
+pnpm --filter api run up
+pnpm --filter api run down
+pnpm --filter api run logs
 ```
 
 ## Environment Variables
