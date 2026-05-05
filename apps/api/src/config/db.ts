@@ -1,34 +1,25 @@
 import mongoose from 'mongoose';
 import { createClient } from 'redis';
 
+import { env } from './env.js';
+import { logger } from '../utils/logger.js';
+
 export async function connectMongo() {
-  const uri = process.env.MONGODB_URI;
+  await mongoose.connect(env.MONGODB_URI);
 
-  if (!uri) {
-    throw new Error('MONGODB_URI is not defined');
-  }
-
-  await mongoose.connect(uri);
-
-  console.log('MongoDB connected');
+  logger.info('mongodb connected');
 }
 
 export async function connectRedis() {
-  const url = process.env.REDIS_URL;
-
-  if (!url) {
-    throw new Error('REDIS_URL is not defined');
-  }
-
-  const redisClient = createClient({ url });
+  const redisClient = createClient({ url: env.REDIS_URL });
 
   redisClient.on('error', (error) => {
-    console.error('Redis error:', error);
+    logger.error({ err: error }, 'redis error');
   });
 
   await redisClient.connect();
 
-  console.log('Redis connected');
+  logger.info('redis connected');
 
   return redisClient;
 }
