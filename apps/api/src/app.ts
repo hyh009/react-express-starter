@@ -1,19 +1,24 @@
+import { corsOptions } from '@src/config/cors';
 import { errorHandler } from '@src/middlewares/error';
 import { requestId } from '@src/middlewares/requestId';
 import { requestLogger } from '@src/middlewares/requestLogger';
 import routes from '@src/routes';
 import { NotFoundError } from '@src/utils/errors';
 import { setupSwagger } from '@src/utils/swagger';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import helmet from 'helmet';
 
 export function createApp() {
   const app = express();
 
   app.use(requestId);
   app.use(requestLogger);
-  app.use(cors());
-  app.use(express.json());
+  app.use(helmet());
+  app.use(cors(corsOptions));
+  app.use(cookieParser());
+  app.use(express.json({ limit: '1mb' }));
 
   setupSwagger(app);
 
