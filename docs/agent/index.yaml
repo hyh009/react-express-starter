@@ -43,6 +43,10 @@ agent_docs:
       path: docs/agent/backend/mongo-schema.md
       use_when: Adding or changing persistent MongoDB data.
 
+    - name: backend-repository
+      path: docs/agent/backend/repository.md
+      use_when: Adding or changing backend data access.
+
     - name: backend-api-testing
       path: docs/agent/backend/api-testing.md
       use_when: Adding or updating backend API integration tests.

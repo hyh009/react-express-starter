@@ -46,9 +46,15 @@ Route handler
   v
 Service
   |
-  +--> models / MongoDB
+  +--> repository
   +--> Redis
   +--> external integrations
+  |
+  v
+Repository
+  |
+  +--> memory / local data
+  +--> MongoDB model
   |
   v
 Response
@@ -93,8 +99,11 @@ Versioned routes
 Business logic
   -> src/services
 
-MongoDB models
-  -> src/models
+Domain and MongoDB models
+  -> src/models/<domain>
+
+Data access
+  -> src/repositories/<domain>
 
 Shared backend utilities
   -> src/utils
@@ -116,6 +125,14 @@ apps/api/
     config/
     middlewares/
     models/
+      <domain>/
+        model.ts
+        mongo.ts
+    repositories/
+      <domain>/
+        repository.ts
+        memory.repository.ts
+        mongo.repository.ts
     routes/
       index.ts
       v1/
@@ -130,4 +147,6 @@ apps/api/
     <feature>.test.ts
 ```
 
-Create `src/models` when the first persistent MongoDB model is added.
+Create `src/models/<domain>` when the first model for a domain is added.
+
+Create `src/repositories/<domain>` when the feature reads or writes data.

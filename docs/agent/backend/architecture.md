@@ -21,6 +21,8 @@ apps/api/src/
   server.ts
   config/
   middlewares/
+  models/
+  repositories/
   routes/
     index.ts
     v1/
@@ -33,6 +35,9 @@ Use these locations:
 
 - `config/` for environment, database, CORS, and infrastructure configuration
 - `middlewares/` for Express middleware
+- `models/<domain>/model.ts` for domain model types and constants
+- `models/<domain>/mongo.ts` for Mongo/Mongoose schema and model
+- `repositories/<domain>/` for data access contracts and implementations
 - `routes/v1/` for versioned API routes
 - `services/` for business logic and data access orchestration
 - `utils/` for shared backend utilities such as errors, logging, Swagger, and error mapping
@@ -52,7 +57,7 @@ Use these locations:
 
 - Put backend business logic in `src/services`.
 - Use factory functions when a service needs testable dependencies.
-- Services may call models, Redis clients, external integrations, and utility functions.
+- Services may call repositories, Redis clients, external integrations, and utility functions.
 - Services should not start HTTP listeners or depend on Express request/response objects unless the behavior is middleware-specific.
 
 ## Persistence
@@ -60,6 +65,8 @@ Use these locations:
 When a feature stores or changes persistent data, define the schema before route implementation.
 
 Follow `docs/agent/backend/mongo-schema.md`.
+
+Use `docs/agent/backend/repository.md` when a feature reads or writes data.
 
 ## Environment
 

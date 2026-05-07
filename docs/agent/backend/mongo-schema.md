@@ -15,20 +15,20 @@ This starter guide contains common schema rules only. If project-specific schema
 
 ## Model Location
 
-Place backend models under:
+Use one folder per domain:
 
 ```txt
-apps/api/src/models
+apps/api/src/models/<domain>/
+  model.ts
+  mongo.ts
 ```
 
-Use one model file per domain resource:
+Use:
 
-```txt
-apps/api/src/models/user.model.ts
-apps/api/src/models/todo.model.ts
-```
+- `model.ts` for domain types, constants, and helpers. It must not import `mongoose`.
+- `mongo.ts` for Mongo/Mongoose schema and model. It may import `mongoose`.
 
-Create the folder when the first persistent model is added.
+Create the domain model folder when the first model for that domain is added.
 
 ## Schema Design
 
@@ -102,6 +102,7 @@ Keep the diagram focused on persistent data structure. Do not include every help
 - Do not expose raw database documents directly when the API shape should be stable.
 - Convert documents to API DTOs when fields need renaming, hiding, formatting, or computed values.
 - Do not expose internal fields such as version keys, deleted markers, or sensitive values unless they are part of the public contract.
+- Keep Mongo document types separate from domain/API-facing types.
 
 ## Tests
 
