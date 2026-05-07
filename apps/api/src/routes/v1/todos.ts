@@ -161,6 +161,33 @@ type UpdateTodoRequest = z.infer<typeof updateTodoSchema>;
  *             id:
  *               type: string
  *               example: todo-1
+ *     ApiErrorCode:
+ *       type: string
+ *       enum:
+ *         - BAD_REQUEST
+ *         - UNAUTHORIZED
+ *         - FORBIDDEN
+ *         - NOT_FOUND
+ *         - CONFLICT
+ *         - INTERNAL_SERVER_ERROR
+ *         - VALIDATION_ERROR
+ *         - INVALID_ID
+ *         - INVALID_FIELD_VALUE
+ *         - RESOURCE_ALREADY_EXISTS
+ *         - TODO_NOT_FOUND
+ *       example: TODO_NOT_FOUND
+ *     ValidationErrorDetail:
+ *       type: object
+ *       required:
+ *         - path
+ *         - message
+ *       properties:
+ *         path:
+ *           type: string
+ *           example: title
+ *         message:
+ *           type: string
+ *           example: 'Invalid input: expected string, received undefined'
  *     ErrorResponse:
  *       type: object
  *       required:
@@ -178,11 +205,17 @@ type UpdateTodoRequest = z.infer<typeof updateTodoSchema>;
  *           type: integer
  *           example: 404
  *         code:
- *           type: string
- *           example: TODO_NOT_FOUND
+ *           $ref: '#/components/schemas/ApiErrorCode'
  *         message:
  *           type: string
  *           example: Todo not found
+ *         details:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/ValidationErrorDetail'
+ *           example:
+ *             - path: title
+ *               message: 'Invalid input: expected string, received undefined'
  */
 
 /**
@@ -234,6 +267,14 @@ router.get('/', async (_req, res) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               todoNotFound:
+ *                 summary: Todo does not exist
+ *                 value:
+ *                   status: error
+ *                   statusCode: 404
+ *                   code: TODO_NOT_FOUND
+ *                   message: Todo not found
  */
 router.get<TodoParams>(
   '/:todoId',
@@ -274,6 +315,23 @@ router.get<TodoParams>(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               validationError:
+ *                 summary: Request body failed validation
+ *                 value:
+ *                   status: error
+ *                   statusCode: 400
+ *                   code: VALIDATION_ERROR
+ *                   message: Invalid request body
+ *                   details:
+ *                     - path: title
+ *                       message: 'Invalid input: expected string, received undefined'
+ *                     - path: status
+ *                       message: 'Invalid option: expected one of "todo"|"in-progress"|"done"'
+ *                     - path: priority
+ *                       message: 'Invalid option: expected one of "low"|"medium"|"high"'
+ *                     - path: owner_name
+ *                       message: 'Invalid input: expected string, received undefined'
  */
 router.post<Record<string, never>, Record<string, unknown>, CreateTodoRequest>('/', validate(createTodoSchema), async (req, res) => {
   res.status(201).json({
@@ -315,12 +373,31 @@ router.post<Record<string, never>, Record<string, unknown>, CreateTodoRequest>('
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               validationError:
+ *                 summary: Request body failed validation
+ *                 value:
+ *                   status: error
+ *                   statusCode: 400
+ *                   code: VALIDATION_ERROR
+ *                   message: Invalid request body
+ *                   details:
+ *                     - path: status
+ *                       message: 'Invalid option: expected one of "todo"|"in-progress"|"done"'
  *       404:
  *         description: Todo not found
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               todoNotFound:
+ *                 summary: Todo does not exist
+ *                 value:
+ *                   status: error
+ *                   statusCode: 404
+ *                   code: TODO_NOT_FOUND
+ *                   message: Todo not found
  */
 router.patch<TodoParams, Record<string, unknown>, UpdateTodoRequest>(
   '/:todoId',
@@ -363,6 +440,14 @@ router.patch<TodoParams, Record<string, unknown>, UpdateTodoRequest>(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               todoNotFound:
+ *                 summary: Todo does not exist
+ *                 value:
+ *                   status: error
+ *                   statusCode: 404
+ *                   code: TODO_NOT_FOUND
+ *                   message: Todo not found
  */
 router.delete<TodoParams>(
   '/:todoId',

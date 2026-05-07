@@ -51,6 +51,10 @@ agent_docs:
       path: docs/agent/backend/repository.md
       use_when: Adding or changing backend data access.
 
+    - name: backend-swagger
+      path: docs/agent/backend/swagger.md
+      use_when: Adding or changing backend API route documentation.
+
     - name: backend-api-testing
       path: docs/agent/backend/api-testing.md
       use_when: Adding or updating backend API integration tests.

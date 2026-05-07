@@ -20,7 +20,7 @@ Use this guide when a new feature adds or changes backend behavior in `apps/api`
 
 - Follow `docs/agent/backend/architecture.md`.
 - Add new feature routes under `apps/api/src/routes/v1`.
-- Update Swagger/OpenAPI docs when adding or changing API routes.
+- Update Swagger/OpenAPI docs with `docs/agent/backend/swagger.md`.
 - Validate API request params, query, and body with Zod.
 - Avoid `any` unless third-party library types make a narrower type impractical.
 - Follow backend error handling and logging docs when adding or changing behavior.
@@ -46,6 +46,7 @@ Use this guide when a new feature adds or changes backend behavior in `apps/api`
 - `docs/agent/backend/architecture.md`
 - `docs/agent/backend/mongo-schema.md`
 - `docs/agent/backend/repository.md`
+- `docs/agent/backend/swagger.md`
 - `docs/agent/backend/api-testing.md`
 - `docs/agent/backend/unit-testing.md`
 - `docs/agent/backend/error-handling.md`
