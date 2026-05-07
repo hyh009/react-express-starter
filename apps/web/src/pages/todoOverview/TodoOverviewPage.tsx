@@ -43,7 +43,7 @@ export function TodoOverviewPage({ onOpenTodo }: TodoOverviewPageProps) {
           >
             <span>
               <strong>{todo.title}</strong>
-              <small>{todo.owner}</small>
+              <small>{todo.ownerName}</small>
             </span>
             <TodoStatusBadge status={todo.status} />
           </button>

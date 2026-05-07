@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { TodoStatusBadge } from '@/features/todo/components/TodoStatusBadge'
+import { todoModel } from '@/models/todo.model'
 import { LoadingState } from '@/shared/components/LoadingState'
 import { useTodoDetailPageVM } from './useTodoDetailPageVM'
 
@@ -40,7 +41,7 @@ export function TodoDetailPage({ todoId, onBack }: TodoDetailPageProps) {
           <dl className="detail-list">
             <div>
               <dt>Owner</dt>
-              <dd>{vm.todo.owner}</dd>
+              <dd>{todoModel.getOwnerLabel(vm.todo)}</dd>
             </div>
             <div>
               <dt>Priority</dt>

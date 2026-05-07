@@ -1,6 +1,8 @@
+import { todoModel } from '@/models/todo.model'
 import type { Todo } from '@/models/todo.types'
+import type { TodoDto } from '@/models/todo.types'
 
-const todos: Todo[] = [
+const todoDtos: TodoDto[] = [
   {
     id: 'design-frontend-architecture',
     title: 'Design frontend architecture',
@@ -8,7 +10,7 @@ const todos: Todo[] = [
       'Document the React, Zustand, VM hook, store, and service boundaries for future agents.',
     status: 'done',
     priority: 'high',
-    owner: 'Frontend',
+    owner_name: 'Frontend',
   },
   {
     id: 'build-todo-overview',
@@ -17,7 +19,7 @@ const todos: Todo[] = [
       'Create a small domain feature that demonstrates page VM hooks and feature-level state.',
     status: 'in-progress',
     priority: 'medium',
-    owner: 'Frontend',
+    owner_name: 'Frontend',
   },
   {
     id: 'connect-health-api',
@@ -26,7 +28,7 @@ const todos: Todo[] = [
       'Expose the API base URL and health endpoint from the frontend API layer.',
     status: 'todo',
     priority: 'low',
-    owner: 'Full stack',
+    owner_name: 'Full stack',
   },
 ]
 
@@ -39,11 +41,18 @@ function wait(ms: number) {
 export const todoService = {
   async listTodos() {
     await wait(180)
-    return todos
+    return todoDtos.map(todoModel.deserialize)
   },
 
   async getTodo(todoId: string) {
     await wait(120)
-    return todos.find((todo) => todo.id === todoId) ?? null
+    const todoDto = todoDtos.find((todo) => todo.id === todoId)
+
+    return todoDto ? todoModel.deserialize(todoDto) : null
+  },
+
+  async saveTodo(todo: Todo) {
+    await wait(180)
+    return todoModel.serialize(todo)
   },
 }

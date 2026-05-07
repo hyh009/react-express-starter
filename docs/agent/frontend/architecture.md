@@ -196,6 +196,14 @@ Backend models are centralized under `apps/api/src/models`.
 
 Do not put model/type files inside feature folders.
 
+Model files may contain pure helpers for API DTO conversion and computed values:
+
+- deserialize API DTOs into frontend models
+- serialize frontend models into API request payloads
+- compute display labels or other derived values
+
+Stores should keep frontend models, not raw API DTOs.
+
 ## Components
 
 Place components by ownership:
