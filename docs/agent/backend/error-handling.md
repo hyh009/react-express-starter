@@ -112,7 +112,8 @@ if (err instanceof ZodError) {
   "status": "error",
   "statusCode": 400,
   "code": "BAD_REQUEST",
-  "message": "Bad request"
+  "message": "Bad request",
+  "details": []
 }
 ```
 
@@ -125,6 +126,7 @@ if (err instanceof ZodError) {
 ```txt
 message → for humans
 code    → for frontend / client logic
+details → optional structured error information (e.g. validation details)
 ```
 
 HTTP status code and application error code have different jobs:

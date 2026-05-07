@@ -49,7 +49,8 @@ Use these locations:
 - Add new feature routes under `src/routes/v1`.
 - Register new route modules in `src/routes/v1/index.ts`.
 - Keep route handlers thin.
-- Route handlers may parse request input, call services, and send responses.
+- Use `validate` middleware for request validation.
+- Route handlers may call services and send responses.
 - Put meaningful branching, persistence, transformations, and permission checks in services.
 - Use existing error helpers and the global error handler instead of ad hoc error responses.
 

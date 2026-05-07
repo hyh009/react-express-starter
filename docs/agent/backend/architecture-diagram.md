@@ -41,6 +41,9 @@ Middleware
 /api routes
   |
   v
+validate (Optional)
+  |
+  v
 Route handler
   |
   v
