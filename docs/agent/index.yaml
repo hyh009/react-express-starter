@@ -75,3 +75,7 @@ agent_docs:
     - name: frontend-architecture-diagram
       path: docs/agent/frontend/architecture-diagram.md
       use_when: Understanding frontend architecture flow visually.
+
+    - name: frontend-error-feedback
+      path: docs/agent/frontend/error-feedback.md
+      use_when: Handling frontend API errors, toast feedback, or shared modal behavior.
