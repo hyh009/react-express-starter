@@ -55,7 +55,19 @@ For API development dependencies:
 pnpm --filter api add -D <package>
 ```
 
-This updates `apps/api/package.json` and the root `pnpm-lock.yaml`.
+For Web runtime dependencies:
+
+```bash
+pnpm --filter web add <package>
+```
+
+For Web development dependencies:
+
+```bash
+pnpm --filter web add -D <package>
+```
+
+This updates the matching package `package.json` and the root `pnpm-lock.yaml`.
 
 ## Running API Scripts
 

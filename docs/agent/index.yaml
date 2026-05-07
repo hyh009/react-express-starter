@@ -1,0 +1,69 @@
+agent_docs:
+  workflows:
+    new_feature:
+      - name: new-feature
+        path: docs/agent/workflows/new-feature/new-feature.md
+        use_when: Adding or extending a feature.
+
+      - name: backend-feature
+        path: docs/agent/workflows/new-feature/backend-feature.md
+        use_when: Backend slice of a new feature.
+
+      - name: frontend-feature
+        path: docs/agent/workflows/new-feature/frontend-feature.md
+        use_when: Frontend slice of a new feature.
+
+    shared:
+      - name: verification
+        path: docs/agent/workflows/verification.md
+        use_when: Before finishing code or documentation changes.
+
+      - name: git-commits
+        path: docs/agent/workflows/git-commits.md
+        use_when: Only when the user explicitly asks for a commit.
+
+      - name: feature-docs
+        path: docs/agent/workflows/feature-docs.md
+        use_when: Creating or updating docs/features files.
+
+  backend:
+    - name: backend-architecture
+      path: docs/agent/backend/architecture.md
+      use_when: Adding or updating backend code.
+
+    - name: backend-architecture-diagram
+      path: docs/agent/backend/architecture-diagram.md
+      use_when: Understanding backend architecture flow visually.
+
+    - name: mongo-schema
+      path: docs/agent/backend/mongo-schema.md
+      use_when: Adding or changing persistent MongoDB data.
+
+    - name: backend-api-testing
+      path: docs/agent/backend/api-testing.md
+      use_when: Adding or updating backend API integration tests.
+
+    - name: backend-unit-testing
+      path: docs/agent/backend/unit-testing.md
+      use_when: Adding or updating backend unit tests.
+
+    - name: backend-error-handling
+      path: docs/agent/backend/error-handling.md
+      use_when: Changing backend error responses or error middleware behavior.
+
+    - name: backend-throwing-errors
+      path: docs/agent/backend/throwing-errors.md
+      use_when: Throwing or mapping backend errors.
+
+    - name: backend-logging
+      path: docs/agent/backend/logging.md
+      use_when: Changing backend logging or request logging behavior.
+
+  frontend:
+    - name: frontend-architecture
+      path: docs/agent/frontend/architecture.md
+      use_when: Adding or updating frontend code.
+
+    - name: frontend-architecture-diagram
+      path: docs/agent/frontend/architecture-diagram.md
+      use_when: Understanding frontend architecture flow visually.
