@@ -82,4 +82,8 @@ agent_docs:
 
     - name: frontend-error-feedback
       path: docs/agent/frontend/error-feedback.md
-      use_when: Handling frontend API errors, toast feedback, or shared modal behavior.
+      use_when: Handling frontend API errors and page/domain error state.
+
+    - name: frontend-shared-feedback-ui
+      path: docs/agent/frontend/shared-feedback-ui.md
+      use_when: Adding or updating frontend toast, modal, or confirm feedback behavior.
