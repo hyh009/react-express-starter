@@ -15,6 +15,10 @@ export function mapToAppError(err: unknown): AppError | unknown {
     return new BadRequestError(
       'Invalid request body',
       ERROR_CODES.VALIDATION_ERROR,
+      err.issues.map((issue) => ({
+        path: issue.path.join('.'),
+        message: issue.message,
+      })),
     );
   }
 

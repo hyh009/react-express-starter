@@ -151,6 +151,12 @@ describe('todos API', () => {
       statusCode: 400,
       code: 'VALIDATION_ERROR',
       message: 'Invalid request body',
+      details: expect.arrayContaining([
+        { path: 'title', message: 'Invalid input: expected string, received undefined' },
+        { path: 'status', message: 'Invalid option: expected one of "todo"|"in-progress"|"done"' },
+        { path: 'priority', message: 'Invalid option: expected one of "low"|"medium"|"high"' },
+        { path: 'owner_name', message: 'Invalid input: expected string, received undefined' },
+      ]),
     });
   });
 });

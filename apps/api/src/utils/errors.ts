@@ -9,6 +9,7 @@ export class AppError extends Error {
     public readonly statusCode: number,
     message: string,
     public readonly code: ErrorCode,
+    public readonly details?: unknown,
     isOperational = true,
   ) {
     super(message);
@@ -20,8 +21,12 @@ export class AppError extends Error {
 }
 
 export class BadRequestError extends AppError {
-  constructor(message = 'Bad request', code: ErrorCode = ERROR_CODES.BAD_REQUEST) {
-    super(400, message, code);
+  constructor(
+    message = 'Bad request',
+    code: ErrorCode = ERROR_CODES.BAD_REQUEST,
+    details?: unknown,
+  ) {
+    super(400, message, code, details);
   }
 }
 

@@ -61,6 +61,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
       statusCode,
       code: isAppError ? error.code : undefined,
       message: normalizedError.message,
+      details: isAppError ? error.details : undefined,
       stack: normalizedError.stack,
       error: normalizedError.raw,
     });
@@ -73,6 +74,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
       statusCode,
       code: error.code,
       message: error.message,
+      details: error.details,
     });
     return;
   }

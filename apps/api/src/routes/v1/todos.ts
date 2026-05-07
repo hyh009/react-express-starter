@@ -1,3 +1,4 @@
+import { validate } from '@src/middlewares/validate';
 import {
   todoPriorities,
   todoStatuses,
@@ -12,6 +13,8 @@ const todoParamsSchema = z.object({
   todoId: z.string().trim().min(1),
 });
 
+type TodoParams = z.infer<typeof todoParamsSchema>;
+
 const createTodoSchema = z.object({
   title: z.string().trim().min(1),
   description: z.string().trim().nullable().optional(),
@@ -20,10 +23,14 @@ const createTodoSchema = z.object({
   owner_name: z.string().trim().min(1),
 });
 
+type CreateTodoRequest = z.infer<typeof createTodoSchema>;
+
 const updateTodoSchema = createTodoSchema.partial().refine(
   (input) => Object.keys(input).length > 0,
   'At least one todo field is required',
 );
+
+type UpdateTodoRequest = z.infer<typeof updateTodoSchema>;
 
 /**
  * @openapi
@@ -228,14 +235,18 @@ router.get('/', async (_req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/:todoId', async (req, res) => {
-  const { todoId } = todoParamsSchema.parse(req.params);
+router.get<TodoParams>(
+  '/:todoId',
+  validate(todoParamsSchema, 'params'),
+  async (req, res) => {
+    const { todoId } = req.params;
 
-  res.json({
-    status: 'success',
-    data: await todoService.getTodo(todoId),
-  });
-});
+    res.json({
+      status: 'success',
+      data: await todoService.getTodo(todoId),
+    });
+  },
+);
 
 /**
  * @openapi
@@ -264,12 +275,10 @@ router.get('/:todoId', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/', async (req, res) => {
-  const input = createTodoSchema.parse(req.body);
-
+router.post<Record<string, never>, Record<string, unknown>, CreateTodoRequest>('/', validate(createTodoSchema), async (req, res) => {
   res.status(201).json({
     status: 'success',
-    data: await todoService.createTodo(input),
+    data: await todoService.createTodo(req.body),
   });
 });
 
@@ -313,15 +322,19 @@ router.post('/', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.patch('/:todoId', async (req, res) => {
-  const { todoId } = todoParamsSchema.parse(req.params);
-  const input = updateTodoSchema.parse(req.body);
+router.patch<TodoParams, Record<string, unknown>, UpdateTodoRequest>(
+  '/:todoId',
+  validate(todoParamsSchema, 'params'),
+  validate(updateTodoSchema),
+  async (req, res) => {
+    const { todoId } = req.params;
 
-  res.json({
-    status: 'success',
-    data: await todoService.updateTodo(todoId, input),
-  });
-});
+    res.json({
+      status: 'success',
+      data: await todoService.updateTodo(todoId, req.body),
+    });
+  },
+);
 
 /**
  * @openapi
@@ -351,13 +364,17 @@ router.patch('/:todoId', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.delete('/:todoId', async (req, res) => {
-  const { todoId } = todoParamsSchema.parse(req.params);
+router.delete<TodoParams>(
+  '/:todoId',
+  validate(todoParamsSchema, 'params'),
+  async (req, res) => {
+    const { todoId } = req.params;
 
-  res.json({
-    status: 'success',
-    data: await todoService.deleteTodo(todoId),
-  });
-});
+    res.json({
+      status: 'success',
+      data: await todoService.deleteTodo(todoId),
+    });
+  },
+);
 
 export default router;
