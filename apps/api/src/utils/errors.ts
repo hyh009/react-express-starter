@@ -48,6 +48,12 @@ export class NotFoundError extends AppError {
   }
 }
 
+export class RouteNotFoundError extends AppError {
+  constructor(message = 'Route not found', code: ErrorCode = ERROR_CODES.NOT_FOUND) {
+    super(404, message, code, undefined, false);
+  }
+}
+
 export class ConflictError extends AppError {
   constructor(message = 'Conflict', code: ErrorCode = ERROR_CODES.CONFLICT) {
     super(409, message, code);

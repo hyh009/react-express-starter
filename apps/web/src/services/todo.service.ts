@@ -1,58 +1,62 @@
+import { apiJson } from '@/api'
+import { todoPaths } from '@/api/paths/todo.paths'
 import { todoModel } from '@/models/todo.model'
+import type { ApiSuccessResponse } from '@/models/apiError.types'
 import type { Todo } from '@/models/todo.types'
-import type { TodoDto } from '@/models/todo.types'
-
-const todoDtos: TodoDto[] = [
-  {
-    id: 'design-frontend-architecture',
-    title: 'Design frontend architecture',
-    description:
-      'Document the React, Zustand, VM hook, store, and service boundaries for future agents.',
-    status: 'done',
-    priority: 'high',
-    owner_name: 'Frontend',
-  },
-  {
-    id: 'build-todo-overview',
-    title: 'Build Todo overview page',
-    description:
-      'Create a small domain feature that demonstrates page VM hooks and feature-level state.',
-    status: 'in-progress',
-    priority: 'medium',
-    owner_name: 'Frontend',
-  },
-  {
-    id: 'connect-health-api',
-    title: 'Keep API health link available',
-    description:
-      'Expose the API base URL and health endpoint from the frontend API layer.',
-    status: 'todo',
-    priority: 'low',
-    owner_name: 'Full stack',
-  },
-]
-
-function wait(ms: number) {
-  return new Promise((resolve) => {
-    window.setTimeout(resolve, ms)
-  })
-}
+import type { DeleteTodoResponse, TodoDto } from '@/models/todo.types'
 
 export const todoService = {
   async listTodos() {
-    await wait(180)
-    return todoDtos.map(todoModel.deserialize)
+    const response = await apiJson<ApiSuccessResponse<TodoDto[]>>(
+      todoPaths.list,
+    )
+
+    return response.data.map(todoModel.deserialize)
   },
 
   async getTodo(todoId: string) {
-    await wait(120)
-    const todoDto = todoDtos.find((todo) => todo.id === todoId)
+    const response = await apiJson<ApiSuccessResponse<TodoDto>>(
+      todoPaths.detail(todoId),
+    )
 
-    return todoDto ? todoModel.deserialize(todoDto) : null
+    return todoModel.deserialize(response.data)
   },
 
   async saveTodo(todo: Todo) {
-    await wait(180)
-    return todoModel.serialize(todo)
+    const response = await apiJson<ApiSuccessResponse<TodoDto>>(
+      todoPaths.detail(todo.id),
+      {
+        body: JSON.stringify(todoModel.serialize(todo)),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'PATCH',
+      },
+    )
+
+    return todoModel.deserialize(response.data)
+  },
+
+  async createTodo(todo: Omit<Todo, 'id'>) {
+    const response = await apiJson<ApiSuccessResponse<TodoDto>>(todoPaths.list, {
+      body: JSON.stringify(todoModel.serializeCreate(todo)),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+
+    return todoModel.deserialize(response.data)
+  },
+
+  async deleteTodo(todoId: string) {
+    const response = await apiJson<ApiSuccessResponse<DeleteTodoResponse>>(
+      todoPaths.detail(todoId),
+      {
+        method: 'DELETE',
+      },
+    )
+
+    return response.data
   },
 }

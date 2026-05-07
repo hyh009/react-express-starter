@@ -20,7 +20,16 @@ export const todoModel = {
 
   serialize(todo: Todo): TodoRequest {
     return {
-      id: todo.id,
+      title: todo.title,
+      description: todo.description,
+      status: todo.status,
+      priority: todo.priority,
+      owner_name: todo.ownerName,
+    }
+  },
+
+  serializeCreate(todo: Omit<Todo, 'id'>): TodoRequest {
+    return {
       title: todo.title,
       description: todo.description,
       status: todo.status,

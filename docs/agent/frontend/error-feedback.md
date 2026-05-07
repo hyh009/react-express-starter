@@ -30,6 +30,7 @@ Backend error response
 - Feature stores keep page/domain error state only.
 - Feature actions only mutate store state.
 - Page workflows may map API errors into page-level outcomes.
+- Keep catch blocks small: delegate API error mapping to named mapper functions.
 - Use inline state when the error is part of the page data.
 - Use shared feedback UI only when the error needs toast or modal presentation.
 
@@ -66,6 +67,23 @@ Keep backend response types in `src/models`.
 Keep fetch helpers and normalization logic in `src/api`.
 
 Services should return frontend models on success and throw `ApiError` on failure.
+
+## Workflow Mapping
+
+Avoid writing different inline `catch` styles in every workflow.
+
+Prefer:
+
+```txt
+catch error
+  -> mapErrorToResult(error)
+  -> feature action updates page state
+  -> return page outcome
+```
+
+Use API helpers for generic checks such as network or server failures.
+
+Keep page/domain-specific code mapping in a named workflow mapper.
 
 ## Inline Errors
 

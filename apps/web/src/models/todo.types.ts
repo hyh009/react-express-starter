@@ -21,10 +21,17 @@ export type TodoDto = {
 }
 
 export type TodoRequest = {
-  id: string
   title: string
   description: string
   status: TodoStatus
   priority: TodoPriority
   owner_name: string
+}
+
+export type CreateTodoRequest = TodoRequest
+
+export type UpdateTodoRequest = Partial<TodoRequest>
+
+export type DeleteTodoResponse = {
+  id: string
 }

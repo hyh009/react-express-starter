@@ -1,3 +1,3 @@
 export const healthPaths = {
-  status: '/api/v1/health',
+  status: '/v1/health',
 }

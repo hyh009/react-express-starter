@@ -3,7 +3,7 @@ import { errorHandler } from '@src/middlewares/error';
 import { requestId } from '@src/middlewares/requestId';
 import { requestLogger } from '@src/middlewares/requestLogger';
 import routes from '@src/routes';
-import { NotFoundError } from '@src/utils/errors';
+import { RouteNotFoundError } from '@src/utils/errors';
 import { setupSwagger } from '@src/utils/swagger';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -26,7 +26,7 @@ export function createApp() {
 
   // 404 Handler
   app.use((req, res, next) => {
-    next(new NotFoundError(`Can't find ${req.originalUrl} on this server!`));
+    next(new RouteNotFoundError(`Can't find ${req.originalUrl} on this server!`));
   });
 
   // Global Error Handler

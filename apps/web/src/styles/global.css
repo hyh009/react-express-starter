@@ -215,6 +215,118 @@ h2 {
   padding: 0;
 }
 
+.primary-button,
+.secondary-button,
+.icon-button {
+  cursor: pointer;
+  font: inherit;
+}
+
+.primary-button,
+.secondary-button {
+  border-radius: 8px;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0 16px;
+}
+
+.primary-button {
+  background: #0f766e;
+  border: 1px solid #0f766e;
+  color: #ffffff;
+}
+
+.secondary-button {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+}
+
+.icon-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: #64748b;
+  display: inline-flex;
+  font-weight: 900;
+  height: 32px;
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.toast-host {
+  display: grid;
+  gap: 10px;
+  max-width: min(360px, calc(100vw - 32px));
+  position: fixed;
+  right: 16px;
+  top: 80px;
+  width: 360px;
+  z-index: 30;
+}
+
+.toast {
+  align-items: flex-start;
+  background: #ffffff;
+  border: 1px solid #d8dee9;
+  border-left: 4px solid #0f766e;
+  border-radius: 8px;
+  box-shadow: 0 16px 30px rgb(15 23 42 / 12%);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 14px 14px 14px 16px;
+}
+
+.toast p,
+.modal-panel p {
+  color: #4b5563;
+  margin: 0;
+}
+
+.toast strong {
+  color: #111827;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.toast-error {
+  border-left-color: #dc2626;
+}
+
+.toast-success {
+  border-left-color: #16a34a;
+}
+
+.modal-backdrop {
+  align-items: center;
+  background: rgb(15 23 42 / 46%);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 20px;
+  position: fixed;
+  z-index: 40;
+}
+
+.modal-panel {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgb(15 23 42 / 24%);
+  display: grid;
+  gap: 24px;
+  max-width: 420px;
+  padding: 24px;
+  width: 100%;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .loading-state,
 .error-message {
   background: #ffffff;

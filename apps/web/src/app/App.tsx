@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react'
 import { apiUrl } from '@/api'
 import { healthPaths } from '@/api/paths/health.paths'
 import { useAppContextVM } from '@/app/viewModel/useAppContextVM'
+import { useFeedbackVM } from '@/app/viewModel/useFeedbackVM'
 import { TodoDetailPage } from '@/pages/todoDetail/TodoDetailPage'
 import { TodoOverviewPage } from '@/pages/todoOverview/TodoOverviewPage'
+import { ModalHost } from '@/shared/components/feedback/ModalHost'
+import { ToastHost } from '@/shared/components/feedback/ToastHost'
 import { AppShell } from '@/shared/components/layout/AppShell'
 
 type AppRoute =
@@ -32,6 +35,7 @@ function getRouteFromLocation(): AppRoute {
 
 export function App() {
   const appContext = useAppContextVM()
+  const feedback = useFeedbackVM()
   const [route, setRoute] = useState(getRouteFromLocation)
 
   useEffect(() => {
@@ -72,6 +76,19 @@ export function App() {
       ) : (
         <TodoOverviewPage onOpenTodo={navigateToTodo} />
       )}
+      <ToastHost
+        onDismiss={feedback.actions.dismissToast}
+        toasts={feedback.toasts}
+      />
+      <ModalHost
+        modal={feedback.modal}
+        onCancel={() => {
+          feedback.actions.closeModal(false)
+        }}
+        onConfirm={() => {
+          feedback.actions.closeModal(true)
+        }}
+      />
     </AppShell>
   )
 }
