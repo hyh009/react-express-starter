@@ -50,7 +50,7 @@ export class NotFoundError extends AppError {
 
 export class RouteNotFoundError extends AppError {
   constructor(message = 'Route not found', code: ErrorCode = ERROR_CODES.NOT_FOUND) {
-    super(404, message, code, undefined, false);
+    super(404, message, code);
   }
 }
 
