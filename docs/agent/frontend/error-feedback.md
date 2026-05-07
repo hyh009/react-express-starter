@@ -48,6 +48,17 @@ src/
 
 ## API Errors
 
+Before mapping frontend errors, check the backend Swagger/OpenAPI route docs.
+
+Use the documented response contract as the source of truth for:
+
+- possible HTTP status codes
+- application error `code` values
+- `details` shape, especially validation errors
+- whether an error is domain-specific or route-level
+
+Do not guess domain meaning from HTTP status alone.
+
 The backend error response shape is:
 
 ```json
