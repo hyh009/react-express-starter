@@ -17,6 +17,7 @@ export const ERROR_CODES = {
   // Business Logic Examples
   PRODUCT_NOT_FOUND: 'PRODUCT_NOT_FOUND',
   PRODUCT_ALREADY_EXISTS: 'PRODUCT_ALREADY_EXISTS',
+  TODO_NOT_FOUND: 'TODO_NOT_FOUND',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
