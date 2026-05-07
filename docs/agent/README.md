@@ -13,5 +13,6 @@ Use the YAML registry to choose the smallest relevant guide before reading full 
 ## Structure
 
 - `workflows/` contains task workflows and finishing rules.
+- `workflows/tooling.md` contains TypeScript, ESLint, and Prettier rules.
 - `backend/` contains backend architecture, persistence, logging, errors, and testing rules.
 - `frontend/` contains frontend architecture rules.

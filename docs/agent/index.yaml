@@ -26,6 +26,10 @@ agent_docs:
         path: docs/agent/workflows/feature-docs.md
         use_when: Creating or updating docs/features files.
 
+      - name: tooling
+        path: docs/agent/workflows/tooling.md
+        use_when: Changing TypeScript, ESLint, Prettier, or package-level tooling.
+
   backend:
     - name: backend-architecture
       path: docs/agent/backend/architecture.md
