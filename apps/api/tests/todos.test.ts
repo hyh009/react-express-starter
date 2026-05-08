@@ -6,6 +6,10 @@ import { createApp } from '../src/app.js';
 
 describe('todos API', () => {
   beforeEach(() => {
+    if (!todoRepository.reset) {
+      throw new Error('Todo API tests require a resettable repository.');
+    }
+
     todoRepository.reset();
   });
 
