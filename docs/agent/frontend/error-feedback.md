@@ -34,6 +34,18 @@ Backend error response
 - Use inline state when the error is part of the page data.
 - Use shared feedback UI only when the error needs toast or modal presentation.
 
+## Feature Checklist
+
+When adding API-backed page behavior:
+
+- Add endpoint paths in `src/api/paths`.
+- Add or reuse a service that returns frontend models.
+- Let `apiJson` throw `ApiError`; do not catch errors in services.
+- Add a named workflow mapper such as `mapLoadTodoError`.
+- Map domain meaning from documented backend `code` values.
+- Return a page result from the workflow when the VM hook needs toast/modal decisions.
+- Store page-owned inline errors in the feature store.
+
 ## Placement
 
 ```txt
@@ -73,6 +85,13 @@ The backend error response shape is:
 
 The API layer should normalize failed requests into an `ApiError`.
 
+Expected normalized failure reasons:
+
+- `network`: browser could not reach the API
+- `server`: API returned a 5xx response
+- `invalid-response`: API returned malformed or unreadable JSON
+- `unknown`: known API error without a generic frontend category
+
 Keep backend response types in `src/models`.
 
 Keep fetch helpers and normalization logic in `src/api`.
@@ -95,6 +114,21 @@ catch error
 Use API helpers for generic checks such as network or server failures.
 
 Keep page/domain-specific code mapping in a named workflow mapper.
+
+Example:
+
+```ts
+function mapLoadTodoError(error: unknown): LoadTodoResult {
+  if (hasApiErrorCode(error, 'TODO_NOT_FOUND')) {
+    return { status: 'not-found' }
+  }
+
+  return {
+    status: 'failed',
+    reason: getApiFailureReason(error),
+  }
+}
+```
 
 ## Inline Errors
 

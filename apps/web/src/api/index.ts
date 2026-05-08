@@ -1,4 +1,8 @@
-import { normalizeApiError, normalizeNetworkError } from './apiError'
+import {
+  normalizeApiError,
+  normalizeInvalidApiResponse,
+  normalizeNetworkError,
+} from './apiError'
 
 const defaultBaseUrl = 'http://localhost:9000'
 const apiPathPrefix = '/api'
@@ -40,7 +44,16 @@ export async function apiJson<TData>(
       ...init,
       headers,
     })
-    const body = await parseJson(response)
+    let body: unknown
+
+    try {
+      body = await parseJson(response)
+    } catch (error) {
+      throw normalizeInvalidApiResponse({
+        response,
+        cause: error,
+      })
+    }
 
     if (!response.ok) {
       throw normalizeApiError({

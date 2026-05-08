@@ -27,6 +27,7 @@ function showLoadTodoToast(result: LoadTodoResult) {
   const messageByReason: Record<LoadTodoFailureReason, string> = {
     network: 'Check that the API server is running, then try again.',
     server: 'The todo service is temporarily unavailable.',
+    'invalid-response': 'The API returned data this page cannot read.',
     unknown: 'Try again in a moment.',
   }
 

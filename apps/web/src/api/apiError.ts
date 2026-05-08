@@ -23,7 +23,11 @@ export class ApiError extends Error {
   }
 }
 
-export type ApiFailureReason = 'network' | 'server' | 'unknown'
+export type ApiFailureReason =
+  | 'network'
+  | 'server'
+  | 'invalid-response'
+  | 'unknown'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -81,6 +85,18 @@ export function normalizeNetworkError(error: unknown): ApiError {
   })
 }
 
+export function normalizeInvalidApiResponse(input: {
+  response: Response
+  cause: unknown
+}): ApiError {
+  return new ApiError({
+    statusCode: input.response.status,
+    code: 'INVALID_API_RESPONSE',
+    message: 'The API returned an invalid response.',
+    cause: input.cause,
+  })
+}
+
 export function isApiError(error: unknown): error is ApiError {
   return error instanceof ApiError
 }
@@ -96,6 +112,10 @@ export function getApiFailureReason(error: unknown): ApiFailureReason {
 
   if (error.statusCode === 0) {
     return 'network'
+  }
+
+  if (error.code === 'INVALID_API_RESPONSE') {
+    return 'invalid-response'
   }
 
   if (error.statusCode >= 500) {
