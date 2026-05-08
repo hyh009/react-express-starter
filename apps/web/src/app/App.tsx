@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { apiUrl } from '@/api'
+import { apiBaseUrl, apiUrl } from '@/api'
 import { healthPaths } from '@/api/paths/health.paths'
 import { useAppContextVM } from '@/app/viewModel/useAppContextVM'
 import { useFeedbackVM } from '@/app/viewModel/useFeedbackVM'
@@ -69,7 +69,7 @@ export function App() {
     <AppShell
       appName={appContext.appName}
       healthUrl={apiUrl(healthPaths.status)}
-      swaggerUrl={`${appContext.apiBaseUrl}/docs`}
+      swaggerUrl={`${apiBaseUrl}/docs`}
     >
       {route.name === 'todo-detail' ? (
         <TodoDetailPage onBack={navigateToOverview} todoId={route.todoId} />
