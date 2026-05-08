@@ -1,8 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { apiJson } from '.'
+import { apiJson, setApiTokenProvider } from '.'
 
 describe('apiJson', () => {
   afterEach(() => {
+    setApiTokenProvider(() => null)
     vi.unstubAllGlobals()
   })
 
@@ -20,6 +21,56 @@ describe('apiJson', () => {
       status: 'success',
       data: { id: '1' },
     })
+  })
+
+  it('adds default API headers and token headers to requests', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ status: 'success', data: { id: '1' } }), {
+        status: 200,
+      }),
+    )
+
+    setApiTokenProvider(() => 'test-token')
+    vi.stubGlobal('fetch', fetchMock)
+
+    await apiJson('/todos', {
+      body: JSON.stringify({ title: 'Write tests' }),
+      method: 'POST',
+    })
+
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit]
+    const headers = new Headers(init.headers)
+
+    expect(headers.get('Accept')).toBe('application/json')
+    expect(headers.get('Content-Type')).toBe('application/json')
+    expect(headers.get('Authorization')).toBe('Bearer test-token')
+  })
+
+  it('allows request headers to override API defaults', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ status: 'success', data: { id: '1' } }), {
+        status: 200,
+      }),
+    )
+
+    setApiTokenProvider(() => 'test-token')
+    vi.stubGlobal('fetch', fetchMock)
+
+    await apiJson('/todos', {
+      headers: {
+        Accept: 'application/vnd.api+json',
+        Authorization: 'Bearer request-token',
+        'Content-Type': 'application/merge-patch+json',
+      },
+      method: 'PATCH',
+    })
+
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit]
+    const headers = new Headers(init.headers)
+
+    expect(headers.get('Accept')).toBe('application/vnd.api+json')
+    expect(headers.get('Authorization')).toBe('Bearer request-token')
+    expect(headers.get('Content-Type')).toBe('application/merge-patch+json')
   })
 
   it('throws an ApiError with backend response fields for failed responses', async () => {

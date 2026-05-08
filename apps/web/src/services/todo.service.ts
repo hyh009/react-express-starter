@@ -27,9 +27,6 @@ export const todoService = {
       todoPaths.detail(todo.id),
       {
         body: JSON.stringify(todoModel.serialize(todo)),
-        headers: {
-          'Content-Type': 'application/json',
-        },
         method: 'PATCH',
       },
     )
@@ -40,9 +37,6 @@ export const todoService = {
   async createTodo(todo: Omit<Todo, 'id'>) {
     const response = await apiJson<ApiSuccessResponse<TodoDto>>(todoPaths.list, {
       body: JSON.stringify(todoModel.serializeCreate(todo)),
-      headers: {
-        'Content-Type': 'application/json',
-      },
       method: 'POST',
     })
 

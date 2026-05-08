@@ -7,7 +7,15 @@ import {
 const defaultBaseUrl = 'http://localhost:9000'
 const apiPathPrefix = '/api'
 
+type ApiTokenProvider = () => string | null | undefined
+
 export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? defaultBaseUrl
+
+let apiTokenProvider: ApiTokenProvider = () => null
+
+export function setApiTokenProvider(provider: ApiTokenProvider) {
+  apiTokenProvider = provider
+}
 
 function joinApiPath(path: string) {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
@@ -29,20 +37,41 @@ async function parseJson(response: Response) {
   return JSON.parse(text) as unknown
 }
 
+function shouldUseJsonContentType(body: RequestInit['body']) {
+  return typeof body === 'string'
+}
+
+function createApiHeaders(init?: RequestInit) {
+  const headers = new Headers(init?.headers)
+  const token = apiTokenProvider()
+
+  if (!headers.has('Accept')) {
+    headers.set('Accept', 'application/json')
+  }
+
+  if (
+    init?.body !== undefined &&
+    shouldUseJsonContentType(init.body) &&
+    !headers.has('Content-Type')
+  ) {
+    headers.set('Content-Type', 'application/json')
+  }
+
+  if (token && !headers.has('Authorization')) {
+    headers.set('Authorization', `Bearer ${token}`)
+  }
+
+  return headers
+}
+
 export async function apiJson<TData>(
   path: string,
   init?: RequestInit,
 ): Promise<TData> {
   try {
-    const headers = new Headers(init?.headers)
-
-    if (!headers.has('Accept')) {
-      headers.set('Accept', 'application/json')
-    }
-
     const response = await fetch(apiUrl(path), {
       ...init,
-      headers,
+      headers: createApiHeaders(init),
     })
     let body: unknown
 
