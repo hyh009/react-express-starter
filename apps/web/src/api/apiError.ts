@@ -1,4 +1,7 @@
-import type { ApiErrorResponse } from '@/models/apiError.types'
+import type {
+  ApiErrorResponse,
+  ValidationErrorDetail,
+} from '@/models/apiError.types'
 
 type ApiErrorInput = {
   statusCode: number
@@ -38,6 +41,14 @@ function isApiErrorResponse(value: unknown): value is ApiErrorResponse {
     isRecord(value) &&
     value.status === 'error' &&
     typeof value.statusCode === 'number' &&
+    typeof value.message === 'string'
+  )
+}
+
+function isValidationErrorDetail(value: unknown): value is ValidationErrorDetail {
+  return (
+    isRecord(value) &&
+    typeof value.path === 'string' &&
     typeof value.message === 'string'
   )
 }
@@ -101,8 +112,27 @@ export function isApiError(error: unknown): error is ApiError {
   return error instanceof ApiError
 }
 
-export function hasApiErrorCode(error: unknown, code: string) {
+export function hasApiErrorCode(
+  error: unknown,
+  code: string,
+): error is ApiError {
   return isApiError(error) && error.code === code
+}
+
+export function getValidationDetails(error: unknown): ValidationErrorDetail[] {
+  if (!hasApiErrorCode(error, 'VALIDATION_ERROR')) {
+    return []
+  }
+
+  if (!Array.isArray(error.details)) {
+    return []
+  }
+
+  if (!error.details.every(isValidationErrorDetail)) {
+    return []
+  }
+
+  return error.details
 }
 
 export function getApiFailureReason(error: unknown): ApiFailureReason {

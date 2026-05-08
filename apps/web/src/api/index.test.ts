@@ -46,6 +46,32 @@ describe('apiJson', () => {
     })
   })
 
+  it('preserves validation details for failed validation responses', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            status: 'error',
+            statusCode: 400,
+            code: 'VALIDATION_ERROR',
+            message: 'Invalid request body',
+            details: [{ path: 'title', message: 'Required' }],
+          }),
+          { status: 400 },
+        ),
+      ),
+    )
+
+    await expect(apiJson('/todos')).rejects.toMatchObject({
+      name: 'ApiError',
+      statusCode: 400,
+      code: 'VALIDATION_ERROR',
+      message: 'Invalid request body',
+      details: [{ path: 'title', message: 'Required' }],
+    })
+  })
+
   it('throws an invalid-response ApiError when JSON cannot be parsed', async () => {
     vi.stubGlobal(
       'fetch',

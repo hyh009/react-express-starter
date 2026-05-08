@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   ApiError,
   getApiFailureReason,
+  getValidationDetails,
   hasApiErrorCode,
   normalizeApiError,
   normalizeInvalidApiResponse,
@@ -17,7 +18,7 @@ describe('api error normalization', () => {
         statusCode: 400,
         code: 'VALIDATION_ERROR',
         message: 'Invalid request body',
-        details: [{ field: 'title', message: 'Required' }],
+        details: [{ path: 'title', message: 'Required' }],
       },
     })
 
@@ -26,7 +27,7 @@ describe('api error normalization', () => {
       statusCode: 400,
       code: 'VALIDATION_ERROR',
       message: 'Invalid request body',
-      details: [{ field: 'title', message: 'Required' }],
+      details: [{ path: 'title', message: 'Required' }],
     })
   })
 
@@ -98,5 +99,34 @@ describe('api error normalization', () => {
 
     expect(hasApiErrorCode(error, 'TODO_NOT_FOUND')).toBe(true)
     expect(hasApiErrorCode(error, 'VALIDATION_ERROR')).toBe(false)
+  })
+
+  it('returns typed validation details for validation errors only', () => {
+    const validationError = new ApiError({
+      statusCode: 400,
+      code: 'VALIDATION_ERROR',
+      message: 'Invalid request body',
+      details: [{ path: 'title', message: 'Required' }],
+    })
+    const malformedValidationError = new ApiError({
+      statusCode: 400,
+      code: 'VALIDATION_ERROR',
+      message: 'Invalid request body',
+      details: [{ path: 'title', text: 'Required' }],
+    })
+
+    expect(getValidationDetails(validationError)).toEqual([
+      { path: 'title', message: 'Required' },
+    ])
+    expect(getValidationDetails(malformedValidationError)).toEqual([])
+    expect(
+      getValidationDetails(
+        new ApiError({
+          statusCode: 404,
+          code: 'TODO_NOT_FOUND',
+          message: 'Todo not found',
+        }),
+      ),
+    ).toEqual([])
   })
 })
