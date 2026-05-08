@@ -84,6 +84,14 @@ agent_docs:
       path: docs/agent/frontend/architecture-diagram.md
       use_when: Understanding frontend architecture flow visually.
 
+    - name: frontend-design-system
+      path: docs/agent/frontend/design-system.md
+      use_when: Adding shadcn/ui, shared UI primitives, or frontend design rules.
+
+    - name: frontend-forms
+      path: docs/agent/frontend/forms.md
+      use_when: Adding or changing frontend forms.
+
     - name: frontend-error-feedback
       path: docs/agent/frontend/error-feedback.md
       use_when: Handling frontend API errors and page/domain error state.

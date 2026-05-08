@@ -1,30 +1,31 @@
-import { useEffect } from 'react'
-import { TodoStatusBadge } from '@/features/todo/components/TodoStatusBadge'
-import { todoModel } from '@/models/todo.model'
-import { LoadingState } from '@/shared/components/LoadingState'
-import { useTodoDetailPageVM } from './useTodoDetailPageVM'
+import { useEffect } from 'react';
+import { TodoStatusBadge } from '@/features/todo/components/TodoStatusBadge';
+import { todoModel } from '@/models/todo.model';
+import { LoadingState } from '@/shared/components/LoadingState';
+import { Button } from '@/shared/components/ui/button';
+import { useTodoDetailPageVM } from './useTodoDetailPageVM';
 
 type TodoDetailPageProps = {
-  todoId: string
-  onBack: () => void
-}
+  todoId: string;
+  onBack: () => void;
+};
 
 export function TodoDetailPage({ todoId, onBack }: TodoDetailPageProps) {
-  const vm = useTodoDetailPageVM()
+  const vm = useTodoDetailPageVM();
 
   useEffect(() => {
-    void vm.actions.loadTodo(todoId)
-  }, [todoId, vm.actions])
+    void vm.actions.loadTodo(todoId);
+  }, [todoId, vm.actions]);
 
   if (vm.isLoading) {
-    return <LoadingState label="Loading todo detail" />
+    return <LoadingState label="Loading todo detail" />;
   }
 
   return (
     <section className="page-section">
-      <button className="text-button" onClick={onBack} type="button">
+      <Button onClick={onBack} type="button" variant="ghost">
         Back to overview
-      </button>
+      </Button>
 
       {vm.error ? <p className="error-message">{vm.error}</p> : null}
 
@@ -55,5 +56,5 @@ export function TodoDetailPage({ todoId, onBack }: TodoDetailPageProps) {
         </article>
       ) : null}
     </section>
-  )
+  );
 }
