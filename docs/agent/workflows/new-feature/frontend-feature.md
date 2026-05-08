@@ -1,45 +1,67 @@
-# Frontend Feature Workflow
+# Frontend Feature Checklist
 
 Use this guide when a new feature adds or changes frontend behavior in `apps/web`.
 
-## Start Here
+## Flow
+
+1. Define the page and feature shape with the user.
+2. Add API integration when needed.
+3. Implement UI, state, and feedback.
+4. Add or update tests when needed.
+5. Verify the change.
+
+## 1. Page and Feature Shape
 
 - Follow `docs/agent/frontend/architecture.md`.
-- Keep the feature slice small enough to validate with lint and build.
-- Do not add a new state or data-fetching framework unless the user asks.
-
-## Page and Feature Structure
-
+- Discuss the page, feature domain, state ownership, and API-backed behavior with the user before implementation when the shape is not already clear.
 - Put page views, page VM hooks, and page workflows under `apps/web/src/pages`.
 - Put domain feature state, actions, and reusable domain components under `apps/web/src/features/<domain>`.
 - Put frontend models and DTO conversion helpers under `apps/web/src/models`.
-- Put domain or app services under `apps/web/src/services`.
-- Put endpoint paths under `apps/web/src/api/paths` when calling a new API endpoint.
+- Use React local state for UI-only state such as modals, menus, hover state, and temporary input text.
 - Keep domain-specific components out of `apps/web/src/shared/components`.
+- Do not add a new state or data-fetching framework unless the user asks.
 
-## State and Data Flow
+## 2. API Integration
+
+- Use this step only when the feature calls or changes backend data.
+- Check backend Swagger/OpenAPI docs or backend API tests before writing frontend fixtures.
+- Add endpoint paths under `apps/web/src/api/paths`.
+- Add domain or app services under `apps/web/src/services`.
+- Services call `apiJson` and use `src/models` helpers for DTO deserialize/serialize.
+- Keep raw API DTOs out of pages, workflows, actions, stores, and views.
+- Let `apiJson` throw `ApiError`; do not catch API errors in services.
+- Follow `docs/agent/frontend/error-feedback.md` when mapping API errors.
+- Update `apps/web/.env.example` when a new frontend env variable is required.
+- Update README or setup docs when local usage changes.
+
+## 3. UI, State, and Feedback
 
 - Components read state and trigger behavior through page VM hooks.
 - Page workflows coordinate service calls, actions, loading states, errors, and save flows.
 - Feature actions mutate feature stores.
 - Stores hold state only.
-- Use React local state for UI-only state such as modals, menus, hover state, and temporary input text.
-- Keep raw API DTOs out of stores and views when a frontend model is useful.
+- Use inline error state for page-owned data errors.
+- Use `docs/agent/frontend/shared-feedback-ui.md` only when the error needs toast or modal presentation.
 
-## API Integration
+## 4. Tests
 
-- Match frontend service calls to the backend contract.
-- Convert API DTOs to frontend models before storing or rendering when shapes differ.
-- Keep auth, cookie, and error behavior aligned with backend middleware.
-- Update `apps/web/.env.example` when a new frontend env variable is required.
-- Update README or setup docs when local usage changes.
+- Add focused tests for meaningful API error normalization or workflow mapping changes.
+- Use `docs/agent/frontend/api-error-testing.md` for API error tests.
+- Do not invent mocked API error shapes; copy fixtures from backend Swagger or backend API tests.
+- DOM/component tests are not required yet.
+- If UI or DOM behavior changes, list concrete manual checks in the final response.
 
-## Tests
+## 5. Verification
 
-- If no frontend test setup exists, do not add a new test framework unless the user asks.
-- Validate frontend changes with lint and build.
-- If manual testing is needed, list the concrete checks in the final response.
+- Follow `docs/agent/workflows/verification.md`.
+- Run `pnpm --filter web run test` when frontend tests exist or change.
+- Run `pnpm --filter web run lint`.
+- Run `pnpm --filter web run build`.
 
-## Verification
+## Related Docs
 
-Follow `docs/agent/workflows/verification.md`.
+- `docs/agent/frontend/architecture.md`
+- `docs/agent/frontend/architecture-diagram.md`
+- `docs/agent/frontend/error-feedback.md`
+- `docs/agent/frontend/api-error-testing.md`
+- `docs/agent/frontend/shared-feedback-ui.md`

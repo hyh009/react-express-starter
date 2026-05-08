@@ -1,6 +1,6 @@
-# Frontend Testing
+# Frontend API Error Testing
 
-Use this guide when adding or updating frontend tests.
+Use this guide when testing frontend API error handling.
 
 ## Commands
 
@@ -12,12 +12,13 @@ pnpm --filter web run build
 
 Use `pnpm --filter web run test:watch` while iterating.
 
-## What To Test
+## Scope
 
 - Test API error normalization in `src/api`.
-- Test service success mapping when DTO conversion is part of the change.
+- Test `apiJson` behavior with mocked `fetch` responses.
 - Test page workflow error mapping when backend `code` values affect page behavior.
-- Keep component tests optional until the repo has a browser/DOM test setup.
+- Do not treat these as real backend integration tests.
+- Keep DOM, component, and E2E testing in a separate guide if those are added later.
 
 ## Placement
 
@@ -28,6 +29,7 @@ Use `pnpm --filter web run test:watch` while iterating.
 
 ## API Error Checklist
 
+- Copy error fixtures from backend Swagger or backend API tests; do not invent the response shape.
 - Backend error envelopes keep `status`, `statusCode`, `code`, `message`, and `details`.
 - Network failures map to `network`.
 - 5xx responses map to `server`.

@@ -186,6 +186,12 @@ Use root-level `src/services` for service modules.
 
 Services handle domain/app calls and external integrations.
 
+Services call `apiJson` and convert between API DTOs and frontend models.
+
+- On read: deserialize API DTOs into frontend models with helpers from `src/models`.
+- On write: serialize frontend models or input into API request payloads with helpers from `src/models`.
+- Pages, workflows, actions, and stores should not handle raw API DTOs directly.
+
 Base API client and endpoint paths stay in `src/api`.
 
 ## Models
