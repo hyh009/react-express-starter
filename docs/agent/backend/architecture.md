@@ -57,6 +57,7 @@ Use these locations:
 ## Service Layer
 
 - Put backend business logic in `src/services`.
+- Define services as classes, export a `createXService()` factory, and export a singleton `xService` for route/config modules.
 - Use factory functions when a service needs testable dependencies.
 - Services may call repositories, Redis clients, external integrations, and utility functions.
 - Services should not start HTTP listeners or depend on Express request/response objects unless the behavior is middleware-specific.

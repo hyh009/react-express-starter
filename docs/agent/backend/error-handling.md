@@ -85,6 +85,8 @@ external error (Zod / Mongo / Mongoose)
 - Keep errorHandler simple and maintainable
 - Centralize external error handling logic
 
+Use `src/utils/errorMapper.ts` for external-to-`AppError` conversion. Put reusable Mongo error-shape checks, such as duplicate key detection, in `src/utils/mongoError.ts` instead of redefining them in routes or services.
+
 ---
 
 ## Common Mappings

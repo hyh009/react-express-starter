@@ -174,6 +174,10 @@ type UpdateTodoRequest = z.infer<typeof updateTodoSchema>;
  *         - INVALID_ID
  *         - INVALID_FIELD_VALUE
  *         - RESOURCE_ALREADY_EXISTS
+ *         - INVALID_CREDENTIALS
+ *         - INVALID_REFRESH_TOKEN
+ *         - USER_ALREADY_EXISTS
+ *         - USER_DISABLED
  *         - TODO_NOT_FOUND
  *       example: TODO_NOT_FOUND
  *     ValidationErrorDetail:

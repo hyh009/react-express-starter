@@ -11,12 +11,12 @@ function createTodoNotFoundError() {
   return new NotFoundError('Todo not found', ERROR_CODES.TODO_NOT_FOUND);
 }
 
-export const todoService = {
-  async listTodos() {
+export class TodoService {
+  public async listTodos() {
     return todoRepository.list();
-  },
+  }
 
-  async getTodo(todoId: string) {
+  public async getTodo(todoId: string) {
     const todo = await todoRepository.findById(todoId);
 
     if (!todo) {
@@ -24,13 +24,13 @@ export const todoService = {
     }
 
     return todo;
-  },
+  }
 
-  async createTodo(input: CreateTodoInput) {
+  public async createTodo(input: CreateTodoInput) {
     return todoRepository.create(input);
-  },
+  }
 
-  async updateTodo(todoId: string, input: UpdateTodoInput) {
+  public async updateTodo(todoId: string, input: UpdateTodoInput) {
     const todo = await todoRepository.update(todoId, input);
 
     if (!todo) {
@@ -38,9 +38,9 @@ export const todoService = {
     }
 
     return todo;
-  },
+  }
 
-  async deleteTodo(todoId: string) {
+  public async deleteTodo(todoId: string) {
     const deletedTodo = await todoRepository.delete(todoId);
 
     if (!deletedTodo) {
@@ -48,5 +48,11 @@ export const todoService = {
     }
 
     return deletedTodo;
-  },
-};
+  }
+}
+
+export function createTodoService() {
+  return new TodoService();
+}
+
+export const todoService = createTodoService();

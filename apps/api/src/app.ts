@@ -1,4 +1,5 @@
 import { corsOptions } from '@src/config/cors';
+import { passport } from '@src/config/passport';
 import { errorHandler } from '@src/middlewares/error';
 import { requestId } from '@src/middlewares/requestId';
 import { requestLogger } from '@src/middlewares/requestLogger';
@@ -19,6 +20,7 @@ export function createApp() {
   app.use(cors(corsOptions));
   app.use(cookieParser());
   app.use(express.json({ limit: '1mb' }));
+  app.use(passport.initialize());
 
   setupSwagger(app);
 

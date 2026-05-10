@@ -1,5 +1,6 @@
 import { ERROR_CODES } from '@src/utils/errorCode.js';
 import { AppError, BadRequestError, ConflictError } from '@src/utils/errors.js';
+import { isMongoDuplicateKeyError } from '@src/utils/mongoError.js';
 import { ZodError } from 'zod';
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -22,7 +23,7 @@ export function mapToAppError(err: unknown): AppError | unknown {
     );
   }
 
-  if (isObject(err) && err.code === 11000) {
+  if (isMongoDuplicateKeyError(err)) {
     return new ConflictError(
       'Resource already exists',
       ERROR_CODES.RESOURCE_ALREADY_EXISTS,

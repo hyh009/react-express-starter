@@ -13,6 +13,15 @@ const envSchema = z.object({
   CORS_ORIGIN: z.string().min(1, 'CORS_ORIGIN is required'),
   MONGODB_URI: z.string().min(1, 'MONGODB_URI is required'),
   REDIS_URL: z.string().min(1, 'REDIS_URL is required'),
+  AUTH_ACCESS_TOKEN_SECRET: z
+    .string()
+    .min(32, 'AUTH_ACCESS_TOKEN_SECRET must be at least 32 characters'),
+  AUTH_ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().positive().default(900),
+  AUTH_REFRESH_TOKEN_TTL_SECONDS: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(60 * 60 * 24 * 30),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

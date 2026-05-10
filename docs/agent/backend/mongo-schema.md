@@ -81,7 +81,7 @@ Maintain a schema UML when persistent models exist.
 Use:
 
 ```txt
-docs/features/mongo-schema.md
+docs/schema/mongo.md
 ```
 
 Create the file when the first persistent model is added.
@@ -92,10 +92,26 @@ Include:
 
 - model names
 - important fields and types
-- required relationships between models
-- uniqueness constraints or indexes that affect behavior
+- required relationships between models, directly in the diagram
+- uniqueness constraints or indexes that affect behavior, directly in the diagram
 
-Keep the diagram focused on persistent data structure. Do not include every helper type or API DTO.
+Use diagram notes for collection and index metadata:
+
+```mermaid
+classDiagram
+  class User {
+    string id
+    string email
+  }
+
+  note for User "collection: users\nunique: email"
+```
+
+Keep the diagram focused on persistent data structure.
+
+Do not put feature-specific planning notes in `docs/schema/mongo.md`, such as future fields that may be added later. Keep those notes close to the relevant model or feature document instead.
+
+Do not create separate index-summary sections when the same information can live in the diagram. Keeping index notes beside the model reduces drift as more schemas are added.
 
 ## API Boundary
 
