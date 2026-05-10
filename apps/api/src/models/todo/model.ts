@@ -1,8 +1,6 @@
-export const todoStatuses = ['todo', 'in-progress', 'done'] as const;
-export const todoPriorities = ['low', 'medium', 'high'] as const;
+export { todoPriorities, todoStatuses } from '@repo/shared';
 
-export type TodoStatus = (typeof todoStatuses)[number];
-export type TodoPriority = (typeof todoPriorities)[number];
+import type { TodoPriority, TodoStatus } from '@repo/shared';
 
 export type TodoEntity = {
   id: string;

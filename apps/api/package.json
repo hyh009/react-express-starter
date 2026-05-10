@@ -6,8 +6,9 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc && tsc-alias",
+    "dev": "pnpm --filter @repo/shared run build && tsx watch src/server.ts",
+    "build": "pnpm --filter @repo/shared run build && pnpm run build:app",
+    "build:app": "tsc && tsc-alias",
     "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" \"vitest.config.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
     "up": "docker compose -f docker/docker-compose.mongo.yml -f docker/docker-compose.redis.yml up -d",
@@ -19,6 +20,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.33.2",
   "dependencies": {
+    "@repo/shared": "workspace:*",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",

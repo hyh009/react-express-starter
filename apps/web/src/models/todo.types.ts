@@ -1,37 +1,21 @@
-export type TodoStatus = 'todo' | 'in-progress' | 'done'
+import type { CreateTodoRequest, TodoPriority, TodoStatus } from '@repo/shared';
 
-export type TodoPriority = 'low' | 'medium' | 'high'
+export type {
+  CreateTodoRequest,
+  DeleteTodoResponse,
+  TodoDto,
+  TodoPriority,
+  TodoStatus,
+  UpdateTodoRequest,
+} from '@repo/shared';
 
 export type Todo = {
-  id: string
-  title: string
-  description: string
-  status: TodoStatus
-  priority: TodoPriority
-  ownerName: string
-}
+  id: string;
+  title: string;
+  description: string;
+  status: TodoStatus;
+  priority: TodoPriority;
+  ownerName: string;
+};
 
-export type TodoDto = {
-  id: string
-  title: string
-  description?: string | null
-  status: TodoStatus
-  priority: TodoPriority
-  owner_name: string
-}
-
-export type TodoRequest = {
-  title: string
-  description: string
-  status: TodoStatus
-  priority: TodoPriority
-  owner_name: string
-}
-
-export type CreateTodoRequest = TodoRequest
-
-export type UpdateTodoRequest = Partial<TodoRequest>
-
-export type DeleteTodoResponse = {
-  id: string
-}
+export type TodoRequest = CreateTodoRequest;

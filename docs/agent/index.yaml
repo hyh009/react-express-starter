@@ -34,6 +34,10 @@ agent_docs:
         path: docs/agent/workflows/tooling.md
         use_when: Changing TypeScript, ESLint, Prettier, or package-level tooling.
 
+      - name: shared-contracts
+        path: docs/agent/workflows/shared-contracts.md
+        use_when: Changing shared API contracts in packages/shared.
+
   backend:
     - name: backend-architecture
       path: docs/agent/backend/architecture.md

@@ -1,8 +1,6 @@
-export const userRoles = ['user', 'admin'] as const;
-export const userStatuses = ['active', 'disabled'] as const;
+export { userRoles, userStatuses } from '@repo/shared';
 
-export type UserRole = (typeof userRoles)[number];
-export type UserStatus = (typeof userStatuses)[number];
+import type { UserRole, UserStatus } from '@repo/shared';
 
 export type UserEntity = {
   id: string;

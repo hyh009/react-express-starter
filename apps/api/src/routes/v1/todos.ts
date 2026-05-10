@@ -1,11 +1,15 @@
-import { validate } from '@src/middlewares/validate';
 import {
+  createTodoSchema,
   todoPriorities,
   todoStatuses,
-} from '@src/models/todo/model';
+  updateTodoSchema,
+} from '@repo/shared';
+import { validate } from '@src/middlewares/validate';
 import { todoService } from '@src/services/todo.service';
 import { Router } from 'express';
 import { z } from 'zod';
+
+import type { CreateTodoRequest, UpdateTodoRequest } from '@repo/shared';
 
 const router = Router();
 
@@ -14,23 +18,6 @@ const todoParamsSchema = z.object({
 });
 
 type TodoParams = z.infer<typeof todoParamsSchema>;
-
-const createTodoSchema = z.object({
-  title: z.string().trim().min(1),
-  description: z.string().trim().nullable().optional(),
-  status: z.enum(todoStatuses),
-  priority: z.enum(todoPriorities),
-  owner_name: z.string().trim().min(1),
-});
-
-type CreateTodoRequest = z.infer<typeof createTodoSchema>;
-
-const updateTodoSchema = createTodoSchema.partial().refine(
-  (input) => Object.keys(input).length > 0,
-  'At least one todo field is required',
-);
-
-type UpdateTodoRequest = z.infer<typeof updateTodoSchema>;
 
 /**
  * @openapi
@@ -337,12 +324,16 @@ router.get<TodoParams>(
  *                     - path: owner_name
  *                       message: 'Invalid input: expected string, received undefined'
  */
-router.post<Record<string, never>, Record<string, unknown>, CreateTodoRequest>('/', validate(createTodoSchema), async (req, res) => {
-  res.status(201).json({
-    status: 'success',
-    data: await todoService.createTodo(req.body),
-  });
-});
+router.post<Record<string, never>, Record<string, unknown>, CreateTodoRequest>(
+  '/',
+  validate(createTodoSchema),
+  async (req, res) => {
+    res.status(201).json({
+      status: 'success',
+      data: await todoService.createTodo(req.body),
+    });
+  },
+);
 
 /**
  * @openapi

@@ -1,27 +1,23 @@
+import { loginSchema, registerSchema } from '@repo/shared';
 import { authConfig, authCookieNames } from '@src/config/auth';
 import { passport } from '@src/config/passport';
 import { requireAuth } from '@src/middlewares/auth';
 import { validate } from '@src/middlewares/validate';
 import { authService } from '@src/services/auth.service';
 import { Router } from 'express';
-import { z } from 'zod';
 
+import type {
+  AuthActionSuccessResponse,
+  AuthSuccessResponse,
+  AuthUserSuccessResponse,
+  LoginRequest,
+  RegisterRequest,
+} from '@repo/shared';
 import type { UserEntity } from '@src/models/user/model';
 import type { AuthResult } from '@src/services/auth.service';
 import type { CookieOptions, NextFunction, Request, Response } from 'express';
 
 const router = Router();
-
-const registerSchema = z.object({
-  email: z.email().trim().toLowerCase(),
-  username: z.string().trim().min(1).max(60),
-  password: z.string().min(8).max(128),
-});
-
-const loginSchema = z.object({
-  email: z.email().trim().toLowerCase(),
-  password: z.string().min(1),
-});
 
 function createCookieOptions(
   maxAgeSeconds: number,
@@ -60,7 +56,11 @@ function clearRefreshCookie(res: Response) {
   });
 }
 
-function sendAuthResult(res: Response, result: AuthResult, statusCode = 200) {
+function sendAuthResult(
+  res: Response<AuthSuccessResponse>,
+  result: AuthResult,
+  statusCode = 200,
+) {
   setAuthCookies(res, result);
 
   res.status(statusCode).json({
@@ -214,11 +214,15 @@ function sendAuthResult(res: Response, result: AuthResult, statusCode = 200) {
  *               code: USER_ALREADY_EXISTS
  *               message: User already exists
  */
-router.post('/register', validate(registerSchema), async (req, res) => {
-  const result = await authService.register(req.body);
+router.post<Record<string, never>, AuthSuccessResponse, RegisterRequest>(
+  '/register',
+  validate(registerSchema),
+  async (req, res) => {
+    const result = await authService.register(req.body);
 
-  sendAuthResult(res, result, 201);
-});
+    sendAuthResult(res, result, 201);
+  },
+);
 
 /**
  * @openapi
@@ -265,7 +269,11 @@ router.post('/register', validate(registerSchema), async (req, res) => {
 router.post(
   '/login',
   validate(loginSchema),
-  (req: Request, res: Response, next: NextFunction) => {
+  (
+    req: Request<Record<string, never>, AuthSuccessResponse, LoginRequest>,
+    res: Response<AuthSuccessResponse>,
+    next: NextFunction,
+  ) => {
     passport.authenticate(
       'local',
       { session: false },
@@ -341,17 +349,20 @@ router.post('/refresh', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/AuthActionSuccessResponse'
  */
-router.post('/logout', async (req, res) => {
-  await authService.logout(req.cookies?.[authCookieNames.refreshToken]);
-  clearRefreshCookie(res);
+router.post<Record<string, never>, AuthActionSuccessResponse>(
+  '/logout',
+  async (req, res) => {
+    await authService.logout(req.cookies?.[authCookieNames.refreshToken]);
+    clearRefreshCookie(res);
 
-  res.json({
-    status: 'success',
-    data: {
-      ok: true,
-    },
-  });
-});
+    res.json({
+      status: 'success',
+      data: {
+        ok: true,
+      },
+    });
+  },
+);
 
 /**
  * @openapi
@@ -374,23 +385,27 @@ router.post('/logout', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/logout-all', requireAuth, async (req, res) => {
-  const user = req.user;
+router.post<Record<string, never>, AuthActionSuccessResponse>(
+  '/logout-all',
+  requireAuth,
+  async (req, res) => {
+    const user = req.user;
 
-  if (!user) {
-    throw new Error('Authenticated user missing after requireAuth.');
-  }
+    if (!user) {
+      throw new Error('Authenticated user missing after requireAuth.');
+    }
 
-  await authService.logoutAll(user.id);
-  clearRefreshCookie(res);
+    await authService.logoutAll(user.id);
+    clearRefreshCookie(res);
 
-  res.json({
-    status: 'success',
-    data: {
-      ok: true,
-    },
-  });
-});
+    res.json({
+      status: 'success',
+      data: {
+        ok: true,
+      },
+    });
+  },
+);
 
 /**
  * @openapi
@@ -413,13 +428,23 @@ router.post('/logout-all', requireAuth, async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/me', requireAuth, (req, res) => {
-  res.json({
-    status: 'success',
-    data: {
-      user: req.user,
-    },
-  });
-});
+router.get<Record<string, never>, AuthUserSuccessResponse>(
+  '/me',
+  requireAuth,
+  (req, res) => {
+    const user = req.user;
+
+    if (!user) {
+      throw new Error('Authenticated user missing after requireAuth.');
+    }
+
+    res.json({
+      status: 'success',
+      data: {
+        user,
+      },
+    });
+  },
+);
 
 export default router;

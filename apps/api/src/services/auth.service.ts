@@ -23,6 +23,12 @@ export type AuthResult = {
   refreshToken: string;
 };
 
+export type RegisterUserInput = {
+  email: string;
+  username: string;
+  password: string;
+};
+
 export type AccessTokenPayload = {
   sub: string;
   roles: UserEntity['roles'];
@@ -98,11 +104,7 @@ function createInvalidRefreshTokenError() {
 }
 
 export class AuthService {
-  public async register(input: {
-    email: string;
-    username: string;
-    password: string;
-  }) {
+  public async register(input: RegisterUserInput) {
     const email = normalizeEmail(input.email);
     const existingUser = await userRepository.findByEmail(email);
 

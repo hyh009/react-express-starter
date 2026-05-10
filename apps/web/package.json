@@ -4,14 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "pnpm --filter @repo/shared run build && vite",
+    "build": "pnpm --filter @repo/shared run build && pnpm run build:app",
+    "build:app": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@repo/shared": "workspace:*",
     "@base-ui/react": "^1.4.1",
     "@fontsource-variable/geist": "^5.2.8",
     "@tailwindcss/vite": "^4.2.4",
