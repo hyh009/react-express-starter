@@ -6,7 +6,8 @@ Full-stack starter template using React, Vite, Express, TypeScript, and pnpm wor
 
 - Express API with versioned routes under `/api/v1`
 - React frontend powered by Vite and TypeScript
-- Frontend structure for app composition, layout components, pages, and API services
+- Frontend structure for app composition, pages, feature state, API services, and shared UI
+- Shared API contract package for request/response DTOs, error envelopes, and Zod schemas
 - TypeScript with `NodeNext` module resolution
 - Path alias support with `@src/*`
 - MongoDB and Redis Docker Compose setup
@@ -28,6 +29,8 @@ Full-stack starter template using React, Vite, Express, TypeScript, and pnpm wor
 │  │  ├─ src/
 │  │  │  ├─ config/
 │  │  │  ├─ middlewares/
+│  │  │  ├─ models/
+│  │  │  ├─ repositories/
 │  │  │  ├─ routes/
 │  │  │  ├─ services/
 │  │  │  ├─ types/
@@ -38,13 +41,22 @@ Full-stack starter template using React, Vite, Express, TypeScript, and pnpm wor
 │  └─ web/
 │     ├─ public/
 │     ├─ src/
+│     │  ├─ api/
 │     │  ├─ app/
-│     │  ├─ components/
+│     │  ├─ features/
+│     │  ├─ models/
 │     │  ├─ pages/
 │     │  ├─ services/
+│     │  ├─ shared/
 │     │  └─ styles/
 │     ├─ package.json
 │     └─ vite.config.ts
+├─ packages/
+│  └─ shared/
+│     ├─ src/
+│     │  └─ contracts/
+│     ├─ package.json
+│     └─ tsconfig.json
 ├─ docs/
 │  └─ agent/
 ├─ package.json
@@ -127,6 +139,24 @@ pnpm --filter api run dev
 pnpm --filter web run dev
 ```
 
+`pnpm run build`, `pnpm --filter api run build`, and `pnpm --filter web run build`
+build `@repo/shared` first so API and web can resolve the shared runtime package.
+
+## Shared Contracts
+
+`packages/shared` publishes `@repo/shared` for API and web consumers.
+
+Use it for public HTTP contracts:
+
+- request and response DTO types
+- API success/error envelopes
+- stable public unions and error codes
+- Zod schemas used at API boundaries
+
+Keep app internals in their app folders. For example, backend Mongo/session
+models stay in `apps/api`, and frontend view models or store state stay in
+`apps/web`.
+
 ## Environment Variables
 
 The API validates environment variables on startup.
@@ -153,13 +183,22 @@ VITE_API_BASE_URL=http://localhost:9000
 ```txt
 /api
 └─ /v1
-   └─ /health
+   ├─ /auth
+   │  ├─ /register
+   │  ├─ /login
+   │  ├─ /refresh
+   │  ├─ /logout
+   │  ├─ /logout-all
+   │  └─ /me
+   ├─ /health
+   └─ /todos
 ```
 
 Example:
 
 ```txt
 GET /api/v1/health
+GET /api/v1/todos
 ```
 
 ## Path Alias
