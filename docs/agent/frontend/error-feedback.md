@@ -18,8 +18,8 @@ docs/agent/frontend/shared-feedback-ui.md
 Backend error response
   -> API client normalizes error
   -> Service throws ApiError
-  -> Page workflow maps domain meaning
-  -> Feature action writes page/domain error state
+  -> Page commands map domain meaning
+  -> Page-local form state or feature action writes page/domain error state
   -> View renders inline error
 ```
 
@@ -27,11 +27,12 @@ Backend error response
 
 - Do not create a global error store.
 - API and service files do not call UI feedback APIs.
-- Feature stores keep page/domain error state only.
+- Feature stores keep feature-owned page/domain error state only.
 - Feature actions only mutate store state.
-- Page workflows may map API errors into page-level outcomes.
+- Page commands may map API errors into page-level outcomes.
 - Keep catch blocks small: delegate API error mapping to named mapper functions.
 - Use inline state when the error is part of the page data.
+- For form field errors, follow `docs/agent/frontend/forms.md`.
 - Use shared feedback UI only when the error needs toast or modal presentation.
 
 ## Feature Checklist
@@ -41,10 +42,11 @@ When adding API-backed page behavior:
 - Add endpoint paths in `src/api/paths`.
 - Add or reuse a service that returns frontend models.
 - Let `apiJson` throw `ApiError`; do not catch errors in services.
-- Add a named workflow mapper such as `mapLoadTodoError`.
+- Add a named command mapper such as `mapLoadTodoError`.
 - Map domain meaning from documented backend `code` values.
-- Return a page result from the workflow when the VM hook needs toast/modal decisions.
-- Store page-owned inline errors in the feature store.
+- Return a page result from the command when the VM hook needs toast/modal decisions.
+- Store feature-owned inline errors in the feature store.
+- Keep page-only form field errors in the page-local form hook; see `docs/agent/frontend/forms.md`.
 
 ## Placement
 
@@ -98,22 +100,22 @@ Keep fetch helpers and normalization logic in `src/api`.
 
 Services should return frontend models on success and throw `ApiError` on failure.
 
-## Workflow Mapping
+## Command Mapping
 
-Avoid writing different inline `catch` styles in every workflow.
+Avoid writing different inline `catch` styles in every command.
 
 Prefer:
 
 ```txt
 catch error
   -> mapErrorToResult(error)
-  -> feature action updates page state
+  -> page-local form state or feature action updates inline state
   -> return page outcome
 ```
 
 Use API helpers for generic checks such as network or server failures.
 
-Keep page/domain-specific code mapping in a named workflow mapper.
+Keep page/domain-specific code mapping in a named command mapper.
 
 Example:
 
@@ -132,16 +134,19 @@ function mapLoadTodoError(error: unknown): LoadTodoResult {
 
 ## Inline Errors
 
-Use feature store state for errors that belong to the current page data.
+Use page-local form state for page-only form field and submit errors.
+
+Use feature store state for feature-owned errors that belong to current page data.
 
 Examples:
 
 - list load failed
 - detail item not found
-- form validation message
 - save failed while the form stays open
 
-Store state may start simple:
+For form field error shape and ownership, follow `docs/agent/frontend/forms.md`.
+
+Feature-owned store error state may start simple:
 
 ```ts
 type PageError = string | null

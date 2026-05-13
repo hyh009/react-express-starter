@@ -25,6 +25,20 @@ export function createTodoDetailActions(todoDetailStore: TodoDetailStore) {
         isLoading: false,
       })
     },
+
+    saveSuccess(todo: Todo) {
+      todoDetailStore.setState({
+        error: null,
+        todo,
+      })
+    },
+
+    deleteSuccess() {
+      todoDetailStore.setState({
+        error: null,
+        todo: null,
+      })
+    },
   }
 }
 

@@ -70,6 +70,7 @@ export async function apiJson<TData>(
 ): Promise<TData> {
   try {
     const response = await fetch(apiUrl(path), {
+      credentials: 'include',
       ...init,
       headers: createApiHeaders(init),
     })

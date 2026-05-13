@@ -7,9 +7,11 @@ Quick reference for frontend work.
 ```txt
 React View
   |
+  | calls stable VM handlers
   v
 Page VM Hook
   |
+  | owns route effects and UI reactions
   v
 Page Commands
   |
@@ -117,3 +119,5 @@ Use camelCase for folders, such as `todoOverview`, `todoDetail`, and `viewModel`
 `store` / `stores` folders contain `*.store.ts` files only.
 
 `*.commands.ts` files do not use React hooks, toast/modal APIs, or navigation APIs.
+
+Page VM hooks return stable top-level handlers. Avoid `vm.actions` objects unless they are memoized.

@@ -31,7 +31,9 @@ Feature Store -> Page VM Hook via useStore(...) -> View re-renders
 - Feature actions only mutate store state.
 - Page commands compose async page flows and call services/actions.
 - Components never call `store.getState()` or `store.setState()` directly.
-- Components use page VM hooks to read state and trigger page commands.
+- Components use page VM hooks to read state and trigger VM handlers.
+- Page VM hooks own route lifecycle effects and command-result reactions.
+- Page VM hooks expose stable top-level handlers, not nested action objects.
 - Global stores only contain app-level context.
 - Use camelCase for folder names and normal module names.
 
@@ -98,10 +100,36 @@ It owns:
 
 - React hooks
 - `useStore` subscriptions
+- route param lifecycle effects such as initial detail-page loads
 - page-local form and UI state
 - validation
 - toast, modal, navigation, and form reset reactions
 - view-ready values and handlers
+
+Views call the page VM hook and render returned values.
+
+Views may pass route params or navigation callbacks into the VM hook.
+
+Views should not:
+
+- call page commands directly
+- inspect command results to decide navigation or feedback
+- depend on grouped objects such as `vm.actions` in `useEffect`
+
+Return stable top-level handlers from the VM hook:
+
+```ts
+return {
+  deleteTodo,
+  form,
+  loadTodo,
+  saveTodo,
+  setField,
+  todo,
+}
+```
+
+Use `useCallback` or `useMemo` when a returned handler/object is used in a dependency array or passed to memoized children.
 
 The page commands file is the testable async page flow layer.
 

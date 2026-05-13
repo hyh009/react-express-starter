@@ -1,12 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ApiError } from '@/api/apiError'
 import { todoService } from '@/services/todo.service'
-import { createTodoDetailPageWorkflow } from './todoDetailPage.workflow'
+import { createTodoDetailPageCommands } from './todoDetailPage.commands'
 import type { TodoDetailActions } from '@/features/todo/actions/todoDetail.actions'
 
 vi.mock('@/services/todo.service', () => ({
   todoService: {
+    deleteTodo: vi.fn(),
     getTodo: vi.fn(),
+    saveTodo: vi.fn(),
   },
 }))
 
@@ -15,17 +17,19 @@ function createActions() {
     startLoading: vi.fn(),
     loadSuccess: vi.fn(),
     loadFailed: vi.fn(),
+    saveSuccess: vi.fn(),
+    deleteSuccess: vi.fn(),
   } satisfies TodoDetailActions
 }
 
-describe('TodoDetailPageWorkflow', () => {
+describe('TodoDetailPageCommands', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   it('maps TODO_NOT_FOUND into a not-found page result', async () => {
     const actions = createActions()
-    const workflow = createTodoDetailPageWorkflow(actions)
+    const commands = createTodoDetailPageCommands(actions)
 
     vi.mocked(todoService.getTodo).mockRejectedValue(
       new ApiError({
@@ -35,7 +39,7 @@ describe('TodoDetailPageWorkflow', () => {
       }),
     )
 
-    await expect(workflow.loadTodo('missing')).resolves.toEqual({
+    await expect(commands.loadTodo('missing')).resolves.toEqual({
       status: 'not-found',
     })
     expect(actions.startLoading).toHaveBeenCalledOnce()
@@ -45,7 +49,7 @@ describe('TodoDetailPageWorkflow', () => {
 
   it('maps network errors into a failed result while storing the page error', async () => {
     const actions = createActions()
-    const workflow = createTodoDetailPageWorkflow(actions)
+    const commands = createTodoDetailPageCommands(actions)
 
     vi.mocked(todoService.getTodo).mockRejectedValue(
       new ApiError({
@@ -55,7 +59,7 @@ describe('TodoDetailPageWorkflow', () => {
       }),
     )
 
-    await expect(workflow.loadTodo('todo-1')).resolves.toEqual({
+    await expect(commands.loadTodo('todo-1')).resolves.toEqual({
       status: 'failed',
       reason: 'network',
     })

@@ -17,6 +17,32 @@ export function createTodoOverviewActions(todoOverviewStore: TodoOverviewStore) 
       })
     },
 
+    addTodo(todo: Todo) {
+      const { todos } = todoOverviewStore.getState()
+
+      todoOverviewStore.setState({
+        todos: [todo, ...todos],
+      })
+    },
+
+    updateTodo(todo: Todo) {
+      const { todos } = todoOverviewStore.getState()
+
+      todoOverviewStore.setState({
+        todos: todos.map((currentTodo) =>
+          currentTodo.id === todo.id ? todo : currentTodo,
+        ),
+      })
+    },
+
+    removeTodo(todoId: string) {
+      const { todos } = todoOverviewStore.getState()
+
+      todoOverviewStore.setState({
+        todos: todos.filter((todo) => todo.id !== todoId),
+      })
+    },
+
     loadFailed(message: string) {
       todoOverviewStore.setState({
         error: message,

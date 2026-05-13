@@ -78,6 +78,8 @@ The page commands file owns:
 
 The page VM connects the local form hook to the page commands.
 
+Return submit handlers as stable top-level VM fields. Do not hide them under an unstable `actions` object.
+
 Example:
 
 ```ts

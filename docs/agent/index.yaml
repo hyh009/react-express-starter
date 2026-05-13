@@ -88,6 +88,10 @@ agent_docs:
       path: docs/agent/frontend/architecture-diagram.md
       use_when: Understanding frontend architecture flow visually.
 
+    - name: frontend-architecture-validation
+      path: docs/agent/frontend/architecture-validation.md
+      use_when: Checking frontend architecture boundaries before finishing frontend code.
+
     - name: frontend-design-system
       path: docs/agent/frontend/design-system.md
       use_when: Adding shadcn/ui, shared UI primitives, or frontend design rules.

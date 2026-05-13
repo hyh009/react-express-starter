@@ -1,54 +1,114 @@
-import { useEffect } from 'react'
-import { TodoStatusBadge } from '@/features/todo/components/TodoStatusBadge'
-import { LoadingState } from '@/shared/components/LoadingState'
-import { useTodoOverviewPageVM } from './useTodoOverviewPageVM'
+import { Link, useNavigate } from 'react-router';
+import { todoStatuses } from '@repo/shared';
+import { TodoPriorityBadge } from '@/features/todo/components/TodoPriorityBadge';
+import { TodoStatusBadge } from '@/features/todo/components/TodoStatusBadge';
+import { LoadingState } from '@/shared/components/LoadingState';
+import { Button } from '@/shared/components/ui/button';
+import { useTodoOverviewPageVM } from './useTodoOverviewPageVM';
+import type { TodoStatus } from '@/models/todo.types';
 
-type TodoOverviewPageProps = {
-  onOpenTodo: (todoId: string) => void
-}
-
-export function TodoOverviewPage({ onOpenTodo }: TodoOverviewPageProps) {
-  const vm = useTodoOverviewPageVM()
-
-  useEffect(() => {
-    void vm.actions.loadTodos()
-  }, [vm.actions])
+export function TodoOverviewPage() {
+  const navigate = useNavigate();
+  const vm = useTodoOverviewPageVM();
 
   if (vm.isLoading && vm.todos.length === 0) {
-    return <LoadingState label="Loading todos" />
+    return <LoadingState label="Loading todos" />;
   }
 
   return (
-    <section className="page-section">
-      <div className="page-heading">
-        <p className="eyebrow">Frontend architecture demo</p>
-        <h1>Todo overview</h1>
-        <p className="lead">
-          This page uses a page VM hook, feature-level Zustand store, Todo VM,
-          feature actions, and domain service.
-        </p>
-      </div>
-
-      {vm.error ? <p className="error-message">{vm.error}</p> : null}
-
-      <div className="todo-list" aria-label="Todo list">
-        {vm.todos.map((todo) => (
-          <button
-            className="todo-row"
-            key={todo.id}
+    <section className="mx-auto grid w-full max-w-6xl gap-8 px-5 py-8 md:px-8">
+      <div className="min-w-0">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="mb-2 text-xs font-bold tracking-[0.08em] text-primary uppercase">
+              Protected todo workspace
+            </p>
+            <h1 className="mb-3 text-3xl leading-tight font-bold text-foreground md:text-4xl">
+              Todos
+            </h1>
+            <p className="max-w-2xl text-base text-muted-foreground">
+              Review priorities, update status, or remove completed work.
+            </p>
+          </div>
+          <Button
             onClick={() => {
-              onOpenTodo(todo.id)
+              navigate('/todos/new');
             }}
             type="button"
           >
-            <span>
-              <strong>{todo.title}</strong>
-              <small>{todo.ownerName}</small>
-            </span>
-            <TodoStatusBadge status={todo.status} />
-          </button>
-        ))}
+            Create todo
+          </Button>
+        </div>
+
+        {vm.error ? (
+          <p className="mb-4 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm font-medium text-destructive">
+            {vm.error}
+          </p>
+        ) : null}
+
+        <div className="grid gap-3" aria-label="Todo list">
+          {vm.todos.map((todo) => (
+            <article
+              className="grid gap-4 rounded-lg border border-border bg-card px-4 py-3 text-foreground shadow-sm transition hover:border-primary/60 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+              key={todo.id}
+            >
+              <div className="grid min-w-0 gap-2">
+                <Link
+                  className="truncate text-base font-semibold text-foreground hover:text-primary"
+                  to={`/todos/${todo.id}`}
+                >
+                  {todo.title}
+                </Link>
+                <span className="text-sm text-muted-foreground">
+                  {todo.ownerName}
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  <TodoStatusBadge status={todo.status} />
+                  <TodoPriorityBadge priority={todo.priority} />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                <label className="sr-only" htmlFor={`todo-status-${todo.id}`}>
+                  Status
+                </label>
+                <select
+                  className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm text-foreground"
+                  id={`todo-status-${todo.id}`}
+                  value={todo.status}
+                  onChange={(event) => {
+                    void vm.updateTodoStatus(
+                      todo,
+                      event.target.value as TodoStatus,
+                    );
+                  }}
+                >
+                  {todoStatuses.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+                <Button
+                  onClick={() => {
+                    void vm.deleteTodo(todo.id);
+                  }}
+                  type="button"
+                  variant="destructive"
+                >
+                  Delete
+                </Button>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {vm.todos.length === 0 && !vm.isLoading ? (
+          <p className="mt-4 rounded-md border border-border bg-card px-4 py-3 text-sm text-muted-foreground">
+            No todos yet.
+          </p>
+        ) : null}
       </div>
     </section>
-  )
+  );
 }

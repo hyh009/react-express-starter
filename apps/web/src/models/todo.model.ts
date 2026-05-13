@@ -1,9 +1,21 @@
-import type { Todo, TodoDto, TodoRequest, TodoStatus } from './todo.types'
+import type {
+  Todo,
+  TodoDto,
+  TodoPriority,
+  TodoRequest,
+  TodoStatus,
+} from './todo.types'
 
 const statusLabel: Record<TodoStatus, string> = {
   todo: 'Todo',
   'in-progress': 'In progress',
   done: 'Done',
+}
+
+const priorityLabel: Record<TodoPriority, string> = {
+  low: 'Low priority',
+  medium: 'Medium priority',
+  high: 'High priority',
 }
 
 export const todoModel = {
@@ -40,6 +52,10 @@ export const todoModel = {
 
   getStatusLabel(status: TodoStatus) {
     return statusLabel[status]
+  },
+
+  getPriorityLabel(priority: TodoPriority) {
+    return priorityLabel[priority]
   },
 
   getOwnerLabel(todo: Todo) {

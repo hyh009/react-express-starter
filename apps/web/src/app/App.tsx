@@ -1,94 +1,61 @@
-import { useEffect, useState } from 'react'
-import { apiBaseUrl, apiUrl } from '@/api'
-import { healthPaths } from '@/api/paths/health.paths'
-import { useAppContextVM } from '@/app/viewModel/useAppContextVM'
-import { useFeedbackVM } from '@/app/viewModel/useFeedbackVM'
+import { useEffect } from 'react'
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+} from 'react-router'
+import { RequireAuth } from '@/app/RequireAuth'
+import { useAuthVM } from '@/app/viewModel/useAuthVM'
+import { LoginPage } from '@/pages/login/LoginPage'
+import { RegisterPage } from '@/pages/register/RegisterPage'
+import { TodoCreatePage } from '@/pages/todoCreate/TodoCreatePage'
 import { TodoDetailPage } from '@/pages/todoDetail/TodoDetailPage'
 import { TodoOverviewPage } from '@/pages/todoOverview/TodoOverviewPage'
-import { ModalHost } from '@/shared/components/feedback/ModalHost'
-import { ToastHost } from '@/shared/components/feedback/ToastHost'
-import { AppShell } from '@/shared/components/layout/AppShell'
+import { LoadingState } from '@/shared/components/LoadingState'
+import { AppLayout } from './AppLayout'
 
-type AppRoute =
-  | {
-      name: 'todo-overview'
-    }
-  | {
-      name: 'todo-detail'
-      todoId: string
-    }
+function PublicOnly() {
+  const auth = useAuthVM()
 
-function getRouteFromLocation(): AppRoute {
-  const detailMatch = window.location.pathname.match(/^\/todos\/([^/]+)$/)
-
-  if (detailMatch?.[1]) {
-    return {
-      name: 'todo-detail',
-      todoId: detailMatch[1],
-    }
+  if (auth.isChecking) {
+    return <LoadingState label="Checking session" />
   }
 
-  return {
-    name: 'todo-overview',
+  if (auth.isAuthenticated) {
+    return <Navigate replace to="/" />
   }
+
+  return <Outlet />
 }
 
 export function App() {
-  const appContext = useAppContextVM()
-  const feedback = useFeedbackVM()
-  const [route, setRoute] = useState(getRouteFromLocation)
+  const auth = useAuthVM()
+  const initializeAuth = auth.initialize
 
   useEffect(() => {
-    const handlePopState = () => {
-      setRoute(getRouteFromLocation())
-    }
-
-    window.addEventListener('popstate', handlePopState)
-
-    return () => {
-      window.removeEventListener('popstate', handlePopState)
-    }
-  }, [])
-
-  function navigateToOverview() {
-    window.history.pushState(null, '', '/')
-    setRoute({
-      name: 'todo-overview',
-    })
-  }
-
-  function navigateToTodo(todoId: string) {
-    window.history.pushState(null, '', `/todos/${todoId}`)
-    setRoute({
-      name: 'todo-detail',
-      todoId,
-    })
-  }
+    void initializeAuth()
+  }, [initializeAuth])
 
   return (
-    <AppShell
-      appName={appContext.appName}
-      healthUrl={apiUrl(healthPaths.status)}
-      swaggerUrl={`${apiBaseUrl}/docs`}
-    >
-      {route.name === 'todo-detail' ? (
-        <TodoDetailPage onBack={navigateToOverview} todoId={route.todoId} />
-      ) : (
-        <TodoOverviewPage onOpenTodo={navigateToTodo} />
-      )}
-      <ToastHost
-        onDismiss={feedback.actions.dismissToast}
-        toasts={feedback.toasts}
-      />
-      <ModalHost
-        modal={feedback.modal}
-        onCancel={() => {
-          feedback.actions.closeModal(false)
-        }}
-        onConfirm={() => {
-          feedback.actions.closeModal(true)
-        }}
-      />
-    </AppShell>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<PublicOnly />}>
+          <Route element={<LoginPage />} path="/login" />
+          <Route element={<RegisterPage />} path="/register" />
+        </Route>
+
+        <Route element={<RequireAuth />}>
+          <Route element={<AppLayout />}>
+            <Route element={<TodoOverviewPage />} index />
+            <Route element={<TodoCreatePage />} path="/todos/new" />
+            <Route element={<TodoDetailPage />} path="/todos/:todoId" />
+          </Route>
+        </Route>
+
+        <Route element={<Navigate replace to="/" />} path="*" />
+      </Routes>
+    </BrowserRouter>
   )
 }

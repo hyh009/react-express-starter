@@ -21,6 +21,12 @@ pnpm --filter web run lint
 pnpm --filter web run build
 ```
 
+Also run the frontend architecture checklist when frontend code changes:
+
+```txt
+docs/agent/frontend/architecture-validation.md
+```
+
 Full-stack or workspace-level change:
 
 ```bash
