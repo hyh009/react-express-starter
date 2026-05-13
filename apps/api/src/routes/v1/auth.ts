@@ -189,7 +189,7 @@ function sendAuthResult(
  *                 example: starter-user
  *               password:
  *                 type: string
- *                 example: password123
+ *                 example: Password123
  *     responses:
  *       201:
  *         description: User registered
@@ -246,7 +246,7 @@ router.post<Record<string, never>, AuthSuccessResponse, RegisterRequest>(
  *                 example: user@example.com
  *               password:
  *                 type: string
- *                 example: password123
+ *                 example: Password123
  *     responses:
  *       200:
  *         description: User logged in

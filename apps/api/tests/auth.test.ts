@@ -215,7 +215,7 @@ vi.mock('@src/repositories/authSession/repository', () => ({
 const credentials = {
   email: 'user@example.com',
   username: 'starter-user',
-  password: 'password123',
+  password: 'Password123',
 };
 
 function getCookie(response: request.Response, cookieName: string) {

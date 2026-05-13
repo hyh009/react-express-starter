@@ -1,7 +1,5 @@
 import {
   createTodoSchema,
-  todoPriorities,
-  todoStatuses,
   updateTodoSchema,
 } from '@repo/shared';
 import { validate } from '@src/middlewares/validate';

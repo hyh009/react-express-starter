@@ -15,10 +15,21 @@ export type AuthUser = {
   roles: UserRole[];
 };
 
+export const passwordRuleMessage =
+  'Password must be 8-128 characters and include uppercase, lowercase, and a number';
+
+export const passwordSchema = z
+  .string()
+  .min(8, passwordRuleMessage)
+  .max(128, passwordRuleMessage)
+  .regex(/[a-z]/, passwordRuleMessage)
+  .regex(/[A-Z]/, passwordRuleMessage)
+  .regex(/[0-9]/, passwordRuleMessage);
+
 export const registerSchema = z.object({
   email: z.email().trim().toLowerCase(),
   username: z.string().trim().min(1).max(60),
-  password: z.string().min(8).max(128),
+  password: passwordSchema,
 });
 
 export type RegisterRequest = z.infer<typeof registerSchema>;
