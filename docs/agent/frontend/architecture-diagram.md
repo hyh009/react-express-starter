@@ -11,7 +11,7 @@ React View
 Page VM Hook
   |
   v
-Page Workflow
+Page Commands
   |
   +--> Service --> API Client / Paths --> Backend API
   |
@@ -37,7 +37,7 @@ React View re-renders
 ## Placement
 
 ```txt
-Page view + page VM hook + page workflow
+Page view + page VM hook + page commands
   -> src/pages/<pageName>
 
 App-level state
@@ -45,6 +45,13 @@ App-level state
 
 Feature-level state
   -> src/features/<domain>/store
+
+Page-only form hook and process/UI state
+  -> src/pages/<pageName>/use<PageName>PageVM.ts
+  -> src/pages/<pageName>/use<PageName>Form.ts
+
+Testable page async flow
+  -> src/pages/<pageName>/<pageName>Page.commands.ts
 
 Feature state mutations
   -> src/features/<domain>/actions
@@ -91,7 +98,7 @@ src/
     <pageName>/
       <PageName>Page.tsx
       use<PageName>PageVM.ts
-      <pageName>Page.workflow.ts
+      <pageName>Page.commands.ts
 
   features/
     <domain>/
@@ -108,3 +115,5 @@ src/
 Use camelCase for folders, such as `todoOverview`, `todoDetail`, and `viewModel`.
 
 `store` / `stores` folders contain `*.store.ts` files only.
+
+`*.commands.ts` files do not use React hooks, toast/modal APIs, or navigation APIs.

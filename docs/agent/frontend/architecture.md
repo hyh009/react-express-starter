@@ -9,7 +9,7 @@ This project uses React + Zustand with a lightweight MVVM-inspired architecture.
 Command flow:
 
 ```txt
-View -> Page VM Hook -> Page Workflow -> Feature Actions -> Feature Store
+View -> Page VM Hook -> Page Commands -> Feature Actions -> Feature Store
                          |
                          v
                        Service -> API
@@ -24,14 +24,14 @@ Feature Store -> Page VM Hook via useStore(...) -> View re-renders
 ## Core Rules
 
 - Pages live in `src/pages`.
-- Each page folder contains the page view, page VM hook, and page workflow.
+- Each page folder contains the page view, page VM hook, and page commands.
 - Features are based on domain, not page.
 - Feature stores and feature actions live under `src/features/<domain>`.
 - Zustand stores hold state only.
-- Actions mutate store state.
-- Page workflow files compose workflows and call services/actions.
+- Feature actions only mutate store state.
+- Page commands compose async page flows and call services/actions.
 - Components never call `store.getState()` or `store.setState()` directly.
-- Components use page VM hooks to read state and trigger workflows.
+- Components use page VM hooks to read state and trigger page commands.
 - Global stores only contain app-level context.
 - Use camelCase for folder names and normal module names.
 
@@ -55,11 +55,11 @@ src/
     todoOverview/
       TodoOverviewPage.tsx
       useTodoOverviewPageVM.ts
-      todoOverviewPage.workflow.ts
+      todoOverviewPage.commands.ts
     todoDetail/
       TodoDetailPage.tsx
       useTodoDetailPageVM.ts
-      todoDetailPage.workflow.ts
+      todoDetailPage.commands.ts
 
   features/
     todo/
@@ -81,7 +81,7 @@ Put page-specific files together:
 
 - page component
 - page VM hook
-- page workflow
+- page commands
 
 Example:
 
@@ -89,17 +89,32 @@ Example:
 src/pages/todoOverview/
   TodoOverviewPage.tsx
   useTodoOverviewPageVM.ts
-  todoOverviewPage.workflow.ts
+  todoOverviewPage.commands.ts
 ```
 
-The page VM hook connects React to Zustand with `useStore`.
+The page VM hook is the React adapter.
 
-The page workflow composes workflows:
+It owns:
+
+- React hooks
+- `useStore` subscriptions
+- page-local form and UI state
+- validation
+- toast, modal, navigation, and form reset reactions
+- view-ready values and handlers
+
+The page commands file is the testable async page flow layer.
+
+It owns:
 
 - call services
 - call feature actions
-- coordinate loading / error / save flows
-- expose computed helpers when useful
+- map API errors into typed page results
+- return typed results to the page VM hook
+
+Page commands do not use React hooks, toast/modal APIs, navigation APIs, or local UI state.
+
+When touching an existing `*.workflow.ts` page file, migrate it to `*.commands.ts`.
 
 ## Feature Layer
 
@@ -131,7 +146,7 @@ Examples:
 - current organization
 - global theme
 
-Feature-level state belongs to one domain feature.
+Feature-level state belongs to one domain feature and needs feature ownership or shared access.
 
 Place feature-level store files in `src/features/<domain>/store`.
 
@@ -139,8 +154,22 @@ Examples:
 
 - todo overview list
 - todo detail state
-- editor form state
-- dashboard filters
+- editor draft state shared across components or pages
+- dashboard filters shared by multiple components
+
+For form values, field errors, and submit state, follow `docs/agent/frontend/forms.md`.
+
+Page-only process/UI state belongs in the page VM hook.
+
+Use React `useState` in the page VM hook.
+
+Examples:
+
+- redirect outcomes
+- page-only computed flags
+- page-only non-form process state
+
+Page-only form state belongs in a page-local form hook; follow `docs/agent/frontend/forms.md`.
 
 UI-level state is local to one component.
 
@@ -151,7 +180,8 @@ Examples:
 - modal open / close
 - dropdown state
 - hover state
-- temporary input value
+- password visibility toggle
+- combobox search text that only filters local menu options
 
 Do not put UI-level state in Zustand.
 
@@ -161,13 +191,13 @@ Stores hold state only.
 
 Store folders contain only `*.store.ts` files.
 
-Do not put VM, actions, hooks, services, API calls, or workflow logic in `store` / `stores`.
+Do not put VM, actions, hooks, services, API calls, or page command logic in `store` / `stores`.
 
 Feature-level stores should usually export factory functions, so feature/page state is not accidentally global.
 
 ## Actions
 
-Actions mutate store state.
+Actions only mutate store state.
 
 Feature actions belong in `src/features/<domain>/actions`.
 
@@ -180,6 +210,8 @@ Actions may call:
 
 Actions should not keep hidden internal state.
 
+Actions should not call services, handle API errors, show feedback, navigate, or coordinate page flows.
+
 ## Services
 
 Use root-level `src/services` for service modules.
@@ -190,7 +222,7 @@ Services call `apiJson` and convert between API DTOs and frontend models.
 
 - On read: deserialize API DTOs into frontend models with helpers from `src/models`.
 - On write: serialize frontend models or input into API request payloads with helpers from `src/models`.
-- Pages, workflows, actions, and stores should not handle raw API DTOs directly.
+- Pages, commands, actions, and stores should not handle raw API DTOs directly.
 
 Base API client and endpoint paths stay in `src/api`.
 
@@ -242,6 +274,6 @@ Examples:
 - `viewModel`
 - `todoOverview.store.ts`
 - `todoDetail.actions.ts`
-- `todoOverviewPage.workflow.ts`
+- `todoOverviewPage.commands.ts`
 
 React component files and component exports use PascalCase.
