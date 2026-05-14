@@ -11,35 +11,17 @@ export type LoadTodosFailureReason = ApiFailureReason
 export type UpdateTodoStatusFailureReason = ApiFailureReason
 export type DeleteTodoFailureReason = ApiFailureReason
 
-export type LoadTodosResult =
-  | {
-      status: 'loaded'
-    }
-  | {
-      status: 'failed'
-      reason: LoadTodosFailureReason
-    }
+type CommandResult<S extends string, F = ApiFailureReason> =
+  | { status: S }
+  | { status: 'failed'; reason: F }
 
-export type UpdateTodoStatusResult =
-  | {
-      status: 'updated'
-    }
-  | {
-      status: 'failed'
-      reason: UpdateTodoStatusFailureReason
-    }
+export type LoadTodosResult = CommandResult<'loaded', LoadTodosFailureReason>
+
+export type UpdateTodoStatusResult = CommandResult<'updated', UpdateTodoStatusFailureReason>
 
 export type DeleteTodoResult =
-  | {
-      status: 'deleted'
-    }
-  | {
-      status: 'not-found'
-    }
-  | {
-      status: 'failed'
-      reason: DeleteTodoFailureReason
-    }
+  | CommandResult<'deleted', DeleteTodoFailureReason>
+  | { status: 'not-found' }
 
 class TodoOverviewPageCommands {
   private readonly todoOverviewActions: TodoOverviewActions
