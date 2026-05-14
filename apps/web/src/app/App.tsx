@@ -6,6 +6,7 @@ import {
   Route,
   Routes,
 } from 'react-router'
+import { RouteErrorBoundary } from '@/app/AppErrorBoundary'
 import { RequireAuth } from '@/app/RequireAuth'
 import { useAuthVM } from '@/app/viewModel/useAuthVM'
 import { LoginPage } from '@/pages/login/LoginPage'
@@ -41,9 +42,11 @@ export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<PublicOnly />}>
-          <Route element={<LoginPage />} path="/login" />
-          <Route element={<RegisterPage />} path="/register" />
+        <Route element={<RouteErrorBoundary />}>
+          <Route element={<PublicOnly />}>
+            <Route element={<LoginPage />} path="/login" />
+            <Route element={<RegisterPage />} path="/register" />
+          </Route>
         </Route>
 
         <Route element={<RequireAuth />}>

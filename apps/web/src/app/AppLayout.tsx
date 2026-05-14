@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from 'react-router'
 import { apiBaseUrl, apiUrl } from '@/api'
 import { healthPaths } from '@/api/paths/health.paths'
+import { PageErrorBoundary } from '@/app/AppErrorBoundary'
 import { useAppContextVM } from '@/app/viewModel/useAppContextVM'
 import { useAuthVM } from '@/app/viewModel/useAuthVM'
 import { useFeedbackVM } from '@/app/viewModel/useFeedbackVM'
@@ -36,7 +37,9 @@ export function AppLayout() {
       swaggerUrl={`${apiBaseUrl}/docs`}
       username={auth.user?.username}
     >
-      <Outlet />
+      <PageErrorBoundary>
+        <Outlet />
+      </PageErrorBoundary>
       <ToastHost
         onDismiss={feedback.actions.dismissToast}
         toasts={feedback.toasts}
