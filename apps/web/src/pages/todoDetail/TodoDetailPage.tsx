@@ -135,7 +135,11 @@ export function TodoDetailPage() {
 
             <div className="flex flex-wrap gap-3">
               <Button type="submit">Save changes</Button>
-              <Button onClick={handleDelete} type="button" variant="destructive">
+              <Button
+                onClick={handleDelete}
+                type="button"
+                variant="destructive"
+              >
                 Delete
               </Button>
             </div>
@@ -152,14 +156,18 @@ export function TodoDetailPage() {
                 <dd className="m-0">{todoModel.getOwnerLabel(vm.todo)}</dd>
               </div>
               <div className="border-t border-border pt-4">
-                <dt className="font-semibold text-muted-foreground">Priority</dt>
+                <dt className="font-semibold text-muted-foreground">
+                  Priority
+                </dt>
                 <dd className="m-0">{vm.todo.priority}</dd>
               </div>
               <div className="border-t border-border pt-4">
                 <dt className="font-semibold text-muted-foreground">
                   Description
                 </dt>
-                <dd className="m-0">{vm.todo.description || 'No description'}</dd>
+                <dd className="m-0">
+                  {vm.todo.description || 'No description'}
+                </dd>
               </div>
             </dl>
           </aside>

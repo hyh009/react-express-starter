@@ -1,43 +1,37 @@
-import { useEffect } from 'react'
-import {
-  BrowserRouter,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-} from 'react-router'
-import { RouteErrorBoundary } from '@/app/AppErrorBoundary'
-import { RequireAuth } from '@/app/RequireAuth'
-import { useAuthVM } from '@/app/viewModel/useAuthVM'
-import { LoginPage } from '@/pages/login/LoginPage'
-import { RegisterPage } from '@/pages/register/RegisterPage'
-import { TodoCreatePage } from '@/pages/todoCreate/TodoCreatePage'
-import { TodoDetailPage } from '@/pages/todoDetail/TodoDetailPage'
-import { TodoOverviewPage } from '@/pages/todoOverview/TodoOverviewPage'
-import { LoadingState } from '@/shared/components/LoadingState'
-import { AppLayout } from './AppLayout'
+import { useEffect } from 'react';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router';
+import { RouteErrorBoundary } from '@/app/AppErrorBoundary';
+import { RequireAuth } from '@/app/RequireAuth';
+import { useAuthVM } from '@/app/viewModel/useAuthVM';
+import { LoginPage } from '@/pages/login/LoginPage';
+import { RegisterPage } from '@/pages/register/RegisterPage';
+import { TodoCreatePage } from '@/pages/todoCreate/TodoCreatePage';
+import { TodoDetailPage } from '@/pages/todoDetail/TodoDetailPage';
+import { TodoOverviewPage } from '@/pages/todoOverview/TodoOverviewPage';
+import { LoadingState } from '@/shared/components/LoadingState';
+import { AppLayout } from './AppLayout';
 
 function PublicOnly() {
-  const auth = useAuthVM()
+  const auth = useAuthVM();
 
   if (auth.isChecking) {
-    return <LoadingState label="Checking session" />
+    return <LoadingState label="Checking session" />;
   }
 
   if (auth.isAuthenticated) {
-    return <Navigate replace to="/" />
+    return <Navigate replace to="/" />;
   }
 
-  return <Outlet />
+  return <Outlet />;
 }
 
 export function App() {
-  const auth = useAuthVM()
-  const initializeAuth = auth.initialize
+  const auth = useAuthVM();
+  const initializeAuth = auth.initialize;
 
   useEffect(() => {
-    void initializeAuth()
-  }, [initializeAuth])
+    void initializeAuth();
+  }, [initializeAuth]);
 
   return (
     <BrowserRouter>
@@ -60,5 +54,5 @@ export function App() {
         <Route element={<Navigate replace to="/" />} path="*" />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }

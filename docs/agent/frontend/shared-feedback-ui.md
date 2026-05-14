@@ -87,7 +87,7 @@ const confirmed = await feedback.confirm({
   title: 'Delete todo?',
   message: 'This action cannot be undone.',
   confirmLabel: 'Delete',
-})
+});
 ```
 
 Rules:

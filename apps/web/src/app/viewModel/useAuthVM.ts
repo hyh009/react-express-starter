@@ -1,28 +1,31 @@
-import { useCallback } from 'react'
-import { useStore } from 'zustand'
-import { authCommands } from '@/app/auth.commands'
-import { authStore } from '@/app/stores/auth.store'
+import { useCallback } from 'react';
+import { useStore } from 'zustand';
+import { authCommands } from '@/app/auth.commands';
+import { authStore } from '@/app/stores/auth.store';
 
 type UseAuthVMOptions = {
-  onLoggedOut?: () => void
-}
+  onLoggedOut?: () => void;
+};
 
 export function useAuthVM(options: UseAuthVMOptions = {}) {
-  const status = useStore(authStore, (state) => state.status)
-  const user = useStore(authStore, (state) => state.user)
-  const { onLoggedOut } = options
+  const status = useStore(authStore, (state) => state.status);
+  const user = useStore(authStore, (state) => state.user);
+  const { onLoggedOut } = options;
 
   const initialize = useCallback(function initialize() {
-    return authCommands.initialize()
-  }, [])
+    return authCommands.initialize();
+  }, []);
 
-  const logout = useCallback(async function logout() {
-    const result = await authCommands.logout()
+  const logout = useCallback(
+    async function logout() {
+      const result = await authCommands.logout();
 
-    if (result.status === 'logged-out') {
-      onLoggedOut?.()
-    }
-  }, [onLoggedOut])
+      if (result.status === 'logged-out') {
+        onLoggedOut?.();
+      }
+    },
+    [onLoggedOut],
+  );
 
   return {
     initialize,
@@ -31,5 +34,5 @@ export function useAuthVM(options: UseAuthVMOptions = {}) {
     logout,
     status,
     user,
-  }
+  };
 }

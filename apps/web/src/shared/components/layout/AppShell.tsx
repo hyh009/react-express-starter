@@ -1,16 +1,16 @@
-import type { ReactNode } from 'react'
-import { Link } from 'react-router'
+import type { ReactNode } from 'react';
+import { Link } from 'react-router';
 
 type AppShellProps = {
-  appName: string
-  children: ReactNode
-  healthUrl: string
-  isAuthenticated: boolean
-  onLogout: () => void
-  onNavigateHome: () => void
-  swaggerUrl: string
-  username?: string
-}
+  appName: string;
+  children: ReactNode;
+  healthUrl: string;
+  isAuthenticated: boolean;
+  onLogout: () => void;
+  onNavigateHome: () => void;
+  swaggerUrl: string;
+  username?: string;
+};
 
 export function AppShell({
   appName,
@@ -67,5 +67,5 @@ export function AppShell({
       </header>
       <main>{children}</main>
     </div>
-  )
+  );
 }

@@ -1,22 +1,22 @@
-import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router'
-import { Field } from '@/shared/components/form/Field'
-import { Button } from '@/shared/components/ui/button'
-import { buttonVariants } from '@/shared/components/ui/buttonVariants'
-import { Input } from '@/shared/components/ui/input'
-import { useRegisterPageVM } from './useRegisterPageVM'
+import type { FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { Field } from '@/shared/components/form/Field';
+import { Button } from '@/shared/components/ui/button';
+import { buttonVariants } from '@/shared/components/ui/buttonVariants';
+import { Input } from '@/shared/components/ui/input';
+import { useRegisterPageVM } from './useRegisterPageVM';
 
 export function RegisterPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const vm = useRegisterPageVM(() => {
     navigate('/', {
       replace: true,
-    })
-  })
+    });
+  });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    void vm.submit()
+    event.preventDefault();
+    void vm.submit();
   }
 
   return (
@@ -29,8 +29,8 @@ export function RegisterPage() {
           Create an account
         </h1>
         <p className="max-w-xl text-base text-muted-foreground">
-          Registration returns an access token and issues the refresh cookie used
-          by protected routes.
+          Registration returns an access token and issues the refresh cookie
+          used by protected routes.
         </p>
       </div>
 
@@ -56,7 +56,7 @@ export function RegisterPage() {
             autoComplete="email"
             value={vm.form.values.email}
             onChange={(event) => {
-              vm.setField('email', event.target.value)
+              vm.setField('email', event.target.value);
             }}
             type="email"
           />
@@ -67,7 +67,7 @@ export function RegisterPage() {
             autoComplete="username"
             value={vm.form.values.username}
             onChange={(event) => {
-              vm.setField('username', event.target.value)
+              vm.setField('username', event.target.value);
             }}
           />
         </Field>
@@ -82,7 +82,7 @@ export function RegisterPage() {
             autoComplete="new-password"
             value={vm.form.values.password}
             onChange={(event) => {
-              vm.setField('password', event.target.value)
+              vm.setField('password', event.target.value);
             }}
             type="password"
           />
@@ -97,7 +97,7 @@ export function RegisterPage() {
             autoComplete="new-password"
             value={vm.form.values.confirmPassword}
             onChange={(event) => {
-              vm.setField('confirmPassword', event.target.value)
+              vm.setField('confirmPassword', event.target.value);
             }}
             type="password"
           />
@@ -112,5 +112,5 @@ export function RegisterPage() {
         </Link>
       </form>
     </section>
-  )
+  );
 }

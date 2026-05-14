@@ -1,27 +1,27 @@
-import { X } from 'lucide-react'
-import { cn } from '@/shared/utils/cn'
+import { X } from 'lucide-react';
+import { cn } from '@/shared/utils/cn';
 
 type ToastItem = {
-  id: string
-  tone: 'info' | 'success' | 'error'
-  message: string
-  title?: string
-}
+  id: string;
+  tone: 'info' | 'success' | 'error';
+  message: string;
+  title?: string;
+};
 
 type ToastHostProps = {
-  toasts: ToastItem[]
-  onDismiss: (toastId: string) => void
-}
+  toasts: ToastItem[];
+  onDismiss: (toastId: string) => void;
+};
 
 const toastToneClassName: Record<ToastItem['tone'], string> = {
   info: 'border-l-primary',
   success: 'border-l-primary',
   error: 'border-l-destructive',
-}
+};
 
 export function ToastHost({ toasts, onDismiss }: ToastHostProps) {
   if (toasts.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -43,15 +43,13 @@ export function ToastHost({ toasts, onDismiss }: ToastHostProps) {
                 {toast.title}
               </strong>
             ) : null}
-            <p className="m-0 text-sm text-muted-foreground">
-              {toast.message}
-            </p>
+            <p className="m-0 text-sm text-muted-foreground">{toast.message}</p>
           </div>
           <button
             aria-label="Dismiss notification"
             className="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
             onClick={() => {
-              onDismiss(toast.id)
+              onDismiss(toast.id);
             }}
             type="button"
           >
@@ -60,5 +58,5 @@ export function ToastHost({ toasts, onDismiss }: ToastHostProps) {
         </section>
       ))}
     </div>
-  )
+  );
 }

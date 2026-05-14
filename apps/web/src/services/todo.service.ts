@@ -1,25 +1,25 @@
-import { apiJson } from '@/api'
-import { todoPaths } from '@/api/paths/todo.paths'
-import { todoModel } from '@/models/todo.model'
-import type { ApiSuccessResponse } from '@/models/apiError.types'
-import type { Todo } from '@/models/todo.types'
-import type { DeleteTodoResponse, TodoDto } from '@/models/todo.types'
+import { apiJson } from '@/api';
+import { todoPaths } from '@/api/paths/todo.paths';
+import { todoModel } from '@/models/todo.model';
+import type { ApiSuccessResponse } from '@/models/apiError.types';
+import type { Todo } from '@/models/todo.types';
+import type { DeleteTodoResponse, TodoDto } from '@/models/todo.types';
 
 export const todoService = {
   async listTodos() {
     const response = await apiJson<ApiSuccessResponse<TodoDto[]>>(
       todoPaths.list,
-    )
+    );
 
-    return response.data.map(todoModel.deserialize)
+    return response.data.map(todoModel.deserialize);
   },
 
   async getTodo(todoId: string) {
     const response = await apiJson<ApiSuccessResponse<TodoDto>>(
       todoPaths.detail(todoId),
-    )
+    );
 
-    return todoModel.deserialize(response.data)
+    return todoModel.deserialize(response.data);
   },
 
   async saveTodo(todo: Todo) {
@@ -29,18 +29,21 @@ export const todoService = {
         body: JSON.stringify(todoModel.serialize(todo)),
         method: 'PATCH',
       },
-    )
+    );
 
-    return todoModel.deserialize(response.data)
+    return todoModel.deserialize(response.data);
   },
 
   async createTodo(todo: Omit<Todo, 'id'>) {
-    const response = await apiJson<ApiSuccessResponse<TodoDto>>(todoPaths.list, {
-      body: JSON.stringify(todoModel.serializeCreate(todo)),
-      method: 'POST',
-    })
+    const response = await apiJson<ApiSuccessResponse<TodoDto>>(
+      todoPaths.list,
+      {
+        body: JSON.stringify(todoModel.serializeCreate(todo)),
+        method: 'POST',
+      },
+    );
 
-    return todoModel.deserialize(response.data)
+    return todoModel.deserialize(response.data);
   },
 
   async deleteTodo(todoId: string) {
@@ -49,8 +52,8 @@ export const todoService = {
       {
         method: 'DELETE',
       },
-    )
+    );
 
-    return response.data
+    return response.data;
   },
-}
+};

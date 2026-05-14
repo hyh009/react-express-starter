@@ -1,7 +1,4 @@
-import {
-  todoPriorities,
-  todoStatuses,
-} from '@src/models/todo/model';
+import { todoPriorities, todoStatuses } from '@src/models/todo/model';
 import { model, models, Schema } from 'mongoose';
 
 import type { TodoEntity } from '@src/models/todo/model';

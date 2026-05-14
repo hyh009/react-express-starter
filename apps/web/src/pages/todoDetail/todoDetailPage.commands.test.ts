@@ -1,8 +1,8 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { ApiError } from '@/api/apiError'
-import { todoService } from '@/services/todo.service'
-import { createTodoDetailPageCommands } from './todoDetailPage.commands'
-import type { TodoDetailActions } from '@/features/todo/actions/todoDetail.actions'
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ApiError } from '@/api/apiError';
+import { todoService } from '@/services/todo.service';
+import { createTodoDetailPageCommands } from './todoDetailPage.commands';
+import type { TodoDetailActions } from '@/features/todo/actions/todoDetail.actions';
 
 vi.mock('@/services/todo.service', () => ({
   todoService: {
@@ -10,7 +10,7 @@ vi.mock('@/services/todo.service', () => ({
     getTodo: vi.fn(),
     saveTodo: vi.fn(),
   },
-}))
+}));
 
 function createActions() {
   return {
@@ -19,17 +19,17 @@ function createActions() {
     loadFailed: vi.fn(),
     saveSuccess: vi.fn(),
     deleteSuccess: vi.fn(),
-  } satisfies TodoDetailActions
+  } satisfies TodoDetailActions;
 }
 
 describe('TodoDetailPageCommands', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it('maps TODO_NOT_FOUND into a not-found page result', async () => {
-    const actions = createActions()
-    const commands = createTodoDetailPageCommands(actions)
+    const actions = createActions();
+    const commands = createTodoDetailPageCommands(actions);
 
     vi.mocked(todoService.getTodo).mockRejectedValue(
       new ApiError({
@@ -37,19 +37,19 @@ describe('TodoDetailPageCommands', () => {
         code: 'TODO_NOT_FOUND',
         message: 'Todo not found',
       }),
-    )
+    );
 
     await expect(commands.loadTodo('missing')).resolves.toEqual({
       status: 'not-found',
-    })
-    expect(actions.startLoading).toHaveBeenCalledOnce()
-    expect(actions.loadSuccess).toHaveBeenCalledWith(null)
-    expect(actions.loadFailed).not.toHaveBeenCalled()
-  })
+    });
+    expect(actions.startLoading).toHaveBeenCalledOnce();
+    expect(actions.loadSuccess).toHaveBeenCalledWith(null);
+    expect(actions.loadFailed).not.toHaveBeenCalled();
+  });
 
   it('maps network errors into a failed result while storing the page error', async () => {
-    const actions = createActions()
-    const commands = createTodoDetailPageCommands(actions)
+    const actions = createActions();
+    const commands = createTodoDetailPageCommands(actions);
 
     vi.mocked(todoService.getTodo).mockRejectedValue(
       new ApiError({
@@ -57,13 +57,15 @@ describe('TodoDetailPageCommands', () => {
         code: 'NETWORK_ERROR',
         message: 'Unable to reach the API.',
       }),
-    )
+    );
 
     await expect(commands.loadTodo('todo-1')).resolves.toEqual({
       status: 'failed',
       reason: 'network',
-    })
-    expect(actions.loadFailed).toHaveBeenCalledWith('Failed to load todo item.')
-    expect(actions.loadSuccess).not.toHaveBeenCalled()
-  })
-})
+    });
+    expect(actions.loadFailed).toHaveBeenCalledWith(
+      'Failed to load todo item.',
+    );
+    expect(actions.loadSuccess).not.toHaveBeenCalled();
+  });
+});

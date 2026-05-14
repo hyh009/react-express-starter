@@ -3,112 +3,111 @@ import {
   getValidationDetails,
   hasApiErrorCode,
   isApiError,
-} from '@/api/apiError'
-import { createAuthActions } from '@/features/auth/actions/auth.actions'
-import { authStore } from '@/app/stores/auth.store'
-import { authService } from '@/services/auth.service'
-import type { LoginRequest, RegisterRequest } from '@/models/auth.types'
+} from '@/api/apiError';
+import { createAuthActions } from '@/features/auth/actions/auth.actions';
+import { authStore } from '@/app/stores/auth.store';
+import { authService } from '@/services/auth.service';
+import type { LoginRequest, RegisterRequest } from '@/models/auth.types';
 
-const authActions = createAuthActions(authStore)
-let initializePromise: Promise<void> | null = null
+const authActions = createAuthActions(authStore);
+let initializePromise: Promise<void> | null = null;
 
 export type AuthSubmitResult =
   | {
-      status: 'authenticated'
+      status: 'authenticated';
     }
-  | AuthSubmitFailureResult
+  | AuthSubmitFailureResult;
 
 export type AuthLogoutResult =
   | {
-      status: 'logged-out'
+      status: 'logged-out';
     }
   | {
-      status: 'failed'
-      reason: ReturnType<typeof getApiFailureReason>
-    }
+      status: 'failed';
+      reason: ReturnType<typeof getApiFailureReason>;
+    };
 
-type AuthSubmitFailureResult =
-  | {
-      status: 'failed'
-      message: string
-      fieldErrors?: Partial<Record<keyof RegisterRequest, string>>
-    }
+type AuthSubmitFailureResult = {
+  status: 'failed';
+  message: string;
+  fieldErrors?: Partial<Record<keyof RegisterRequest, string>>;
+};
 
 export const authCommands = {
   initialize() {
     if (initializePromise) {
-      return initializePromise
+      return initializePromise;
     }
 
     initializePromise = initializeAuth().finally(() => {
-      initializePromise = null
-    })
+      initializePromise = null;
+    });
 
-    return initializePromise
+    return initializePromise;
   },
 
   async login(input: LoginRequest): Promise<AuthSubmitResult> {
     try {
-      const session = await authService.login(input)
+      const session = await authService.login(input);
 
-      authActions.authSuccess(session)
+      authActions.authSuccess(session);
       return {
         status: 'authenticated',
-      }
+      };
     } catch (error) {
       const result: AuthSubmitFailureResult = mapAuthSubmitError(
         error,
         'Invalid email or password.',
-      )
+      );
 
-      return result
+      return result;
     }
   },
 
   async register(input: RegisterRequest): Promise<AuthSubmitResult> {
     try {
-      const session = await authService.register(input)
+      const session = await authService.register(input);
 
-      authActions.authSuccess(session)
+      authActions.authSuccess(session);
       return {
         status: 'authenticated',
-      }
+      };
     } catch (error) {
       const result: AuthSubmitFailureResult = mapAuthSubmitError(
         error,
         'Could not create this account.',
-      )
+      );
 
-      return result
+      return result;
     }
   },
 
   async logout(): Promise<AuthLogoutResult> {
     try {
-      await authService.logout()
+      await authService.logout();
 
-      authActions.authAnonymous()
+      authActions.authAnonymous();
       return {
         status: 'logged-out',
-      }
+      };
     } catch (error) {
       return {
         status: 'failed',
         reason: getApiFailureReason(error),
-      }
+      };
     }
   },
-}
+};
 
 async function initializeAuth() {
-  authActions.authChecking()
+  authActions.authChecking();
 
   try {
-    const session = await authService.refresh()
+    const session = await authService.refresh();
 
-    authActions.authSuccess(session)
+    authActions.authSuccess(session);
   } catch {
-    authActions.authAnonymous()
+    authActions.authAnonymous();
   }
 }
 
@@ -123,17 +122,17 @@ function mapAuthSubmitError(
       fieldErrors: {
         email: 'This email is already registered.',
       },
-    }
+    };
   }
 
   if (hasApiErrorCode(error, 'INVALID_CREDENTIALS')) {
     return {
       status: 'failed',
       message: 'Invalid email or password.',
-    }
+    };
   }
 
-  const validationDetails = getValidationDetails(error)
+  const validationDetails = getValidationDetails(error);
 
   if (validationDetails.length > 0) {
     return {
@@ -142,18 +141,18 @@ function mapAuthSubmitError(
       fieldErrors: Object.fromEntries(
         validationDetails.map((detail) => [detail.path, detail.message]),
       ) as Partial<Record<keyof RegisterRequest, string>>,
-    }
+    };
   }
 
   if (isApiError(error) && getApiFailureReason(error) === 'network') {
     return {
       status: 'failed',
       message: 'Cannot reach the API server.',
-    }
+    };
   }
 
   return {
     status: 'failed',
     message: fallbackMessage,
-  }
+  };
 }

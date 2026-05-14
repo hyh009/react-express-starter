@@ -28,7 +28,7 @@
     "express": "^5.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.6.1",
+    "mongoose": "^9.6.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
@@ -44,7 +44,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.7.0",
     "@types/passport": "^1.0.17",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
@@ -55,6 +55,6 @@
     "supertest": "^7.2.2",
     "tsc-alias": "^1.8.17",
     "tsx": "^4.21.0",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.6"
   }
 }

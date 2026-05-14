@@ -1,16 +1,16 @@
-import { todoModel } from '@/models/todo.model'
-import { cn } from '@/shared/utils/cn'
-import type { TodoPriority } from '@/models/todo.types'
+import { todoModel } from '@/models/todo.model';
+import { cn } from '@/shared/utils/cn';
+import type { TodoPriority } from '@/models/todo.types';
 
 type TodoPriorityBadgeProps = {
-  priority: TodoPriority
-}
+  priority: TodoPriority;
+};
 
 const priorityClassName: Record<TodoPriority, string> = {
   low: 'border-secondary bg-secondary text-secondary-foreground',
   medium: 'border-accent bg-accent text-accent-foreground',
   high: 'border-destructive/30 bg-destructive/10 text-destructive',
-}
+};
 
 export function TodoPriorityBadge({ priority }: TodoPriorityBadgeProps) {
   return (
@@ -22,5 +22,5 @@ export function TodoPriorityBadge({ priority }: TodoPriorityBadgeProps) {
     >
       {todoModel.getPriorityLabel(priority)}
     </span>
-  )
+  );
 }

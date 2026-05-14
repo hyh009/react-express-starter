@@ -1,26 +1,26 @@
-import type { ErrorInfo, ReactNode } from 'react'
-import { AlertTriangle, Home, RotateCcw } from 'lucide-react'
-import { Outlet, useLocation, useNavigate } from 'react-router'
+import type { ErrorInfo, ReactNode } from 'react';
+import { AlertTriangle, Home, RotateCcw } from 'lucide-react';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 import {
   ErrorBoundary,
   type ErrorBoundaryFallbackProps,
-} from '@/shared/components/ErrorBoundary'
-import { Button } from '@/shared/components/ui/button'
+} from '@/shared/components/ErrorBoundary';
+import { Button } from '@/shared/components/ui/button';
 
 type AppErrorBoundaryProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 type AppErrorFallbackProps = ErrorBoundaryFallbackProps & {
-  isFullScreen?: boolean
-  onGoHome?: () => void
-}
+  isFullScreen?: boolean;
+  onGoHome?: () => void;
+};
 
 function reportBoundaryError(error: Error, errorInfo: ErrorInfo) {
   console.error('React error boundary caught an error', {
     componentStack: errorInfo.componentStack,
     error,
-  })
+  });
 }
 
 function AppErrorFallback({
@@ -71,17 +71,17 @@ function AppErrorFallback({
         ) : null}
       </div>
     </section>
-  )
+  );
 
   if (!isFullScreen) {
-    return <div className="px-5 py-8 md:px-8">{content}</div>
+    return <div className="px-5 py-8 md:px-8">{content}</div>;
   }
 
   return (
     <main className="min-h-screen bg-background px-5 py-10 text-foreground md:px-8">
       {content}
     </main>
-  )
+  );
 }
 
 export function AppErrorBoundary({ children }: AppErrorBoundaryProps) {
@@ -94,12 +94,12 @@ export function AppErrorBoundary({ children }: AppErrorBoundaryProps) {
     >
       {children}
     </ErrorBoundary>
-  )
+  );
 }
 
 export function RouteErrorBoundary() {
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <ErrorBoundary
@@ -108,10 +108,10 @@ export function RouteErrorBoundary() {
           {...fallbackProps}
           isFullScreen
           onGoHome={() => {
-            fallbackProps.resetErrorBoundary()
+            fallbackProps.resetErrorBoundary();
             navigate('/', {
               replace: true,
-            })
+            });
           }}
         />
       )}
@@ -120,12 +120,12 @@ export function RouteErrorBoundary() {
     >
       <Outlet />
     </ErrorBoundary>
-  )
+  );
 }
 
 export function PageErrorBoundary({ children }: AppErrorBoundaryProps) {
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <ErrorBoundary
@@ -133,10 +133,10 @@ export function PageErrorBoundary({ children }: AppErrorBoundaryProps) {
         <AppErrorFallback
           {...fallbackProps}
           onGoHome={() => {
-            fallbackProps.resetErrorBoundary()
+            fallbackProps.resetErrorBoundary();
             navigate('/', {
               replace: true,
-            })
+            });
           }}
         />
       )}
@@ -145,5 +145,5 @@ export function PageErrorBoundary({ children }: AppErrorBoundaryProps) {
     >
       {children}
     </ErrorBoundary>
-  )
+  );
 }

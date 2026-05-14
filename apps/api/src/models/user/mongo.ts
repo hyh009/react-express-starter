@@ -1,7 +1,4 @@
-import {
-  userRoles,
-  userStatuses,
-} from '@src/models/user/model';
+import { userRoles, userStatuses } from '@src/models/user/model';
 import { model, models, Schema } from 'mongoose';
 
 import type { UserEntity } from '@src/models/user/model';

@@ -15,7 +15,12 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
       }
 
       if (!user) {
-        next(new UnauthorizedError('Authentication required', ERROR_CODES.UNAUTHORIZED));
+        next(
+          new UnauthorizedError(
+            'Authentication required',
+            ERROR_CODES.UNAUTHORIZED,
+          ),
+        );
         return;
       }
 

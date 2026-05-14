@@ -1,23 +1,26 @@
-import { feedbackStore } from '../stores/feedback.store'
+import { feedbackStore } from '../stores/feedback.store';
 
-import type { ActiveConfirmModal, FeedbackTone } from '../stores/feedback.store'
+import type {
+  ActiveConfirmModal,
+  FeedbackTone,
+} from '../stores/feedback.store';
 
 type ToastInput = {
-  tone?: FeedbackTone
-  title?: string
-  message: string
-}
+  tone?: FeedbackTone;
+  title?: string;
+  message: string;
+};
 
 type ConfirmInput = {
-  title: string
-  message: string
-  confirmLabel?: string
-  cancelLabel?: string
-  tone?: FeedbackTone
-}
+  title: string;
+  message: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  tone?: FeedbackTone;
+};
 
 class FeedbackVM {
-  private nextToastId = 1
+  private nextToastId = 1;
 
   toast = (input: ToastInput) => {
     const toast = {
@@ -25,22 +28,22 @@ class FeedbackVM {
       tone: input.tone ?? 'info',
       title: input.title,
       message: input.message,
-    }
+    };
 
-    this.nextToastId += 1
+    this.nextToastId += 1;
 
     feedbackStore.setState((state) => ({
       toasts: [...state.toasts, toast],
-    }))
+    }));
 
-    return toast.id
-  }
+    return toast.id;
+  };
 
   dismissToast = (toastId: string) => {
     feedbackStore.setState((state) => ({
       toasts: state.toasts.filter((toast) => toast.id !== toastId),
-    }))
-  }
+    }));
+  };
 
   confirm = (input: ConfirmInput) => {
     return new Promise<boolean>((resolve) => {
@@ -51,26 +54,26 @@ class FeedbackVM {
         cancelLabel: input.cancelLabel ?? 'Cancel',
         tone: input.tone ?? 'info',
         onResolve: resolve,
-      }
+      };
 
       feedbackStore.setState({
         modal,
-      })
-    })
-  }
+      });
+    });
+  };
 
   closeModal = (confirmed: boolean) => {
-    const modal = feedbackStore.getState().modal
+    const modal = feedbackStore.getState().modal;
 
     if (!modal) {
-      return
+      return;
     }
 
     feedbackStore.setState({
       modal: null,
-    })
-    modal.onResolve(confirmed)
-  }
+    });
+    modal.onResolve(confirmed);
+  };
 }
 
-export const feedbackVM = new FeedbackVM()
+export const feedbackVM = new FeedbackVM();

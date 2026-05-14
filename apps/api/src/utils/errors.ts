@@ -31,7 +31,10 @@ export class BadRequestError extends AppError {
 }
 
 export class UnauthorizedError extends AppError {
-  constructor(message = 'Unauthorized', code: ErrorCode = ERROR_CODES.UNAUTHORIZED) {
+  constructor(
+    message = 'Unauthorized',
+    code: ErrorCode = ERROR_CODES.UNAUTHORIZED,
+  ) {
     super(401, message, code);
   }
 }
@@ -43,13 +46,19 @@ export class ForbiddenError extends AppError {
 }
 
 export class NotFoundError extends AppError {
-  constructor(message = 'Resource not found', code: ErrorCode = ERROR_CODES.NOT_FOUND) {
+  constructor(
+    message = 'Resource not found',
+    code: ErrorCode = ERROR_CODES.NOT_FOUND,
+  ) {
     super(404, message, code);
   }
 }
 
 export class RouteNotFoundError extends AppError {
-  constructor(message = 'Route not found', code: ErrorCode = ERROR_CODES.NOT_FOUND) {
+  constructor(
+    message = 'Route not found',
+    code: ErrorCode = ERROR_CODES.NOT_FOUND,
+  ) {
     super(404, message, code);
   }
 }

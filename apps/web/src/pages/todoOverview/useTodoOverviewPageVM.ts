@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useStore } from 'zustand'
-import { createTodoOverviewActions } from '@/features/todo/actions/todoOverview.actions'
-import { createTodoOverviewStore } from '@/features/todo/store/todoOverview.store'
-import { feedbackVM } from '@/app/viewModel/feedback.vm'
-import { createTodoOverviewPageCommands } from './todoOverviewPage.commands'
-import type { Todo, TodoStatus } from '@/models/todo.types'
+import { useCallback, useEffect, useState } from 'react';
+import { useStore } from 'zustand';
+import { createTodoOverviewActions } from '@/features/todo/actions/todoOverview.actions';
+import { createTodoOverviewStore } from '@/features/todo/store/todoOverview.store';
+import { feedbackVM } from '@/app/viewModel/feedback.vm';
+import { createTodoOverviewPageCommands } from './todoOverviewPage.commands';
+import type { Todo, TodoStatus } from '@/models/todo.types';
 import type {
   DeleteTodoFailureReason,
   DeleteTodoResult,
@@ -12,11 +12,11 @@ import type {
   LoadTodosResult,
   UpdateTodoStatusFailureReason,
   UpdateTodoStatusResult,
-} from './todoOverviewPage.commands'
+} from './todoOverviewPage.commands';
 
 function showLoadTodosToast(result: LoadTodosResult) {
   if (result.status === 'loaded') {
-    return
+    return;
   }
 
   const messageByReason: Record<LoadTodosFailureReason, string> = {
@@ -24,13 +24,13 @@ function showLoadTodosToast(result: LoadTodosResult) {
     server: 'The todo service is temporarily unavailable.',
     'invalid-response': 'The API returned data this page cannot read.',
     unknown: 'Try again in a moment.',
-  }
+  };
 
   feedbackVM.toast({
     tone: 'error',
     title: 'Could not load todos',
     message: messageByReason[result.reason],
-  })
+  });
 }
 
 function showUpdateTodoStatusToast(result: UpdateTodoStatusResult) {
@@ -39,8 +39,8 @@ function showUpdateTodoStatusToast(result: UpdateTodoStatusResult) {
       tone: 'success',
       title: 'Todo updated',
       message: 'The status was saved.',
-    })
-    return
+    });
+    return;
   }
 
   const messageByReason: Record<UpdateTodoStatusFailureReason, string> = {
@@ -48,13 +48,13 @@ function showUpdateTodoStatusToast(result: UpdateTodoStatusResult) {
     server: 'The todo service is temporarily unavailable.',
     'invalid-response': 'The API returned data this page cannot read.',
     unknown: 'Try again in a moment.',
-  }
+  };
 
   feedbackVM.toast({
     tone: 'error',
     title: 'Could not update todo',
     message: messageByReason[result.reason],
-  })
+  });
 }
 
 function showDeleteTodoToast(result: DeleteTodoResult) {
@@ -63,8 +63,8 @@ function showDeleteTodoToast(result: DeleteTodoResult) {
       tone: 'success',
       title: 'Todo deleted',
       message: 'The todo was removed.',
-    })
-    return
+    });
+    return;
   }
 
   if (result.status === 'not-found') {
@@ -72,8 +72,8 @@ function showDeleteTodoToast(result: DeleteTodoResult) {
       tone: 'info',
       title: 'Todo not found',
       message: 'This todo may have already been deleted.',
-    })
-    return
+    });
+    return;
   }
 
   const messageByReason: Record<DeleteTodoFailureReason, string> = {
@@ -81,76 +81,79 @@ function showDeleteTodoToast(result: DeleteTodoResult) {
     server: 'The todo service is temporarily unavailable.',
     'invalid-response': 'The API returned data this page cannot read.',
     unknown: 'Try again in a moment.',
-  }
+  };
 
   feedbackVM.toast({
     tone: 'error',
     title: 'Could not delete todo',
     message: messageByReason[result.reason],
-  })
+  });
 }
 
-type TodoOverviewPageContext = ReturnType<typeof createTodoOverviewPageContext>
+type TodoOverviewPageContext = ReturnType<typeof createTodoOverviewPageContext>;
 
 function createTodoOverviewPageContext() {
-  const store = createTodoOverviewStore()
-  const actions = createTodoOverviewActions(store)
-  const commands = createTodoOverviewPageCommands(actions)
+  const store = createTodoOverviewStore();
+  const actions = createTodoOverviewActions(store);
+  const commands = createTodoOverviewPageCommands(actions);
 
   return {
     actions: {
       async loadTodos() {
-        const result = await commands.loadTodos()
+        const result = await commands.loadTodos();
 
-        showLoadTodosToast(result)
+        showLoadTodosToast(result);
       },
 
       async updateTodoStatus(todo: Todo, status: TodoStatus) {
-        const result = await commands.updateTodoStatus(todo, status)
+        const result = await commands.updateTodoStatus(todo, status);
 
-        showUpdateTodoStatusToast(result)
-        return result
+        showUpdateTodoStatusToast(result);
+        return result;
       },
 
       async deleteTodo(todoId: string) {
-        const result = await commands.deleteTodo(todoId)
+        const result = await commands.deleteTodo(todoId);
 
-        showDeleteTodoToast(result)
-        return result
+        showDeleteTodoToast(result);
+        return result;
       },
     },
     store,
-  }
+  };
 }
 
 export function useTodoOverviewPageVM() {
   const [{ actions, store }] = useState<TodoOverviewPageContext>(
     createTodoOverviewPageContext,
-  )
-  const loadTodos = actions.loadTodos
+  );
+  const loadTodos = actions.loadTodos;
 
-  const todos = useStore(store, (state) => state.todos)
-  const isLoading = useStore(store, (state) => state.isLoading)
-  const error = useStore(store, (state) => state.error)
+  const todos = useStore(store, (state) => state.todos);
+  const isLoading = useStore(store, (state) => state.isLoading);
+  const error = useStore(store, (state) => state.error);
 
   useEffect(() => {
-    void loadTodos()
-  }, [loadTodos])
+    void loadTodos();
+  }, [loadTodos]);
 
-  const updateTodoStatus = useCallback(async function updateTodoStatus(
-    todo: Todo,
-    status: TodoStatus,
-  ) {
-    if (todo.status === status) {
-      return
-    }
+  const updateTodoStatus = useCallback(
+    async function updateTodoStatus(todo: Todo, status: TodoStatus) {
+      if (todo.status === status) {
+        return;
+      }
 
-    await actions.updateTodoStatus(todo, status)
-  }, [actions])
+      await actions.updateTodoStatus(todo, status);
+    },
+    [actions],
+  );
 
-  const deleteTodo = useCallback(async function deleteTodo(todoId: string) {
-    await actions.deleteTodo(todoId)
-  }, [actions])
+  const deleteTodo = useCallback(
+    async function deleteTodo(todoId: string) {
+      await actions.deleteTodo(todoId);
+    },
+    [actions],
+  );
 
   return {
     error,
@@ -159,5 +162,5 @@ export function useTodoOverviewPageVM() {
     loadTodos,
     todos,
     updateTodoStatus,
-  }
+  };
 }

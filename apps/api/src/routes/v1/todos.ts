@@ -1,7 +1,4 @@
-import {
-  createTodoSchema,
-  updateTodoSchema,
-} from '@repo/shared';
+import { createTodoSchema, updateTodoSchema } from '@repo/shared';
 import { validate } from '@src/middlewares/validate';
 import { todoService } from '@src/services/todo.service';
 import { Router } from 'express';

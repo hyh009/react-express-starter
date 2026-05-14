@@ -1,20 +1,20 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 export type ErrorBoundaryFallbackProps = {
-  error: Error
-  resetErrorBoundary: () => void
-}
+  error: Error;
+  resetErrorBoundary: () => void;
+};
 
 type ErrorBoundaryProps = {
-  children: ReactNode
-  fallback: (props: ErrorBoundaryFallbackProps) => ReactNode
-  onError?: (error: Error, errorInfo: ErrorInfo) => void
-  resetKeys?: readonly unknown[]
-}
+  children: ReactNode;
+  fallback: (props: ErrorBoundaryFallbackProps) => ReactNode;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  resetKeys?: readonly unknown[];
+};
 
 type ErrorBoundaryState = {
-  error: Error | null
-}
+  error: Error | null;
+};
 
 function haveResetKeysChanged(
   previousResetKeys: readonly unknown[] = [],
@@ -23,9 +23,10 @@ function haveResetKeysChanged(
   return (
     previousResetKeys.length !== resetKeys.length ||
     previousResetKeys.some(
-      (previousResetKey, index) => !Object.is(previousResetKey, resetKeys[index]),
+      (previousResetKey, index) =>
+        !Object.is(previousResetKey, resetKeys[index]),
     )
-  )
+  );
 }
 
 export class ErrorBoundary extends Component<
@@ -34,16 +35,16 @@ export class ErrorBoundary extends Component<
 > {
   state: ErrorBoundaryState = {
     error: null,
-  }
+  };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return {
       error,
-    }
+    };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    this.props.onError?.(error, errorInfo)
+    this.props.onError?.(error, errorInfo);
   }
 
   componentDidUpdate(previousProps: ErrorBoundaryProps) {
@@ -51,26 +52,26 @@ export class ErrorBoundary extends Component<
       this.state.error &&
       haveResetKeysChanged(previousProps.resetKeys, this.props.resetKeys)
     ) {
-      this.resetErrorBoundary()
+      this.resetErrorBoundary();
     }
   }
 
   resetErrorBoundary = () => {
     this.setState({
       error: null,
-    })
-  }
+    });
+  };
 
   render() {
-    const { error } = this.state
+    const { error } = this.state;
 
     if (error) {
       return this.props.fallback({
         error,
         resetErrorBoundary: this.resetErrorBoundary,
-      })
+      });
     }
 
-    return this.props.children
+    return this.props.children;
   }
 }

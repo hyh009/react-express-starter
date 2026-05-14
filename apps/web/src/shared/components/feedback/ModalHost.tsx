@@ -1,22 +1,22 @@
-import { Button } from '@/shared/components/ui/button'
+import { Button } from '@/shared/components/ui/button';
 
 type ModalViewState = {
-  title: string
-  message: string
-  confirmLabel: string
-  cancelLabel: string
-  tone: 'info' | 'success' | 'error'
-}
+  title: string;
+  message: string;
+  confirmLabel: string;
+  cancelLabel: string;
+  tone: 'info' | 'success' | 'error';
+};
 
 type ModalHostProps = {
-  modal: ModalViewState | null
-  onCancel: () => void
-  onConfirm: () => void
-}
+  modal: ModalViewState | null;
+  onCancel: () => void;
+  onConfirm: () => void;
+};
 
 export function ModalHost({ modal, onCancel, onConfirm }: ModalHostProps) {
   if (!modal) {
-    return null
+    return null;
   }
 
   return (
@@ -46,5 +46,5 @@ export function ModalHost({ modal, onCancel, onConfirm }: ModalHostProps) {
         </div>
       </section>
     </div>
-  )
+  );
 }

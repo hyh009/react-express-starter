@@ -1,5 +1,5 @@
-import type { Todo } from '@/models/todo.types'
-import type { TodoDetailStore } from '../store/todoDetail.store'
+import type { Todo } from '@/models/todo.types';
+import type { TodoDetailStore } from '../store/todoDetail.store';
 
 export function createTodoDetailActions(todoDetailStore: TodoDetailStore) {
   return {
@@ -8,7 +8,7 @@ export function createTodoDetailActions(todoDetailStore: TodoDetailStore) {
         todo: null,
         isLoading: true,
         error: null,
-      })
+      });
     },
 
     loadSuccess(todo: Todo | null) {
@@ -16,30 +16,30 @@ export function createTodoDetailActions(todoDetailStore: TodoDetailStore) {
         todo,
         error: todo ? null : 'Todo item was not found.',
         isLoading: false,
-      })
+      });
     },
 
     loadFailed(message: string) {
       todoDetailStore.setState({
         error: message,
         isLoading: false,
-      })
+      });
     },
 
     saveSuccess(todo: Todo) {
       todoDetailStore.setState({
         error: null,
         todo,
-      })
+      });
     },
 
     deleteSuccess() {
       todoDetailStore.setState({
         error: null,
         todo: null,
-      })
+      });
     },
-  }
+  };
 }
 
-export type TodoDetailActions = ReturnType<typeof createTodoDetailActions>
+export type TodoDetailActions = ReturnType<typeof createTodoDetailActions>;

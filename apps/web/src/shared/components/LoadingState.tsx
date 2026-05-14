@@ -1,6 +1,6 @@
 type LoadingStateProps = {
-  label: string
-}
+  label: string;
+};
 
 export function LoadingState({ label }: LoadingStateProps) {
   return (
@@ -12,5 +12,5 @@ export function LoadingState({ label }: LoadingStateProps) {
         {label}
       </div>
     </section>
-  )
+  );
 }

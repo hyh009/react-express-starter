@@ -272,7 +272,10 @@ describe('auth API', () => {
 
     const meResponse = await agent
       .get('/api/v1/auth/me')
-      .set('Authorization', authorizationHeader(getAccessToken(registerResponse)));
+      .set(
+        'Authorization',
+        authorizationHeader(getAccessToken(registerResponse)),
+      );
 
     expect(meResponse.status).toBe(200);
     expect(meResponse.body).toMatchObject({
@@ -290,7 +293,10 @@ describe('auth API', () => {
   it('rejects duplicate registration with USER_ALREADY_EXISTS', async () => {
     const app = createApp();
 
-    await request(app).post('/api/v1/auth/register').send(credentials).expect(201);
+    await request(app)
+      .post('/api/v1/auth/register')
+      .send(credentials)
+      .expect(201);
 
     const response = await request(app)
       .post('/api/v1/auth/register')
@@ -327,7 +333,10 @@ describe('auth API', () => {
     const app = createApp();
     const agent = request.agent(app);
 
-    await request(app).post('/api/v1/auth/register').send(credentials).expect(201);
+    await request(app)
+      .post('/api/v1/auth/register')
+      .send(credentials)
+      .expect(201);
 
     const loginResponse = await agent.post('/api/v1/auth/login').send({
       email: credentials.email,
@@ -350,7 +359,10 @@ describe('auth API', () => {
   it('rejects invalid credentials with INVALID_CREDENTIALS', async () => {
     const app = createApp();
 
-    await request(app).post('/api/v1/auth/register').send(credentials).expect(201);
+    await request(app)
+      .post('/api/v1/auth/register')
+      .send(credentials)
+      .expect(201);
 
     const response = await request(app).post('/api/v1/auth/login').send({
       email: credentials.email,

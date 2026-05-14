@@ -20,15 +20,15 @@ Application code should throw `Error` instances only.
 Use:
 
 ```ts
-throw new BadRequestError("Invalid input");
-throw new Error("Unexpected failure");
+throw new BadRequestError('Invalid input');
+throw new Error('Unexpected failure');
 ```
 
 Do not use:
 
 ```ts
-throw "Invalid input";
-throw { message: "Invalid input" };
+throw 'Invalid input';
+throw { message: 'Invalid input' };
 throw null;
 throw undefined;
 ```
@@ -49,9 +49,9 @@ Use `AppError` subclasses for predictable application errors.
 Examples:
 
 ```ts
-throw new BadRequestError("Invalid request body");
-throw new NotFoundError("Product not found");
-throw new ConflictError("Product already exists");
+throw new BadRequestError('Invalid request body');
+throw new NotFoundError('Product not found');
+throw new ConflictError('Product already exists');
 ```
 
 Expected errors are safe to return to clients when their messages and codes are controlled by the application.
@@ -73,7 +73,7 @@ Use normal `Error` for unexpected failures.
 Example:
 
 ```ts
-throw new Error("Failed to connect to database");
+throw new Error('Failed to connect to database');
 ```
 
 Unexpected errors should become generic `500 Internal Server Error` responses in production.
@@ -111,8 +111,8 @@ Even though application code should throw only `Error` instances, runtime error 
 JavaScript allows throwing any value:
 
 ```ts
-throw "error";
-throw { message: "error" };
+throw 'error';
+throw { message: 'error' };
 throw null;
 ```
 
@@ -133,13 +133,13 @@ Rejected promises should reject with `Error` instances.
 Use:
 
 ```ts
-return Promise.reject(new Error("Unexpected failure"));
+return Promise.reject(new Error('Unexpected failure'));
 ```
 
 Do not use:
 
 ```ts
-return Promise.reject("Unexpected failure");
+return Promise.reject('Unexpected failure');
 ```
 
 Rejected non-Error values should be handled the same way as non-Error thrown values.

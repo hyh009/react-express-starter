@@ -6,7 +6,9 @@ import type {
 } from '@src/models/authSession/model';
 
 export type AuthSessionRepository = {
-  findByRefreshTokenHash(refreshTokenHash: string): Promise<AuthSessionEntity | null>;
+  findByRefreshTokenHash(
+    refreshTokenHash: string,
+  ): Promise<AuthSessionEntity | null>;
   consumeActiveRefreshToken(
     refreshTokenHash: string,
     consumedAt: Date,

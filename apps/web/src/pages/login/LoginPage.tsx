@@ -1,35 +1,35 @@
-import type { FormEvent } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router'
-import { Field } from '@/shared/components/form/Field'
-import { Button } from '@/shared/components/ui/button'
-import { buttonVariants } from '@/shared/components/ui/buttonVariants'
-import { Input } from '@/shared/components/ui/input'
-import { useLoginPageVM } from './useLoginPageVM'
+import type { FormEvent } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
+import { Field } from '@/shared/components/form/Field';
+import { Button } from '@/shared/components/ui/button';
+import { buttonVariants } from '@/shared/components/ui/buttonVariants';
+import { Input } from '@/shared/components/ui/input';
+import { useLoginPageVM } from './useLoginPageVM';
 
 type RouteState = {
   from?: {
-    pathname?: string
-  }
-}
+    pathname?: string;
+  };
+};
 
 function getRedirectPath(state: unknown) {
-  const routeState = state as RouteState | null
+  const routeState = state as RouteState | null;
 
-  return routeState?.from?.pathname ?? '/'
+  return routeState?.from?.pathname ?? '/';
 }
 
 export function LoginPage() {
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
   const vm = useLoginPageVM(() => {
     navigate(getRedirectPath(location.state), {
       replace: true,
-    })
-  })
+    });
+  });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    void vm.submit()
+    event.preventDefault();
+    void vm.submit();
   }
 
   return (
@@ -69,7 +69,7 @@ export function LoginPage() {
             autoComplete="email"
             value={vm.form.values.email}
             onChange={(event) => {
-              vm.setField('email', event.target.value)
+              vm.setField('email', event.target.value);
             }}
             type="email"
           />
@@ -80,7 +80,7 @@ export function LoginPage() {
             autoComplete="current-password"
             value={vm.form.values.password}
             onChange={(event) => {
-              vm.setField('password', event.target.value)
+              vm.setField('password', event.target.value);
             }}
             type="password"
           />
@@ -95,5 +95,5 @@ export function LoginPage() {
         </Link>
       </form>
     </section>
-  )
+  );
 }

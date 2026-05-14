@@ -16,7 +16,11 @@ const envSchema = z.object({
   AUTH_ACCESS_TOKEN_SECRET: z
     .string()
     .min(32, 'AUTH_ACCESS_TOKEN_SECRET must be at least 32 characters'),
-  AUTH_ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().positive().default(900),
+  AUTH_ACCESS_TOKEN_TTL_SECONDS: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(900),
   AUTH_REFRESH_TOKEN_TTL_SECONDS: z.coerce
     .number()
     .int()

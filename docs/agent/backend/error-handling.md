@@ -24,7 +24,7 @@ Used for predictable, business-level errors:
 Example:
 
 ```ts
-throw new NotFoundError("Product not found");
+throw new NotFoundError('Product not found');
 ```
 
 ---
@@ -101,7 +101,7 @@ Example:
 
 ```ts
 if (err instanceof ZodError) {
-  return new BadRequestError("Invalid request body", "VALIDATION_ERROR");
+  return new BadRequestError('Invalid request body', 'VALIDATION_ERROR');
 }
 ```
 

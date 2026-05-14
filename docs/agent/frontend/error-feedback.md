@@ -122,13 +122,13 @@ Example:
 ```ts
 function mapLoadTodoError(error: unknown): LoadTodoResult {
   if (hasApiErrorCode(error, 'TODO_NOT_FOUND')) {
-    return { status: 'not-found' }
+    return { status: 'not-found' };
   }
 
   return {
     status: 'failed',
     reason: getApiFailureReason(error),
-  }
+  };
 }
 ```
 
@@ -149,17 +149,17 @@ For form field error shape and ownership, follow `docs/agent/frontend/forms.md`.
 Feature-owned store error state may start simple:
 
 ```ts
-type PageError = string | null
+type PageError = string | null;
 ```
 
 Use a structured error only when the UI needs code or details:
 
 ```ts
 type PageError = {
-  message: string
-  code?: string
-  details?: unknown[]
-}
+  message: string;
+  code?: string;
+  details?: unknown[];
+};
 ```
 
 ## Presentation Decisions

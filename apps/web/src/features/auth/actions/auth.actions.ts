@@ -1,13 +1,13 @@
-import type { AuthSession } from '@/models/auth.types'
-import type { AuthState } from '@/app/stores/auth.store'
-import type { StoreApi } from 'zustand/vanilla'
+import type { AuthSession } from '@/models/auth.types';
+import type { AuthState } from '@/app/stores/auth.store';
+import type { StoreApi } from 'zustand/vanilla';
 
 export function createAuthActions(authStore: StoreApi<AuthState>) {
   return {
     authChecking() {
       authStore.setState({
         status: 'checking',
-      })
+      });
     },
 
     authSuccess(session: AuthSession) {
@@ -15,7 +15,7 @@ export function createAuthActions(authStore: StoreApi<AuthState>) {
         accessToken: session.accessToken,
         status: 'authenticated',
         user: session.user,
-      })
+      });
     },
 
     authAnonymous() {
@@ -23,9 +23,9 @@ export function createAuthActions(authStore: StoreApi<AuthState>) {
         accessToken: null,
         status: 'anonymous',
         user: null,
-      })
+      });
     },
-  }
+  };
 }
 
-export type AuthActions = ReturnType<typeof createAuthActions>
+export type AuthActions = ReturnType<typeof createAuthActions>;

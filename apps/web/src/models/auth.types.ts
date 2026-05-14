@@ -5,7 +5,7 @@ import type {
   AuthUserSuccessResponse,
   LoginRequest,
   RegisterRequest,
-} from '@repo/shared'
+} from '@repo/shared';
 
 export type {
   AuthActionSuccessResponse,
@@ -14,9 +14,9 @@ export type {
   AuthUserSuccessResponse,
   LoginRequest,
   RegisterRequest,
-}
+};
 
 export type AuthSession = {
-  accessToken: string
-  user: AuthUser
-}
+  accessToken: string;
+  user: AuthUser;
+};

@@ -126,7 +126,7 @@ return {
   saveTodo,
   setField,
   todo,
-}
+};
 ```
 
 Use `useCallback` or `useMemo` when a returned handler/object is used in a dependency array or passed to memoized children.

@@ -28,7 +28,9 @@ export function createApp() {
 
   // 404 Handler
   app.use((req, res, next) => {
-    next(new RouteNotFoundError(`Can't find ${req.originalUrl} on this server!`));
+    next(
+      new RouteNotFoundError(`Can't find ${req.originalUrl} on this server!`),
+    );
   });
 
   // Global Error Handler

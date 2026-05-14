@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useStore } from 'zustand'
-import { todoPriorities, todoStatuses } from '@repo/shared'
-import { createTodoDetailActions } from '@/features/todo/actions/todoDetail.actions'
-import { createTodoDetailStore } from '@/features/todo/store/todoDetail.store'
-import { createTodoDetailPageCommands } from './todoDetailPage.commands'
-import { feedbackVM } from '@/app/viewModel/feedback.vm'
-import type { Todo, TodoPriority, TodoStatus } from '@/models/todo.types'
+import { useCallback, useEffect, useState } from 'react';
+import { useStore } from 'zustand';
+import { todoPriorities, todoStatuses } from '@repo/shared';
+import { createTodoDetailActions } from '@/features/todo/actions/todoDetail.actions';
+import { createTodoDetailStore } from '@/features/todo/store/todoDetail.store';
+import { createTodoDetailPageCommands } from './todoDetailPage.commands';
+import { feedbackVM } from '@/app/viewModel/feedback.vm';
+import type { Todo, TodoPriority, TodoStatus } from '@/models/todo.types';
 
 import type {
   DeleteTodoFailureReason,
@@ -14,24 +14,24 @@ import type {
   LoadTodoResult,
   SaveTodoFailureReason,
   SaveTodoResult,
-} from './todoDetailPage.commands'
+} from './todoDetailPage.commands';
 
-type TodoEditForm = Omit<Todo, 'id'>
+type TodoEditForm = Omit<Todo, 'id'>;
 
 type TodoEditDraft = {
-  todoId: string
-  values: TodoEditForm
-}
+  todoId: string;
+  values: TodoEditForm;
+};
 
 type TodoEditFormErrors = {
-  errors: Partial<TodoEditForm>
-  todoId?: string
-}
+  errors: Partial<TodoEditForm>;
+  todoId?: string;
+};
 
 type UseTodoDetailPageVMOptions = {
-  onDeleted: () => void
-  todoId?: string
-}
+  onDeleted: () => void;
+  todoId?: string;
+};
 
 const emptyForm: TodoEditForm = {
   description: '',
@@ -39,7 +39,7 @@ const emptyForm: TodoEditForm = {
   priority: 'medium',
   status: 'todo',
   title: '',
-}
+};
 
 function todoToEditForm(todo: Todo): TodoEditForm {
   return {
@@ -48,12 +48,12 @@ function todoToEditForm(todo: Todo): TodoEditForm {
     priority: todo.priority,
     status: todo.status,
     title: todo.title,
-  }
+  };
 }
 
 function showLoadTodoToast(result: LoadTodoResult) {
   if (result.status === 'loaded') {
-    return
+    return;
   }
 
   if (result.status === 'not-found') {
@@ -61,8 +61,8 @@ function showLoadTodoToast(result: LoadTodoResult) {
       tone: 'info',
       title: 'Todo not found',
       message: 'This todo may have been deleted or moved.',
-    })
-    return
+    });
+    return;
   }
 
   const messageByReason: Record<LoadTodoFailureReason, string> = {
@@ -70,13 +70,13 @@ function showLoadTodoToast(result: LoadTodoResult) {
     server: 'The todo service is temporarily unavailable.',
     'invalid-response': 'The API returned data this page cannot read.',
     unknown: 'Try again in a moment.',
-  }
+  };
 
   feedbackVM.toast({
     tone: 'error',
     title: 'Could not load todo',
     message: messageByReason[result.reason],
-  })
+  });
 }
 
 function showSaveTodoToast(result: SaveTodoResult) {
@@ -85,8 +85,8 @@ function showSaveTodoToast(result: SaveTodoResult) {
       tone: 'success',
       title: 'Todo saved',
       message: 'Your changes were saved.',
-    })
-    return
+    });
+    return;
   }
 
   const messageByReason: Record<SaveTodoFailureReason, string> = {
@@ -94,13 +94,13 @@ function showSaveTodoToast(result: SaveTodoResult) {
     server: 'The todo service is temporarily unavailable.',
     'invalid-response': 'The API returned data this page cannot read.',
     unknown: 'Check the form and try again.',
-  }
+  };
 
   feedbackVM.toast({
     tone: 'error',
     title: 'Could not save todo',
     message: messageByReason[result.reason],
-  })
+  });
 }
 
 function showDeleteTodoToast(result: DeleteTodoResult) {
@@ -109,8 +109,8 @@ function showDeleteTodoToast(result: DeleteTodoResult) {
       tone: 'success',
       title: 'Todo deleted',
       message: 'The todo was removed.',
-    })
-    return
+    });
+    return;
   }
 
   if (result.status === 'not-found') {
@@ -118,8 +118,8 @@ function showDeleteTodoToast(result: DeleteTodoResult) {
       tone: 'info',
       title: 'Todo not found',
       message: 'This todo may have already been deleted.',
-    })
-    return
+    });
+    return;
   }
 
   const messageByReason: Record<DeleteTodoFailureReason, string> = {
@@ -127,50 +127,50 @@ function showDeleteTodoToast(result: DeleteTodoResult) {
     server: 'The todo service is temporarily unavailable.',
     'invalid-response': 'The API returned data this page cannot read.',
     unknown: 'Try again in a moment.',
-  }
+  };
 
   feedbackVM.toast({
     tone: 'error',
     title: 'Could not delete todo',
     message: messageByReason[result.reason],
-  })
+  });
 }
 
-type TodoDetailPageContext = ReturnType<typeof createTodoDetailPageContext>
+type TodoDetailPageContext = ReturnType<typeof createTodoDetailPageContext>;
 
 function createTodoDetailPageContext() {
-  const store = createTodoDetailStore()
-  const actions = createTodoDetailActions(store)
-  const commands = createTodoDetailPageCommands(actions)
+  const store = createTodoDetailStore();
+  const actions = createTodoDetailActions(store);
+  const commands = createTodoDetailPageCommands(actions);
 
   return {
     actions: {
       async loadTodo(todoId: string) {
-        const result = await commands.loadTodo(todoId)
+        const result = await commands.loadTodo(todoId);
 
-        showLoadTodoToast(result)
-        return result
+        showLoadTodoToast(result);
+        return result;
       },
 
       async saveTodo(todoId: string, todo: TodoEditForm) {
         const result = await commands.saveTodo(todoId, {
           ...todo,
           id: todoId,
-        })
+        });
 
-        showSaveTodoToast(result)
-        return result
+        showSaveTodoToast(result);
+        return result;
       },
 
       async deleteTodo(todoId: string) {
-        const result = await commands.deleteTodo(todoId)
+        const result = await commands.deleteTodo(todoId);
 
-        showDeleteTodoToast(result)
-        return result
+        showDeleteTodoToast(result);
+        return result;
       },
     },
     store,
-  }
+  };
 }
 
 export function useTodoDetailPageVM({
@@ -179,124 +179,142 @@ export function useTodoDetailPageVM({
 }: UseTodoDetailPageVMOptions) {
   const [{ actions, store }] = useState<TodoDetailPageContext>(
     createTodoDetailPageContext,
-  )
+  );
 
-  const todo = useStore(store, (state) => state.todo)
-  const isLoading = useStore(store, (state) => state.isLoading)
-  const error = useStore(store, (state) => state.error)
-  const [draft, setDraft] = useState<TodoEditDraft | null>(null)
+  const todo = useStore(store, (state) => state.todo);
+  const isLoading = useStore(store, (state) => state.isLoading);
+  const error = useStore(store, (state) => state.error);
+  const [draft, setDraft] = useState<TodoEditDraft | null>(null);
   const [formErrorsState, setFormErrorsState] =
-    useState<TodoEditFormErrors | null>(null)
+    useState<TodoEditFormErrors | null>(null);
 
   const form =
     draft && draft.todoId === todoId
       ? draft.values
       : todo
         ? todoToEditForm(todo)
-        : emptyForm
+        : emptyForm;
   const formErrors =
     formErrorsState && formErrorsState.todoId === todoId
       ? formErrorsState.errors
-      : {}
+      : {};
 
-  const setField = useCallback(function setField(
-    name: keyof TodoEditForm,
-    value: string,
-  ) {
-    if (!todoId) {
-      return
-    }
+  const setField = useCallback(
+    function setField(name: keyof TodoEditForm, value: string) {
+      if (!todoId) {
+        return;
+      }
 
-    setDraft({
-      todoId,
-      values: {
+      setDraft({
+        todoId,
+        values: {
+          ...form,
+          [name]: value,
+        },
+      });
+      setFormErrorsState((current) => ({
+        errors: {
+          ...current?.errors,
+          [name]: undefined,
+        },
+        todoId,
+      }));
+    },
+    [form, todoId],
+  );
+
+  const setStatus = useCallback(
+    function setStatus(value: string) {
+      if (todoStatuses.includes(value as TodoStatus)) {
+        setField('status', value);
+      }
+    },
+    [setField],
+  );
+
+  const setPriority = useCallback(
+    function setPriority(value: string) {
+      if (todoPriorities.includes(value as TodoPriority)) {
+        setField('priority', value);
+      }
+    },
+    [setField],
+  );
+
+  const validateForm = useCallback(
+    function validateForm() {
+      const errors: Partial<TodoEditForm> = {};
+
+      if (!form.title.trim()) {
+        errors.title = 'Title is required.';
+      }
+
+      if (!form.ownerName.trim()) {
+        errors.ownerName = 'Owner is required.';
+      }
+
+      setFormErrorsState({
+        errors,
+        todoId,
+      });
+      return Object.keys(errors).length === 0;
+    },
+    [form, todoId],
+  );
+
+  const saveTodo = useCallback(
+    async function saveTodo() {
+      if (!todoId) {
+        return;
+      }
+
+      if (!validateForm()) {
+        return;
+      }
+
+      const result = await actions.saveTodo(todoId, {
         ...form,
-        [name]: value,
-      },
-    })
-    setFormErrorsState((current) => ({
-      errors: {
-        ...current?.errors,
-        [name]: undefined,
-      },
-      todoId,
-    }))
-  }, [form, todoId])
+        description: form.description.trim(),
+        ownerName: form.ownerName.trim(),
+        title: form.title.trim(),
+      });
 
-  const setStatus = useCallback(function setStatus(value: string) {
-    if (todoStatuses.includes(value as TodoStatus)) {
-      setField('status', value)
-    }
-  }, [setField])
+      if (result.status === 'saved') {
+        setDraft(null);
+      }
+    },
+    [actions, form, todoId, validateForm],
+  );
 
-  const setPriority = useCallback(function setPriority(value: string) {
-    if (todoPriorities.includes(value as TodoPriority)) {
-      setField('priority', value)
-    }
-  }, [setField])
+  const loadTodo = useCallback(
+    async function loadTodo() {
+      if (!todoId) {
+        return;
+      }
 
-  const validateForm = useCallback(function validateForm() {
-    const errors: Partial<TodoEditForm> = {}
+      await actions.loadTodo(todoId);
+    },
+    [actions, todoId],
+  );
 
-    if (!form.title.trim()) {
-      errors.title = 'Title is required.'
-    }
+  const deleteTodo = useCallback(
+    async function deleteTodo() {
+      if (!todoId) {
+        return;
+      }
 
-    if (!form.ownerName.trim()) {
-      errors.ownerName = 'Owner is required.'
-    }
+      const result = await actions.deleteTodo(todoId);
 
-    setFormErrorsState({
-      errors,
-      todoId,
-    })
-    return Object.keys(errors).length === 0
-  }, [form, todoId])
-
-  const saveTodo = useCallback(async function saveTodo() {
-    if (!todoId) {
-      return
-    }
-
-    if (!validateForm()) {
-      return
-    }
-
-    const result = await actions.saveTodo(todoId, {
-      ...form,
-      description: form.description.trim(),
-      ownerName: form.ownerName.trim(),
-      title: form.title.trim(),
-    })
-
-    if (result.status === 'saved') {
-      setDraft(null)
-    }
-  }, [actions, form, todoId, validateForm])
-
-  const loadTodo = useCallback(async function loadTodo() {
-    if (!todoId) {
-      return
-    }
-
-    await actions.loadTodo(todoId)
-  }, [actions, todoId])
-
-  const deleteTodo = useCallback(async function deleteTodo() {
-    if (!todoId) {
-      return
-    }
-
-    const result = await actions.deleteTodo(todoId)
-
-    if (result.status === 'deleted' || result.status === 'not-found') {
-      onDeleted()
-    }
-  }, [actions, onDeleted, todoId])
+      if (result.status === 'deleted' || result.status === 'not-found') {
+        onDeleted();
+      }
+    },
+    [actions, onDeleted, todoId],
+  );
 
   useEffect(() => {
-    void loadTodo()
-  }, [loadTodo])
+    void loadTodo();
+  }, [loadTodo]);
 
   return {
     form,
@@ -310,5 +328,5 @@ export function useTodoDetailPageVM({
     setField,
     setPriority,
     setStatus,
-  }
+  };
 }

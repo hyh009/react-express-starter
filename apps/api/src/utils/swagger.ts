@@ -35,5 +35,8 @@ export function setupSwagger(app: Express) {
     res.send(swaggerSpec);
   });
 
-  logger.info({ url: `http://localhost:${env.PORT}/docs` }, 'swagger docs ready');
+  logger.info(
+    { url: `http://localhost:${env.PORT}/docs` },
+    'swagger docs ready',
+  );
 }

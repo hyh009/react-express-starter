@@ -1,24 +1,27 @@
-import { useCallback, type FormEvent } from 'react'
-import { useNavigate } from 'react-router'
-import { todoPriorities, todoStatuses } from '@repo/shared'
-import { Field } from '@/shared/components/form/Field'
-import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { Textarea } from '@/shared/components/ui/textarea'
-import { useTodoCreatePageVM } from './useTodoCreatePageVM'
+import { useCallback, type FormEvent } from 'react';
+import { useNavigate } from 'react-router';
+import { todoPriorities, todoStatuses } from '@repo/shared';
+import { Field } from '@/shared/components/form/Field';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+import { Textarea } from '@/shared/components/ui/textarea';
+import { useTodoCreatePageVM } from './useTodoCreatePageVM';
 
 export function TodoCreatePage() {
-  const navigate = useNavigate()
-  const handleCreated = useCallback((todoId: string) => {
-    navigate(`/todos/${todoId}`)
-  }, [navigate])
+  const navigate = useNavigate();
+  const handleCreated = useCallback(
+    (todoId: string) => {
+      navigate(`/todos/${todoId}`);
+    },
+    [navigate],
+  );
   const vm = useTodoCreatePageVM({
     onCreated: handleCreated,
-  })
+  });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    void vm.createTodo()
+    event.preventDefault();
+    void vm.createTodo();
   }
 
   return (
@@ -26,7 +29,7 @@ export function TodoCreatePage() {
       <div className="mb-6">
         <Button
           onClick={() => {
-            navigate('/')
+            navigate('/');
           }}
           type="button"
           variant="ghost"
@@ -61,7 +64,7 @@ export function TodoCreatePage() {
           <Input
             value={vm.form.values.title}
             onChange={(event) => {
-              vm.form.setField('title', event.target.value)
+              vm.form.setField('title', event.target.value);
             }}
           />
         </Field>
@@ -70,7 +73,7 @@ export function TodoCreatePage() {
           <Input
             value={vm.form.values.ownerName}
             onChange={(event) => {
-              vm.form.setField('ownerName', event.target.value)
+              vm.form.setField('ownerName', event.target.value);
             }}
           />
         </Field>
@@ -79,7 +82,7 @@ export function TodoCreatePage() {
           <Textarea
             value={vm.form.values.description}
             onChange={(event) => {
-              vm.form.setField('description', event.target.value)
+              vm.form.setField('description', event.target.value);
             }}
           />
         </Field>
@@ -91,7 +94,7 @@ export function TodoCreatePage() {
               className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm"
               value={vm.form.values.status}
               onChange={(event) => {
-                vm.form.setStatus(event.target.value)
+                vm.form.setStatus(event.target.value);
               }}
             >
               {todoStatuses.map((status) => (
@@ -107,7 +110,7 @@ export function TodoCreatePage() {
               className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm"
               value={vm.form.values.priority}
               onChange={(event) => {
-                vm.form.setPriority(event.target.value)
+                vm.form.setPriority(event.target.value);
               }}
             >
               {todoPriorities.map((priority) => (
@@ -125,7 +128,7 @@ export function TodoCreatePage() {
           </Button>
           <Button
             onClick={() => {
-              navigate('/')
+              navigate('/');
             }}
             type="button"
             variant="outline"
@@ -135,5 +138,5 @@ export function TodoCreatePage() {
         </div>
       </form>
     </section>
-  )
+  );
 }
