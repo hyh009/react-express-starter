@@ -39,6 +39,24 @@ Docs-only change:
 
 - No lint or build is required unless the docs reference commands, scripts, env vars, routes, generated output, or behavior that should be checked.
 
+## Formatting
+
+Format changed files before running final verification:
+
+```bash
+pnpm exec prettier --write <changed-files>
+```
+
+Use the narrowest file list that covers the current task, especially in a dirty worktree. This keeps Codex-created or Codex-edited files aligned with editor on-save formatting without rewriting unrelated files.
+
+After formatting, run the relevant lint command:
+
+```bash
+pnpm run lint
+```
+
+Use repo-wide formatting only when the requested work owns the whole formatting change or the worktree has been reviewed.
+
 ## Manual Checks
 
 If a change needs user manual testing, list the specific checks in the final response.
