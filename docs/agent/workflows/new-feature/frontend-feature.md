@@ -14,6 +14,11 @@ Use this guide when a new feature adds or changes frontend behavior in `apps/web
 
 - Follow `docs/agent/frontend/architecture.md`.
 - Discuss the page, feature domain, state ownership, and API-backed behavior with the user before implementation when the shape is not already clear.
+- Before implementing new or changed frontend state, tell the user the state ownership plan:
+  - Store state: app/domain state shared across handlers, flows, components, or pages.
+  - Page VM state: page-only process state, route lifecycle state, command-result reactions, and page-owned form/control state.
+  - Component local state: UI-only state owned by one component, such as menu open state, hover state, password visibility, or local-only search text.
+- Ask before coding when a state value could reasonably belong in more than one place.
 - Put page views, page VM hooks, and page workflows under `apps/web/src/pages`.
 - Put domain feature state, actions, and reusable domain components under `apps/web/src/features/<domain>`.
 - Put frontend models and DTO conversion helpers under `apps/web/src/models`.
