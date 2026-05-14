@@ -45,6 +45,7 @@ out/
 .env
 .env.*
 !.env.example
+secrets/
 
 # -----------------
 

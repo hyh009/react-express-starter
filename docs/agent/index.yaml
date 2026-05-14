@@ -114,4 +114,4 @@ agent_docs:
 
     - name: frontend-i18n
       path: docs/agent/frontend/i18n.md
-      use_when: Adding or changing frontend i18n strings, language switching, or locale resources.
+      use_when: Adding or changing frontend user-facing strings or language switching behavior.

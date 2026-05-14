@@ -1,4 +1,4 @@
-import { passwordRuleMessage, registerSchema } from '@repo/shared';
+import { registerSchema } from '@repo/shared';
 import { tDefault } from '@/app/i18n';
 import { registerPageCommands } from './registerPage.commands';
 import { useRegisterForm } from './useRegisterForm';
@@ -103,7 +103,7 @@ export function useRegisterPageVM(onAuthenticated: () => void) {
     form,
     passwordRuleMessage: tDefault(
       'auth.register.passwordDescription',
-      passwordRuleMessage,
+      'Use at least 8 characters with uppercase, lowercase, and a number.',
     ),
     setField: form.setField,
     submit,

@@ -1,6 +1,34 @@
 import type { Resource } from 'i18next';
+import { generatedResources } from './resources.generated';
 
-export const resources: Resource = {
+type ResourceBranch = string | { [key: string]: ResourceBranch };
+
+function mergeResourceBranch(
+  base: ResourceBranch,
+  override: ResourceBranch,
+): ResourceBranch {
+  if (typeof base === 'string' || typeof override === 'string') {
+    return override;
+  }
+
+  const merged: { [key: string]: ResourceBranch } = { ...base };
+
+  for (const [key, value] of Object.entries(override)) {
+    merged[key] =
+      key in merged ? mergeResourceBranch(merged[key], value) : value;
+  }
+
+  return merged;
+}
+
+function mergeResources(base: Resource, override: Resource): Resource {
+  return mergeResourceBranch(
+    base as ResourceBranch,
+    override as ResourceBranch,
+  ) as Resource;
+}
+
+const manualResources: Resource = {
   'zh-TW': {
     translation: {
       app: {
@@ -189,3 +217,8 @@ export const resources: Resource = {
     },
   },
 };
+
+export const resources: Resource = mergeResources(
+  generatedResources,
+  manualResources,
+);
