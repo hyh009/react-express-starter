@@ -4,6 +4,7 @@ import { RouteErrorBoundary } from '@/app/AppErrorBoundary';
 import { RequireAuth } from '@/app/RequireAuth';
 import { useAuthVM } from '@/app/viewModel/useAuthVM';
 import { LoginPage } from '@/pages/login/LoginPage';
+import { NotFoundPage } from '@/pages/notFound/NotFoundPage';
 import { RegisterPage } from '@/pages/register/RegisterPage';
 import { TodoCreatePage } from '@/pages/todoCreate/TodoCreatePage';
 import { TodoDetailPage } from '@/pages/todoDetail/TodoDetailPage';
@@ -48,10 +49,10 @@ export function App() {
             <Route element={<TodoOverviewPage />} index />
             <Route element={<TodoCreatePage />} path="/todos/new" />
             <Route element={<TodoDetailPage />} path="/todos/:todoId" />
+            <Route element={<NotFoundPage embedded />} path="*" />
           </Route>
         </Route>
 
-        <Route element={<Navigate replace to="/" />} path="*" />
       </Routes>
     </BrowserRouter>
   );
