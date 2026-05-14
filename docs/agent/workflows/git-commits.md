@@ -38,9 +38,15 @@ Use broad staging only when the user explicitly asks to commit everything and th
 
 ## Commit Message Style
 
-Use Conventional Commit style.
+Use Conventional Commit style. Prefer no scope when the type already identifies the area clearly.
 
-Format:
+Default format:
+
+```txt
+type: summary
+```
+
+Use the scoped format only when the change is clearly tied to one package or feature area:
 
 ```txt
 type(scope): summary
@@ -55,16 +61,29 @@ Common types:
 - `test` for tests
 - `chore` for tooling, dependency, or maintenance changes
 
-Use a scope when the change is clearly tied to one package or area.
+Use a scope when the change is clearly tied to one package, app, feature, or domain area.
+
+Do not use a scope that repeats the type:
+
+- use `docs: ...` for repository-wide or cross-app documentation
+- do not use `docs(docs): ...`
+- use `docs(api): ...`, `docs(web): ...`, or `docs(frontend): ...` only when the documentation is specifically about that area
 
 Common scopes:
 
 - `api`
-- `docs`
+- `web`
+- `frontend`
+- `backend`
+- `shared`
+- `workspace`
 
 Examples from this repository:
 
 ```txt
+docs: update starter README
+docs: document full-stack workspace setup
+docs(frontend): document page commands architecture
 feat(api): add structured logging and env validation
 feat(api): enhance error mapping and backend error docs
 refactor(api): improve health service testability with factory function
