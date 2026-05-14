@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router';
 import { RouteErrorBoundary } from '@/app/AppErrorBoundary';
+import { PublicLayout } from '@/app/PublicLayout';
 import { RequireAuth } from '@/app/RequireAuth';
+import { useAppTranslation } from '@/app/i18n';
 import { useAuthVM } from '@/app/viewModel/useAuthVM';
 import { LoginPage } from '@/pages/login/LoginPage';
 import { NotFoundPage } from '@/pages/notFound/NotFoundPage';
@@ -14,9 +16,14 @@ import { AppLayout } from './AppLayout';
 
 function PublicOnly() {
   const auth = useAuthVM();
+  const { tDefault } = useAppTranslation();
 
   if (auth.isChecking) {
-    return <LoadingState label="Checking session" />;
+    return (
+      <LoadingState
+        label={tDefault('app.loading.checkingSession', 'Checking session')}
+      />
+    );
   }
 
   if (auth.isAuthenticated) {
@@ -39,8 +46,10 @@ export function App() {
       <Routes>
         <Route element={<RouteErrorBoundary />}>
           <Route element={<PublicOnly />}>
-            <Route element={<LoginPage />} path="/login" />
-            <Route element={<RegisterPage />} path="/register" />
+            <Route element={<PublicLayout />}>
+              <Route element={<LoginPage />} path="/login" />
+              <Route element={<RegisterPage />} path="/register" />
+            </Route>
           </Route>
         </Route>
 
@@ -52,7 +61,6 @@ export function App() {
             <Route element={<NotFoundPage embedded />} path="*" />
           </Route>
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

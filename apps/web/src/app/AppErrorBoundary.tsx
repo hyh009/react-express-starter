@@ -1,6 +1,7 @@
 import type { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, Home, RotateCcw } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
+import { useAppTranslation } from '@/app/i18n';
 import {
   ErrorBoundary,
   type ErrorBoundaryFallbackProps,
@@ -29,6 +30,7 @@ function AppErrorFallback({
   onGoHome,
   resetErrorBoundary,
 }: AppErrorFallbackProps) {
+  const { tDefault } = useAppTranslation();
   const content = (
     <section
       aria-labelledby="app-error-title"
@@ -44,10 +46,13 @@ function AppErrorFallback({
             className="mb-2 max-w-none text-2xl leading-tight"
             id="app-error-title"
           >
-            Something went wrong
+            {tDefault('app.errorBoundary.title', 'Something went wrong')}
           </h1>
           <p className="m-0 text-sm text-muted-foreground">
-            The page stopped rendering. Try again, or return home.
+            {tDefault(
+              'app.errorBoundary.description',
+              'The page stopped rendering. Try again, or return home.',
+            )}
           </p>
         </div>
       </div>
@@ -61,12 +66,12 @@ function AppErrorFallback({
       <div className="flex flex-wrap gap-2">
         <Button onClick={resetErrorBoundary} type="button">
           <RotateCcw aria-hidden="true" className="size-4" />
-          Try again
+          {tDefault('app.errorBoundary.tryAgain', 'Try again')}
         </Button>
         {onGoHome ? (
           <Button onClick={onGoHome} type="button" variant="outline">
             <Home aria-hidden="true" className="size-4" />
-            Home
+            {tDefault('app.errorBoundary.home', 'Home')}
           </Button>
         ) : null}
       </div>

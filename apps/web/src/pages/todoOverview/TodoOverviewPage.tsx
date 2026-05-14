@@ -1,5 +1,7 @@
 import { Link, useNavigate } from 'react-router';
 import { todoStatuses } from '@repo/shared';
+import { useAppTranslation } from '@/app/i18n';
+import { getTodoStatusLabel } from '@/app/i18n/todoLabels';
 import { TodoPriorityBadge } from '@/features/todo/components/TodoPriorityBadge';
 import { TodoStatusBadge } from '@/features/todo/components/TodoStatusBadge';
 import { LoadingState } from '@/shared/components/LoadingState';
@@ -9,10 +11,15 @@ import type { TodoStatus } from '@/models/todo.types';
 
 export function TodoOverviewPage() {
   const navigate = useNavigate();
+  const { tDefault } = useAppTranslation();
   const vm = useTodoOverviewPageVM();
 
   if (vm.isLoading && vm.todos.length === 0) {
-    return <LoadingState label="Loading todos" />;
+    return (
+      <LoadingState
+        label={tDefault('todo.overview.loading', 'Loading todos')}
+      />
+    );
   }
 
   return (
@@ -21,13 +28,16 @@ export function TodoOverviewPage() {
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="mb-2 text-xs font-bold tracking-[0.08em] text-primary uppercase">
-              Protected todo workspace
+              {tDefault('todo.overview.eyebrow', 'Protected todo workspace')}
             </p>
             <h1 className="mb-3 text-3xl leading-tight font-bold text-foreground md:text-4xl">
-              Todos
+              {tDefault('todo.overview.title', 'Todos')}
             </h1>
             <p className="max-w-2xl text-base text-muted-foreground">
-              Review priorities, update status, or remove completed work.
+              {tDefault(
+                'todo.overview.subtitle',
+                'Review priorities, update status, or remove completed work.',
+              )}
             </p>
           </div>
           <Button
@@ -36,7 +46,7 @@ export function TodoOverviewPage() {
             }}
             type="button"
           >
-            Create todo
+            {tDefault('todo.overview.addTodo', 'Create todo')}
           </Button>
         </div>
 
@@ -46,7 +56,10 @@ export function TodoOverviewPage() {
           </p>
         ) : null}
 
-        <div className="grid gap-3" aria-label="Todo list">
+        <div
+          className="grid gap-3"
+          aria-label={tDefault('todo.overview.listLabel', 'Todo list')}
+        >
           {vm.todos.map((todo) => (
             <article
               className="grid gap-4 rounded-lg border border-border bg-card px-4 py-3 text-foreground shadow-sm transition hover:border-primary/60 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
@@ -70,7 +83,7 @@ export function TodoOverviewPage() {
 
               <div className="flex flex-wrap items-center gap-2 sm:justify-end">
                 <label className="sr-only" htmlFor={`todo-status-${todo.id}`}>
-                  Status
+                  {tDefault('common.fields.status', 'Status')}
                 </label>
                 <select
                   className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm text-foreground"
@@ -85,7 +98,7 @@ export function TodoOverviewPage() {
                 >
                   {todoStatuses.map((status) => (
                     <option key={status} value={status}>
-                      {status}
+                      {getTodoStatusLabel(tDefault, status)}
                     </option>
                   ))}
                 </select>
@@ -96,7 +109,7 @@ export function TodoOverviewPage() {
                   type="button"
                   variant="destructive"
                 >
-                  Delete
+                  {tDefault('common.actions.delete', 'Delete')}
                 </Button>
               </div>
             </article>
@@ -105,7 +118,7 @@ export function TodoOverviewPage() {
 
         {vm.todos.length === 0 && !vm.isLoading ? (
           <p className="mt-4 rounded-md border border-border bg-card px-4 py-3 text-sm text-muted-foreground">
-            No todos yet.
+            {tDefault('todo.overview.empty', 'No todos yet.')}
           </p>
         ) : null}
       </div>

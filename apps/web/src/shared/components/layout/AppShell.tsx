@@ -1,11 +1,21 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
+import { useAppTranslation } from '@/app/i18n';
+import type { SupportedLanguage } from '@/app/i18n/languages';
+
+type LanguageOption = {
+  label: string;
+  value: SupportedLanguage;
+};
 
 type AppShellProps = {
   appName: string;
   children: ReactNode;
   healthUrl: string;
   isAuthenticated: boolean;
+  language: SupportedLanguage;
+  languageOptions: LanguageOption[];
+  onLanguageChange: (language: string) => void | Promise<void>;
   onLogout: () => void;
   onNavigateHome: () => void;
   swaggerUrl: string;
@@ -17,11 +27,16 @@ export function AppShell({
   children,
   healthUrl,
   isAuthenticated,
+  language,
+  languageOptions,
+  onLanguageChange,
   onLogout,
   onNavigateHome,
   swaggerUrl,
   username,
 }: AppShellProps) {
+  const { tDefault } = useAppTranslation();
+
   return (
     <div className="min-h-screen">
       <header className="flex min-h-16 items-center justify-between gap-4 border-b border-border bg-card px-5 py-3 md:px-8">
@@ -30,7 +45,7 @@ export function AppShell({
         </Link>
         <nav
           className="flex flex-wrap items-center justify-end gap-3 text-sm font-semibold text-muted-foreground"
-          aria-label="Main navigation"
+          aria-label={tDefault('app.navigation.label', 'Main navigation')}
         >
           {isAuthenticated ? (
             <button
@@ -38,15 +53,32 @@ export function AppShell({
               onClick={onNavigateHome}
               type="button"
             >
-              Todos
+              {tDefault('app.navigation.home', 'Todos')}
             </button>
           ) : null}
           <a className="hover:text-primary" href={healthUrl}>
-            API health
+            {tDefault('app.navigation.apiHealth', 'API health')}
           </a>
           <a className="hover:text-primary" href={swaggerUrl}>
-            Swagger docs
+            {tDefault('app.navigation.swaggerDocs', 'Swagger docs')}
           </a>
+          <label className="sr-only" htmlFor="app-language">
+            {tDefault('app.navigation.language', 'Language')}
+          </label>
+          <select
+            className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm text-foreground"
+            id="app-language"
+            value={language}
+            onChange={(event) => {
+              void onLanguageChange(event.target.value);
+            }}
+          >
+            {languageOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
               {username ? (
@@ -59,7 +91,7 @@ export function AppShell({
                 onClick={onLogout}
                 type="button"
               >
-                Logout
+                {tDefault('app.navigation.logout', 'Logout')}
               </button>
             </div>
           ) : null}

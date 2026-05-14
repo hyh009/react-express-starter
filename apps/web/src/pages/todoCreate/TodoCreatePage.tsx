@@ -1,6 +1,11 @@
 import { useCallback, type FormEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { todoPriorities, todoStatuses } from '@repo/shared';
+import { useAppTranslation } from '@/app/i18n';
+import {
+  getTodoPriorityLabel,
+  getTodoStatusLabel,
+} from '@/app/i18n/todoLabels';
 import { Field } from '@/shared/components/form/Field';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
@@ -9,6 +14,7 @@ import { useTodoCreatePageVM } from './useTodoCreatePageVM';
 
 export function TodoCreatePage() {
   const navigate = useNavigate();
+  const { tDefault } = useAppTranslation();
   const handleCreated = useCallback(
     (todoId: string) => {
       navigate(`/todos/${todoId}`);
@@ -34,7 +40,7 @@ export function TodoCreatePage() {
           type="button"
           variant="ghost"
         >
-          Back to overview
+          {tDefault('todo.create.backToOverview', 'Back to overview')}
         </Button>
       </div>
 
@@ -44,13 +50,16 @@ export function TodoCreatePage() {
       >
         <div>
           <p className="mb-2 text-xs font-bold tracking-[0.08em] text-primary uppercase">
-            Create todo
+            {tDefault('todo.create.eyebrow', 'Create todo')}
           </p>
           <h1 className="mb-3 text-3xl leading-tight font-bold text-foreground md:text-4xl">
-            New todo
+            {tDefault('todo.create.title', 'New todo')}
           </h1>
           <p className="max-w-2xl text-base text-muted-foreground">
-            Add a todo with the owner, priority, and starting status.
+            {tDefault(
+              'todo.create.description',
+              'Add a todo with the owner, priority, and starting status.',
+            )}
           </p>
         </div>
 
@@ -60,7 +69,11 @@ export function TodoCreatePage() {
           </p>
         ) : null}
 
-        <Field label="Title" error={vm.form.fieldErrors.title} required>
+        <Field
+          label={tDefault('common.fields.title', 'Title')}
+          error={vm.form.fieldErrors.title}
+          required
+        >
           <Input
             value={vm.form.values.title}
             onChange={(event) => {
@@ -69,7 +82,11 @@ export function TodoCreatePage() {
           />
         </Field>
 
-        <Field label="Owner" error={vm.form.fieldErrors.ownerName} required>
+        <Field
+          label={tDefault('common.fields.owner', 'Owner')}
+          error={vm.form.fieldErrors.ownerName}
+          required
+        >
           <Input
             value={vm.form.values.ownerName}
             onChange={(event) => {
@@ -78,7 +95,7 @@ export function TodoCreatePage() {
           />
         </Field>
 
-        <Field label="Description">
+        <Field label={tDefault('common.fields.description', 'Description')}>
           <Textarea
             value={vm.form.values.description}
             onChange={(event) => {
@@ -89,7 +106,7 @@ export function TodoCreatePage() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="grid gap-1.5 text-sm font-medium text-foreground">
-            Status
+            {tDefault('common.fields.status', 'Status')}
             <select
               className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm"
               value={vm.form.values.status}
@@ -99,13 +116,13 @@ export function TodoCreatePage() {
             >
               {todoStatuses.map((status) => (
                 <option key={status} value={status}>
-                  {status}
+                  {getTodoStatusLabel(tDefault, status)}
                 </option>
               ))}
             </select>
           </label>
           <label className="grid gap-1.5 text-sm font-medium text-foreground">
-            Priority
+            {tDefault('common.fields.priority', 'Priority')}
             <select
               className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm"
               value={vm.form.values.priority}
@@ -115,7 +132,7 @@ export function TodoCreatePage() {
             >
               {todoPriorities.map((priority) => (
                 <option key={priority} value={priority}>
-                  {priority}
+                  {getTodoPriorityLabel(tDefault, priority)}
                 </option>
               ))}
             </select>
@@ -124,7 +141,7 @@ export function TodoCreatePage() {
 
         <div className="flex flex-wrap gap-3">
           <Button disabled={vm.isSubmitting} type="submit">
-            Create todo
+            {tDefault('todo.create.submit', 'Create todo')}
           </Button>
           <Button
             onClick={() => {
@@ -133,7 +150,7 @@ export function TodoCreatePage() {
             type="button"
             variant="outline"
           >
-            Cancel
+            {tDefault('common.actions.cancel', 'Cancel')}
           </Button>
         </div>
       </form>

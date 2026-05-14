@@ -14,7 +14,7 @@ export function createTodoDetailActions(todoDetailStore: TodoDetailStore) {
     loadSuccess(todo: Todo | null) {
       todoDetailStore.setState({
         todo,
-        error: todo ? null : 'Todo item was not found.',
+        error: null,
         isLoading: false,
       });
     },

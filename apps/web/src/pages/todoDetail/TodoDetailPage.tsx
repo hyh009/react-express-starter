@@ -2,6 +2,11 @@ import { useCallback } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { todoPriorities, todoStatuses } from '@repo/shared';
+import { useAppTranslation } from '@/app/i18n';
+import {
+  getTodoPriorityLabel,
+  getTodoStatusLabel,
+} from '@/app/i18n/todoLabels';
 import { TodoStatusBadge } from '@/features/todo/components/TodoStatusBadge';
 import { todoModel } from '@/models/todo.model';
 import { LoadingState } from '@/shared/components/LoadingState';
@@ -14,6 +19,7 @@ import { useTodoDetailPageVM } from './useTodoDetailPageVM';
 export function TodoDetailPage() {
   const navigate = useNavigate();
   const { todoId } = useParams();
+  const { tDefault } = useAppTranslation();
   const handleDeleted = useCallback(() => {
     navigate('/');
   }, [navigate]);
@@ -33,7 +39,11 @@ export function TodoDetailPage() {
   }
 
   if (vm.isLoading) {
-    return <LoadingState label="Loading todo detail" />;
+    return (
+      <LoadingState
+        label={tDefault('todo.detail.loading', 'Loading todo detail')}
+      />
+    );
   }
 
   return (
@@ -46,7 +56,7 @@ export function TodoDetailPage() {
           type="button"
           variant="ghost"
         >
-          Back to overview
+          {tDefault('todo.detail.backToOverview', 'Back to overview')}
         </Button>
       </div>
 
@@ -64,14 +74,18 @@ export function TodoDetailPage() {
           >
             <div>
               <p className="mb-2 text-xs font-bold tracking-[0.08em] text-primary uppercase">
-                Todo detail
+                {tDefault('todo.detail.eyebrow', 'Todo detail')}
               </p>
               <h1 className="mb-3 text-3xl leading-tight font-bold text-foreground md:text-4xl">
                 {vm.todo.title}
               </h1>
             </div>
 
-            <Field label="Title" error={vm.formErrors.title} required>
+            <Field
+              label={tDefault('common.fields.title', 'Title')}
+              error={vm.formErrors.title}
+              required
+            >
               <Input
                 value={vm.form.title}
                 onChange={(event) => {
@@ -80,7 +94,11 @@ export function TodoDetailPage() {
               />
             </Field>
 
-            <Field label="Owner" error={vm.formErrors.ownerName} required>
+            <Field
+              label={tDefault('common.fields.owner', 'Owner')}
+              error={vm.formErrors.ownerName}
+              required
+            >
               <Input
                 value={vm.form.ownerName}
                 onChange={(event) => {
@@ -89,7 +107,7 @@ export function TodoDetailPage() {
               />
             </Field>
 
-            <Field label="Description">
+            <Field label={tDefault('common.fields.description', 'Description')}>
               <Textarea
                 value={vm.form.description}
                 onChange={(event) => {
@@ -100,7 +118,7 @@ export function TodoDetailPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="grid gap-1.5 text-sm font-medium text-foreground">
-                Status
+                {tDefault('common.fields.status', 'Status')}
                 <select
                   className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm"
                   value={vm.form.status}
@@ -110,13 +128,13 @@ export function TodoDetailPage() {
                 >
                   {todoStatuses.map((status) => (
                     <option key={status} value={status}>
-                      {status}
+                      {getTodoStatusLabel(tDefault, status)}
                     </option>
                   ))}
                 </select>
               </label>
               <label className="grid gap-1.5 text-sm font-medium text-foreground">
-                Priority
+                {tDefault('common.fields.priority', 'Priority')}
                 <select
                   className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm"
                   value={vm.form.priority}
@@ -126,7 +144,7 @@ export function TodoDetailPage() {
                 >
                   {todoPriorities.map((priority) => (
                     <option key={priority} value={priority}>
-                      {priority}
+                      {getTodoPriorityLabel(tDefault, priority)}
                     </option>
                   ))}
                 </select>
@@ -134,39 +152,48 @@ export function TodoDetailPage() {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Button type="submit">Save changes</Button>
+              <Button type="submit">
+                {tDefault('common.actions.saveChanges', 'Save changes')}
+              </Button>
               <Button
                 onClick={handleDelete}
                 type="button"
                 variant="destructive"
               >
-                Delete
+                {tDefault('common.actions.delete', 'Delete')}
               </Button>
             </div>
           </form>
 
           <aside className="self-start rounded-lg border border-border bg-card p-5 shadow-sm">
             <div className="mb-5 flex items-center justify-between gap-3">
-              <h2 className="m-0 text-lg font-semibold">Summary</h2>
+              <h2 className="m-0 text-lg font-semibold">
+                {tDefault('todo.detail.summary', 'Summary')}
+              </h2>
               <TodoStatusBadge status={vm.todo.status} />
             </div>
             <dl className="grid gap-4 text-sm">
               <div className="border-t border-border pt-4">
-                <dt className="font-semibold text-muted-foreground">Owner</dt>
+                <dt className="font-semibold text-muted-foreground">
+                  {tDefault('common.fields.owner', 'Owner')}
+                </dt>
                 <dd className="m-0">{todoModel.getOwnerLabel(vm.todo)}</dd>
               </div>
               <div className="border-t border-border pt-4">
                 <dt className="font-semibold text-muted-foreground">
-                  Priority
+                  {tDefault('common.fields.priority', 'Priority')}
                 </dt>
-                <dd className="m-0">{vm.todo.priority}</dd>
+                <dd className="m-0">
+                  {getTodoPriorityLabel(tDefault, vm.todo.priority)}
+                </dd>
               </div>
               <div className="border-t border-border pt-4">
                 <dt className="font-semibold text-muted-foreground">
-                  Description
+                  {tDefault('common.fields.description', 'Description')}
                 </dt>
                 <dd className="m-0">
-                  {vm.todo.description || 'No description'}
+                  {vm.todo.description ||
+                    tDefault('todo.detail.emptyDescription', 'No description')}
                 </dd>
               </div>
             </dl>

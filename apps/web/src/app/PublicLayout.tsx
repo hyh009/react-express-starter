@@ -3,44 +3,33 @@ import { apiBaseUrl, apiUrl } from '@/api';
 import { healthPaths } from '@/api/paths/health.paths';
 import { PageErrorBoundary } from '@/app/AppErrorBoundary';
 import { useAppContextVM } from '@/app/viewModel/useAppContextVM';
-import { useAuthVM } from '@/app/viewModel/useAuthVM';
 import { useFeedbackVM } from '@/app/viewModel/useFeedbackVM';
 import { useLanguageVM } from '@/app/viewModel/useLanguageVM';
 import { ModalHost } from '@/shared/components/feedback/ModalHost';
 import { ToastHost } from '@/shared/components/feedback/ToastHost';
 import { AppShell } from '@/shared/components/layout/AppShell';
 
-export function AppLayout() {
+export function PublicLayout() {
   const appContext = useAppContextVM();
   const feedback = useFeedbackVM();
   const language = useLanguageVM();
   const navigate = useNavigate();
-  const auth = useAuthVM({
-    onLoggedOut() {
-      navigate('/login', {
-        replace: true,
-      });
-    },
-  });
 
   function navigateHome() {
-    navigate('/');
+    navigate('/login');
   }
 
   return (
     <AppShell
       appName={appContext.appName}
       healthUrl={apiUrl(healthPaths.status)}
-      isAuthenticated
+      isAuthenticated={false}
       language={language.currentLanguage}
       languageOptions={language.languageOptions}
       onLanguageChange={language.changeLanguage}
-      onLogout={() => {
-        void auth.logout();
-      }}
+      onLogout={() => {}}
       onNavigateHome={navigateHome}
       swaggerUrl={`${apiBaseUrl}/docs`}
-      username={auth.user?.username}
     >
       <PageErrorBoundary>
         <Outlet />

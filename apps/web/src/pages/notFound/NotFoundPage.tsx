@@ -1,5 +1,6 @@
 import { ArrowLeft, Home, LogIn } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
+import { useAppTranslation } from '@/app/i18n';
 import { useAuthVM } from '@/app/viewModel/useAuthVM';
 import { buttonVariants } from '@/shared/components/ui/buttonVariants';
 import { cn } from '@/shared/utils/cn';
@@ -11,8 +12,11 @@ type NotFoundPageProps = {
 export function NotFoundPage({ embedded = false }: NotFoundPageProps) {
   const auth = useAuthVM();
   const navigate = useNavigate();
+  const { tDefault } = useAppTranslation();
   const destination = auth.isAuthenticated ? '/' : '/login';
-  const destinationLabel = auth.isAuthenticated ? 'Go to todos' : 'Sign in';
+  const destinationLabel = auth.isAuthenticated
+    ? tDefault('notFound.goToTodos', 'Go to todos')
+    : tDefault('notFound.signIn', 'Sign in');
   const DestinationIcon = auth.isAuthenticated ? Home : LogIn;
 
   return (
@@ -24,13 +28,16 @@ export function NotFoundPage({ embedded = false }: NotFoundPageProps) {
     >
       <div className="min-w-0">
         <p className="mb-3 text-xs font-bold tracking-[0.08em] text-primary uppercase">
-          404
+          {tDefault('notFound.eyebrow', '404')}
         </p>
         <h1 className="mb-5 text-4xl leading-tight font-bold text-foreground md:text-5xl">
-          Page not found
+          {tDefault('notFound.title', 'Page not found')}
         </h1>
         <p className="max-w-xl text-base text-muted-foreground">
-          The route does not exist, or the page may have moved.
+          {tDefault(
+            'notFound.description',
+            'The route does not exist, or the page may have moved.',
+          )}
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
           <button
@@ -41,7 +48,7 @@ export function NotFoundPage({ embedded = false }: NotFoundPageProps) {
             type="button"
           >
             <ArrowLeft aria-hidden="true" />
-            Back
+            {tDefault('notFound.back', 'Back')}
           </button>
           <Link className={buttonVariants()} to={destination}>
             <DestinationIcon aria-hidden="true" />

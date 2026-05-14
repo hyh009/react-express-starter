@@ -43,8 +43,8 @@ describe('TodoDetailPageCommands', () => {
       status: 'not-found',
     });
     expect(actions.startLoading).toHaveBeenCalledOnce();
-    expect(actions.loadSuccess).toHaveBeenCalledWith(null);
-    expect(actions.loadFailed).not.toHaveBeenCalled();
+    expect(actions.loadFailed).toHaveBeenCalledWith('Todo item was not found.');
+    expect(actions.loadSuccess).not.toHaveBeenCalled();
   });
 
   it('maps network errors into a failed result while storing the page error', async () => {

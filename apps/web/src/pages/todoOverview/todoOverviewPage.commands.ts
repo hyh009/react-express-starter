@@ -1,4 +1,5 @@
 import { getApiFailureReason, hasApiErrorCode } from '@/api/apiError';
+import { tDefault } from '@/app/i18n';
 import { todoService } from '@/services/todo.service';
 import type { TodoOverviewActions } from '@/features/todo/actions/todoOverview.actions';
 import type { ApiFailureReason } from '@/api/apiError';
@@ -43,7 +44,9 @@ class TodoOverviewPageCommands {
     } catch (error) {
       const result = mapLoadTodosError(error);
 
-      this.todoOverviewActions.loadFailed('Failed to load todos.');
+      this.todoOverviewActions.loadFailed(
+        tDefault('todo.overview.loadError', 'Failed to load todos.'),
+      );
       return result;
     }
   }

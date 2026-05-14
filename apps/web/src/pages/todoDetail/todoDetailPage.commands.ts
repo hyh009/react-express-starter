@@ -1,4 +1,5 @@
 import { getApiFailureReason, hasApiErrorCode } from '@/api/apiError';
+import { tDefault } from '@/app/i18n';
 import { todoService } from '@/services/todo.service';
 import type { TodoDetailActions } from '@/features/todo/actions/todoDetail.actions';
 import type { ApiFailureReason } from '@/api/apiError';
@@ -62,11 +63,15 @@ class TodoDetailPageCommands {
       const result = mapLoadTodoError(error);
 
       if (result.status === 'not-found') {
-        this.todoDetailActions.loadSuccess(null);
+        this.todoDetailActions.loadFailed(
+          tDefault('todo.detail.notFoundError', 'Todo item was not found.'),
+        );
         return result;
       }
 
-      this.todoDetailActions.loadFailed('Failed to load todo item.');
+      this.todoDetailActions.loadFailed(
+        tDefault('todo.detail.loadError', 'Failed to load todo item.'),
+      );
       return result;
     }
   }

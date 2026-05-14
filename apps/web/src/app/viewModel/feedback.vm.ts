@@ -1,3 +1,4 @@
+import { tDefault } from '@/app/i18n';
 import { feedbackStore } from '../stores/feedback.store';
 
 import type {
@@ -50,8 +51,10 @@ class FeedbackVM {
       const modal: ActiveConfirmModal = {
         title: input.title,
         message: input.message,
-        confirmLabel: input.confirmLabel ?? 'Confirm',
-        cancelLabel: input.cancelLabel ?? 'Cancel',
+        confirmLabel:
+          input.confirmLabel ?? tDefault('common.actions.confirm', 'Confirm'),
+        cancelLabel:
+          input.cancelLabel ?? tDefault('common.actions.cancel', 'Cancel'),
         tone: input.tone ?? 'info',
         onResolve: resolve,
       };

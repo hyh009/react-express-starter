@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { todoPriorities, todoStatuses } from '@repo/shared';
+import { tDefault } from '@/app/i18n';
 import { createTodoDetailActions } from '@/features/todo/actions/todoDetail.actions';
 import { createTodoDetailStore } from '@/features/todo/store/todoDetail.store';
 import { createTodoDetailPageCommands } from './todoDetailPage.commands';
@@ -59,22 +60,34 @@ function showLoadTodoToast(result: LoadTodoResult) {
   if (result.status === 'not-found') {
     feedbackVM.toast({
       tone: 'info',
-      title: 'Todo not found',
-      message: 'This todo may have been deleted or moved.',
+      title: tDefault('todo.toast.notFound.title', 'Todo not found'),
+      message: tDefault(
+        'todo.toast.notFound.movedMessage',
+        'This todo may have been deleted or moved.',
+      ),
     });
     return;
   }
 
   const messageByReason: Record<LoadTodoFailureReason, string> = {
-    network: 'Check that the API server is running, then try again.',
-    server: 'The todo service is temporarily unavailable.',
-    'invalid-response': 'The API returned data this page cannot read.',
-    unknown: 'Try again in a moment.',
+    network: tDefault(
+      'common.errors.checkApiServer',
+      'Check that the API server is running, then try again.',
+    ),
+    server: tDefault(
+      'common.errors.apiServerUnavailable',
+      'The todo service is temporarily unavailable.',
+    ),
+    'invalid-response': tDefault(
+      'common.errors.apiInvalidResponse',
+      'The API returned data this page cannot read.',
+    ),
+    unknown: tDefault('common.errors.tryAgainLater', 'Try again in a moment.'),
   };
 
   feedbackVM.toast({
     tone: 'error',
-    title: 'Could not load todo',
+    title: tDefault('todo.toast.loadDetailFailed.title', 'Could not load todo'),
     message: messageByReason[result.reason],
   });
 }
@@ -83,22 +96,34 @@ function showSaveTodoToast(result: SaveTodoResult) {
   if (result.status === 'saved') {
     feedbackVM.toast({
       tone: 'success',
-      title: 'Todo saved',
-      message: 'Your changes were saved.',
+      title: tDefault('todo.toast.saved.title', 'Todo saved'),
+      message: tDefault('todo.toast.saved.message', 'Your changes were saved.'),
     });
     return;
   }
 
   const messageByReason: Record<SaveTodoFailureReason, string> = {
-    network: 'Check that the API server is running, then try again.',
-    server: 'The todo service is temporarily unavailable.',
-    'invalid-response': 'The API returned data this page cannot read.',
-    unknown: 'Check the form and try again.',
+    network: tDefault(
+      'common.errors.checkApiServer',
+      'Check that the API server is running, then try again.',
+    ),
+    server: tDefault(
+      'common.errors.apiServerUnavailable',
+      'The todo service is temporarily unavailable.',
+    ),
+    'invalid-response': tDefault(
+      'common.errors.apiInvalidResponse',
+      'The API returned data this page cannot read.',
+    ),
+    unknown: tDefault(
+      'todo.toast.validationFailed',
+      'Check the form and try again.',
+    ),
   };
 
   feedbackVM.toast({
     tone: 'error',
-    title: 'Could not save todo',
+    title: tDefault('todo.toast.saveFailed.title', 'Could not save todo'),
     message: messageByReason[result.reason],
   });
 }
@@ -107,8 +132,8 @@ function showDeleteTodoToast(result: DeleteTodoResult) {
   if (result.status === 'deleted') {
     feedbackVM.toast({
       tone: 'success',
-      title: 'Todo deleted',
-      message: 'The todo was removed.',
+      title: tDefault('todo.toast.deleted.title', 'Todo deleted'),
+      message: tDefault('todo.toast.deleted.message', 'The todo was removed.'),
     });
     return;
   }
@@ -116,22 +141,34 @@ function showDeleteTodoToast(result: DeleteTodoResult) {
   if (result.status === 'not-found') {
     feedbackVM.toast({
       tone: 'info',
-      title: 'Todo not found',
-      message: 'This todo may have already been deleted.',
+      title: tDefault('todo.toast.notFound.title', 'Todo not found'),
+      message: tDefault(
+        'todo.toast.notFound.deletedMessage',
+        'This todo may have already been deleted.',
+      ),
     });
     return;
   }
 
   const messageByReason: Record<DeleteTodoFailureReason, string> = {
-    network: 'Check that the API server is running, then try again.',
-    server: 'The todo service is temporarily unavailable.',
-    'invalid-response': 'The API returned data this page cannot read.',
-    unknown: 'Try again in a moment.',
+    network: tDefault(
+      'common.errors.checkApiServer',
+      'Check that the API server is running, then try again.',
+    ),
+    server: tDefault(
+      'common.errors.apiServerUnavailable',
+      'The todo service is temporarily unavailable.',
+    ),
+    'invalid-response': tDefault(
+      'common.errors.apiInvalidResponse',
+      'The API returned data this page cannot read.',
+    ),
+    unknown: tDefault('common.errors.tryAgainLater', 'Try again in a moment.'),
   };
 
   feedbackVM.toast({
     tone: 'error',
-    title: 'Could not delete todo',
+    title: tDefault('todo.toast.deleteFailed.title', 'Could not delete todo'),
     message: messageByReason[result.reason],
   });
 }
@@ -246,11 +283,17 @@ export function useTodoDetailPageVM({
       const errors: Partial<TodoEditForm> = {};
 
       if (!form.title.trim()) {
-        errors.title = 'Title is required.';
+        errors.title = tDefault(
+          'todo.validation.titleRequired',
+          'Title is required.',
+        );
       }
 
       if (!form.ownerName.trim()) {
-        errors.ownerName = 'Owner is required.';
+        errors.ownerName = tDefault(
+          'todo.validation.ownerRequired',
+          'Owner is required.',
+        );
       }
 
       setFormErrorsState({

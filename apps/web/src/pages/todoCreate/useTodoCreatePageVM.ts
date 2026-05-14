@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { tDefault } from '@/app/i18n';
 import { feedbackVM } from '@/app/viewModel/feedback.vm';
 import {
   createTodoCreatePageCommands,
@@ -17,22 +18,37 @@ function showCreateTodoToast(result: CreateTodoResult) {
   if (result.status === 'created') {
     feedbackVM.toast({
       tone: 'success',
-      title: 'Todo created',
-      message: 'The new todo is ready to edit.',
+      title: tDefault('todo.toast.created.title', 'Todo created'),
+      message: tDefault(
+        'todo.toast.created.message',
+        'The new todo is ready to edit.',
+      ),
     });
     return;
   }
 
   const messageByReason: Record<CreateTodoFailureReason, string> = {
-    network: 'Check that the API server is running, then try again.',
-    server: 'The todo service is temporarily unavailable.',
-    'invalid-response': 'The API returned data this page cannot read.',
-    unknown: 'Check the form and try again.',
+    network: tDefault(
+      'common.errors.checkApiServer',
+      'Check that the API server is running, then try again.',
+    ),
+    server: tDefault(
+      'common.errors.apiServerUnavailable',
+      'The todo service is temporarily unavailable.',
+    ),
+    'invalid-response': tDefault(
+      'common.errors.apiInvalidResponse',
+      'The API returned data this page cannot read.',
+    ),
+    unknown: tDefault(
+      'todo.toast.validationFailed',
+      'Check the form and try again.',
+    ),
   };
 
   feedbackVM.toast({
     tone: 'error',
-    title: 'Could not create todo',
+    title: tDefault('todo.toast.createFailed.title', 'Could not create todo'),
     message: messageByReason[result.reason],
   });
 }
@@ -77,7 +93,9 @@ export function useTodoCreatePageVM({ onCreated }: UseTodoCreatePageVMOptions) {
         return;
       }
 
-      setSubmitError('Could not create todo.');
+      setSubmitError(
+        tDefault('todo.create.submitError', 'Could not create todo.'),
+      );
     },
     [commands, onCreated, reset, setSubmitError, validate, values],
   );

@@ -1,4 +1,5 @@
-import { todoModel } from '@/models/todo.model';
+import { useAppTranslation } from '@/app/i18n';
+import { getTodoPriorityLabel } from '@/app/i18n/todoLabels';
 import { cn } from '@/shared/utils/cn';
 import type { TodoPriority } from '@/models/todo.types';
 
@@ -13,6 +14,9 @@ const priorityClassName: Record<TodoPriority, string> = {
 };
 
 export function TodoPriorityBadge({ priority }: TodoPriorityBadgeProps) {
+  const { tDefault } = useAppTranslation();
+  const label = getTodoPriorityLabel(tDefault, priority);
+
   return (
     <span
       className={cn(
@@ -20,7 +24,7 @@ export function TodoPriorityBadge({ priority }: TodoPriorityBadgeProps) {
         priorityClassName[priority],
       )}
     >
-      {todoModel.getPriorityLabel(priority)}
+      {label}
     </span>
   );
 }

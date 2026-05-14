@@ -1,4 +1,5 @@
 import { passwordRuleMessage, registerSchema } from '@repo/shared';
+import { tDefault } from '@/app/i18n';
 import { registerPageCommands } from './registerPage.commands';
 import { useRegisterForm } from './useRegisterForm';
 import type {
@@ -39,9 +40,15 @@ function validateRegisterForm(
   }
 
   if (!confirmPassword) {
-    errors.confirmPassword = 'Confirm password is required.';
+    errors.confirmPassword = tDefault(
+      'auth.validation.confirmPasswordRequired',
+      'Confirm password is required.',
+    );
   } else if (form.password !== confirmPassword) {
-    errors.confirmPassword = 'Passwords do not match.';
+    errors.confirmPassword = tDefault(
+      'auth.validation.passwordsDoNotMatch',
+      'Passwords do not match.',
+    );
   }
 
   if (!result.success || Object.keys(errors).length > 0) {
@@ -69,7 +76,12 @@ export function useRegisterPageVM(onAuthenticated: () => void) {
     if (!validation.success) {
       form.setIsSubmitting(false);
       form.setFieldErrors(validation.fieldErrors);
-      form.setSubmitError('Check the highlighted fields and try again.');
+      form.setSubmitError(
+        tDefault(
+          'auth.validation.submitInvalid',
+          'Check the highlighted fields and try again.',
+        ),
+      );
       return;
     }
 
@@ -89,7 +101,10 @@ export function useRegisterPageVM(onAuthenticated: () => void) {
 
   return {
     form,
-    passwordRuleMessage,
+    passwordRuleMessage: tDefault(
+      'auth.register.passwordDescription',
+      passwordRuleMessage,
+    ),
     setField: form.setField,
     submit,
   };

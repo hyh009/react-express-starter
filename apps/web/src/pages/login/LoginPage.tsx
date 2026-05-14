@@ -1,5 +1,6 @@
 import type { FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { useAppTranslation } from '@/app/i18n';
 import { Field } from '@/shared/components/form/Field';
 import { Button } from '@/shared/components/ui/button';
 import { buttonVariants } from '@/shared/components/ui/buttonVariants';
@@ -21,6 +22,7 @@ function getRedirectPath(state: unknown) {
 export function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { tDefault } = useAppTranslation();
   const vm = useLoginPageVM(() => {
     navigate(getRedirectPath(location.state), {
       replace: true,
@@ -36,14 +38,16 @@ export function LoginPage() {
     <section className="mx-auto grid min-h-[calc(100vh-4rem)] w-full max-w-5xl content-center gap-8 px-5 py-10 md:grid-cols-[1fr_26rem] md:px-8">
       <div className="max-w-2xl self-center">
         <p className="mb-3 text-xs font-bold tracking-[0.08em] text-primary uppercase">
-          Protected starter
+          {tDefault('auth.login.eyebrow', 'Protected starter')}
         </p>
         <h1 className="mb-5 text-4xl leading-tight font-bold text-foreground md:text-5xl">
-          Sign in to manage todos
+          {tDefault('auth.login.title', 'Sign in to manage todos')}
         </h1>
         <p className="max-w-xl text-base text-muted-foreground">
-          The frontend keeps the access token in memory and restores sessions
-          with the backend refresh cookie.
+          {tDefault(
+            'auth.login.description',
+            'The frontend keeps the access token in memory and restores sessions with the backend refresh cookie.',
+          )}
         </p>
       </div>
 
@@ -52,9 +56,14 @@ export function LoginPage() {
         onSubmit={handleSubmit}
       >
         <div>
-          <h2 className="mb-1 text-xl font-semibold">Login</h2>
+          <h2 className="mb-1 text-xl font-semibold">
+            {tDefault('auth.login.formTitle', 'Login')}
+          </h2>
           <p className="m-0 text-sm text-muted-foreground">
-            Use an existing starter account.
+            {tDefault(
+              'auth.login.formDescription',
+              'Use an existing starter account.',
+            )}
           </p>
         </div>
 
@@ -64,7 +73,11 @@ export function LoginPage() {
           </p>
         ) : null}
 
-        <Field label="Email" error={vm.form.fieldErrors.email} required>
+        <Field
+          label={tDefault('auth.login.email', 'Email')}
+          error={vm.form.fieldErrors.email}
+          required
+        >
           <Input
             autoComplete="email"
             value={vm.form.values.email}
@@ -75,7 +88,11 @@ export function LoginPage() {
           />
         </Field>
 
-        <Field label="Password" error={vm.form.fieldErrors.password} required>
+        <Field
+          label={tDefault('auth.login.password', 'Password')}
+          error={vm.form.fieldErrors.password}
+          required
+        >
           <Input
             autoComplete="current-password"
             value={vm.form.values.password}
@@ -87,11 +104,13 @@ export function LoginPage() {
         </Field>
 
         <Button disabled={vm.form.isSubmitting} type="submit">
-          {vm.form.isSubmitting ? 'Signing in...' : 'Sign in'}
+          {vm.form.isSubmitting
+            ? tDefault('auth.login.submitting', 'Signing in...')
+            : tDefault('auth.login.submit', 'Sign in')}
         </Button>
 
         <Link className={buttonVariants({ variant: 'ghost' })} to="/register">
-          Create account
+          {tDefault('auth.login.createAccount', 'Create account')}
         </Link>
       </form>
     </section>

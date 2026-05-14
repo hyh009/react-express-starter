@@ -111,3 +111,7 @@ agent_docs:
     - name: frontend-shared-feedback-ui
       path: docs/agent/frontend/shared-feedback-ui.md
       use_when: Adding or updating frontend toast, modal, or confirm feedback behavior.
+
+    - name: frontend-i18n
+      path: docs/agent/frontend/i18n.md
+      use_when: Adding or changing frontend i18n strings, language switching, or locale resources.

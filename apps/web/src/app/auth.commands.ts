@@ -4,6 +4,7 @@ import {
   hasApiErrorCode,
   isApiError,
 } from '@/api/apiError';
+import { tDefault } from '@/app/i18n';
 import { createAuthActions } from '@/features/auth/actions/auth.actions';
 import { authStore } from '@/app/stores/auth.store';
 import { authService } from '@/services/auth.service';
@@ -57,7 +58,10 @@ export const authCommands = {
     } catch (error) {
       const result: AuthSubmitFailureResult = mapAuthSubmitError(
         error,
-        'Invalid email or password.',
+        tDefault(
+          'auth.errors.invalidCredentials',
+          'Invalid email or password.',
+        ),
       );
 
       return result;
@@ -75,7 +79,10 @@ export const authCommands = {
     } catch (error) {
       const result: AuthSubmitFailureResult = mapAuthSubmitError(
         error,
-        'Could not create this account.',
+        tDefault(
+          'auth.errors.registerFailed',
+          'Could not create this account.',
+        ),
       );
 
       return result;
@@ -118,9 +125,15 @@ function mapAuthSubmitError(
   if (hasApiErrorCode(error, 'USER_ALREADY_EXISTS')) {
     return {
       status: 'failed',
-      message: 'An account with this email already exists.',
+      message: tDefault(
+        'auth.errors.accountExists',
+        'An account with this email already exists.',
+      ),
       fieldErrors: {
-        email: 'This email is already registered.',
+        email: tDefault(
+          'auth.errors.emailRegistered',
+          'This email is already registered.',
+        ),
       },
     };
   }
@@ -128,7 +141,10 @@ function mapAuthSubmitError(
   if (hasApiErrorCode(error, 'INVALID_CREDENTIALS')) {
     return {
       status: 'failed',
-      message: 'Invalid email or password.',
+      message: tDefault(
+        'auth.errors.invalidCredentials',
+        'Invalid email or password.',
+      ),
     };
   }
 
@@ -137,7 +153,10 @@ function mapAuthSubmitError(
   if (validationDetails.length > 0) {
     return {
       status: 'failed',
-      message: 'Check the highlighted fields and try again.',
+      message: tDefault(
+        'auth.validation.submitInvalid',
+        'Check the highlighted fields and try again.',
+      ),
       fieldErrors: Object.fromEntries(
         validationDetails.map((detail) => [detail.path, detail.message]),
       ) as Partial<Record<keyof RegisterRequest, string>>,
@@ -147,7 +166,10 @@ function mapAuthSubmitError(
   if (isApiError(error) && getApiFailureReason(error) === 'network') {
     return {
       status: 'failed',
-      message: 'Cannot reach the API server.',
+      message: tDefault(
+        'auth.errors.apiUnreachable',
+        'Cannot reach the API server.',
+      ),
     };
   }
 

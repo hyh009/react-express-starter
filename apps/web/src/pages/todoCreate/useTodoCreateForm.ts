@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { todoPriorities, todoStatuses } from '@repo/shared';
+import { tDefault } from '@/app/i18n';
 import type { TodoPriority, TodoStatus } from '@/models/todo.types';
 
 export type TodoCreateFormValues = {
@@ -63,11 +64,17 @@ export function useTodoCreateForm() {
       const errors: TodoCreateFieldErrors = {};
 
       if (!values.title.trim()) {
-        errors.title = 'Title is required.';
+        errors.title = tDefault(
+          'todo.validation.titleRequired',
+          'Title is required.',
+        );
       }
 
       if (!values.ownerName.trim()) {
-        errors.ownerName = 'Owner is required.';
+        errors.ownerName = tDefault(
+          'todo.validation.ownerRequired',
+          'Owner is required.',
+        );
       }
 
       setFieldErrors(errors);

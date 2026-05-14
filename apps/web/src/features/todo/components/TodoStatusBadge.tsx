@@ -1,4 +1,5 @@
-import { todoModel } from '@/models/todo.model';
+import { useAppTranslation } from '@/app/i18n';
+import { getTodoStatusLabel } from '@/app/i18n/todoLabels';
 import { cn } from '@/shared/utils/cn';
 import type { TodoStatus } from '@/models/todo.types';
 
@@ -13,6 +14,9 @@ const statusClassName: Record<TodoStatus, string> = {
 };
 
 export function TodoStatusBadge({ status }: TodoStatusBadgeProps) {
+  const { tDefault } = useAppTranslation();
+  const label = getTodoStatusLabel(tDefault, status);
+
   return (
     <span
       className={cn(
@@ -20,7 +24,7 @@ export function TodoStatusBadge({ status }: TodoStatusBadgeProps) {
         statusClassName[status],
       )}
     >
-      {todoModel.getStatusLabel(status)}
+      {label}
     </span>
   );
 }
