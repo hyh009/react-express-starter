@@ -26,16 +26,24 @@ export const passwordSchema = z
   .regex(/[A-Z]/, passwordRuleMessage)
   .regex(/[0-9]/, passwordRuleMessage);
 
+const normalizedEmailSchema = z.preprocess(
+  (value) => (typeof value === 'string' ? value.trim().toLowerCase() : value),
+  z.email(),
+);
+
 export const registerSchema = z.object({
-  email: z.email().trim().toLowerCase(),
-  username: z.string().trim().min(1).max(60),
+  email: normalizedEmailSchema,
+  username: z.preprocess(
+    (value) => (typeof value === 'string' ? value.trim() : value),
+    z.string().min(1).max(60),
+  ),
   password: passwordSchema,
 });
 
 export type RegisterRequest = z.infer<typeof registerSchema>;
 
 export const loginSchema = z.object({
-  email: z.email().trim().toLowerCase(),
+  email: normalizedEmailSchema,
   password: z.string().min(1),
 });
 

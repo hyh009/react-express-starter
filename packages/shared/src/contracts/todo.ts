@@ -15,12 +15,22 @@ export type TodoDto = {
   owner_name: string;
 };
 
+const trimmedRequiredStringSchema = z.preprocess(
+  (value) => (typeof value === 'string' ? value.trim() : value),
+  z.string().min(1),
+);
+
+const trimmedOptionalNullableStringSchema = z.preprocess(
+  (value) => (typeof value === 'string' ? value.trim() : value),
+  z.string().nullable().optional(),
+);
+
 export const createTodoSchema = z.object({
-  title: z.string().trim().min(1),
-  description: z.string().trim().nullable().optional(),
+  title: trimmedRequiredStringSchema,
+  description: trimmedOptionalNullableStringSchema,
   status: z.enum(todoStatuses),
   priority: z.enum(todoPriorities),
-  owner_name: z.string().trim().min(1),
+  owner_name: trimmedRequiredStringSchema,
 });
 
 export type CreateTodoRequest = z.infer<typeof createTodoSchema>;

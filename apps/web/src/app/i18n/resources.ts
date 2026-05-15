@@ -92,8 +92,13 @@ const manualResources: Resource = {
         },
         validation: {
           confirmPasswordRequired: '請輸入確認密碼。',
+          emailInvalid: '請輸入有效的 Email。',
+          emailRequired: '請輸入 Email。',
+          passwordRequired: '請輸入密碼。',
+          passwordRule: '至少 8 個字元，並包含英文大小寫字母和數字。',
           passwordsDoNotMatch: '密碼不一致。',
           submitInvalid: '請檢查標示欄位後再試一次。',
+          usernameRequired: '請輸入使用者名稱。',
         },
       },
       common: {
@@ -210,7 +215,10 @@ const manualResources: Resource = {
           validationFailed: '請檢查表單後再試一次。',
         },
         validation: {
+          descriptionInvalid: '請輸入有效的描述。',
           ownerRequired: '請輸入負責人。',
+          priorityInvalid: '請選擇有效的優先度。',
+          statusInvalid: '請選擇有效的狀態。',
           titleRequired: '請輸入標題。',
         },
       },

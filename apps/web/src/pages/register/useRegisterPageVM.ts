@@ -18,7 +18,25 @@ type RegisterFormValidationResult =
       fieldErrors: RegisterFieldErrors;
     };
 
-function validateRegisterForm(
+function getRegisterFieldError(fieldName: 'email' | 'password' | 'username') {
+  if (fieldName === 'email') {
+    return tDefault('auth.validation.emailInvalid', 'Enter a valid email.');
+  }
+
+  if (fieldName === 'username') {
+    return tDefault(
+      'auth.validation.usernameRequired',
+      'Username is required.',
+    );
+  }
+
+  return tDefault(
+    'auth.validation.passwordRule',
+    'Use at least 8 characters with uppercase, lowercase, and a number.',
+  );
+}
+
+export function validateRegisterForm(
   form: RegisterFormValues,
 ): RegisterFormValidationResult {
   const errors: RegisterFieldErrors = {};
@@ -34,7 +52,7 @@ function validateRegisterForm(
         fieldName === 'username' ||
         fieldName === 'password'
       ) {
-        errors[fieldName] ??= issue.message;
+        errors[fieldName] ??= getRegisterFieldError(fieldName);
       }
     }
   }

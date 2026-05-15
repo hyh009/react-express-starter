@@ -66,23 +66,26 @@ export function useTodoCreatePageVM({ onCreated }: UseTodoCreatePageVMOptions) {
     createTodoCreatePageContext,
   );
   const form = useTodoCreateForm();
-  const { reset, setSubmitError, validate, values } = form;
+  const { reset, setSubmitError, validate } = form;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const createTodo = useCallback(
     async function createTodo() {
-      if (!validate()) {
+      const validation = validate();
+
+      if (!validation.success) {
+        setSubmitError(
+          tDefault(
+            'todo.create.validationError',
+            'Check the highlighted fields and try again.',
+          ),
+        );
         return;
       }
 
       setIsSubmitting(true);
 
-      const result = await commands.createTodo({
-        ...values,
-        description: values.description.trim(),
-        ownerName: values.ownerName.trim(),
-        title: values.title.trim(),
-      });
+      const result = await commands.createTodo(validation.todo);
 
       setIsSubmitting(false);
       showCreateTodoToast(result);
@@ -97,7 +100,7 @@ export function useTodoCreatePageVM({ onCreated }: UseTodoCreatePageVMOptions) {
         tDefault('todo.create.submitError', 'Could not create todo.'),
       );
     },
-    [commands, onCreated, reset, setSubmitError, validate, values],
+    [commands, onCreated, reset, setSubmitError, validate],
   );
 
   return {
