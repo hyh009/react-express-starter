@@ -62,7 +62,8 @@ Repository
   v
 Domain mapper
   |
-  +--> Entity -> public DTO
+  +--> Entity -> public resource DTO
+  +--> simple action responses may be assembled in services
   |
   v
 Response
@@ -110,7 +111,7 @@ Business logic
 Domain and MongoDB models
   -> src/models/<domain>
 
-Domain entity-to-DTO mapping
+Domain resource DTO mapping
   -> src/models/<domain>/mapper.ts
 
 Data access

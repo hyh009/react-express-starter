@@ -1,4 +1,4 @@
-import { toDeleteTodoResponse, toTodoDto } from '@src/models/todo/mapper';
+import { toTodoDto } from '@src/models/todo/mapper';
 import { todoRepository } from '@src/repositories/todo/repository';
 import { ERROR_CODES } from '@src/utils/errorCode';
 import { NotFoundError } from '@src/utils/errors';
@@ -52,7 +52,9 @@ export class TodoService {
       throw createTodoNotFoundError();
     }
 
-    return toDeleteTodoResponse(deletedTodo);
+    return {
+      id: deletedTodo.id,
+    };
   }
 }
 

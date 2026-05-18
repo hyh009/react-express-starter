@@ -1,7 +1,7 @@
-import type { AuthUser } from '@repo/shared';
+import type { AuthUserDto } from '@repo/shared';
 import type { UserEntity } from '@src/models/user/model';
 
-export function toAuthUser(user: UserEntity): AuthUser {
+export function toAuthUserDto(user: UserEntity): AuthUserDto {
   return {
     id: user.id,
     email: user.email,

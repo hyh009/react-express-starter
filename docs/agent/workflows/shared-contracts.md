@@ -34,7 +34,7 @@ Keep backend internals out of shared:
 - Request body types use action names such as `CreateTodoRequest` or `UpdateTodoRequest`.
 - Endpoint-specific response data types use action names such as `DeleteTodoResponse`.
 - Keep backend entity types out of shared even when the DTO fields currently match the entity fields.
-- Keep entity-to-DTO mapper functions in the API domain mapper, named after the target contract such as `toTodoDto`.
+- Keep resource DTO mapper functions in the API domain mapper, named after the target contract such as `toTodoDto` or `toAuthUserDto`.
 
 ## Build Output
 
