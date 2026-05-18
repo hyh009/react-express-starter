@@ -1,3 +1,4 @@
+import { toDeleteTodoResponse, toTodoDto } from '@src/models/todo/mapper';
 import { todoRepository } from '@src/repositories/todo/repository';
 import { ERROR_CODES } from '@src/utils/errorCode';
 import { NotFoundError } from '@src/utils/errors';
@@ -13,7 +14,9 @@ function createTodoNotFoundError() {
 
 export class TodoService {
   public async listTodos() {
-    return todoRepository.list();
+    const todos = await todoRepository.list();
+
+    return todos.map(toTodoDto);
   }
 
   public async getTodo(todoId: string) {
@@ -23,11 +26,13 @@ export class TodoService {
       throw createTodoNotFoundError();
     }
 
-    return todo;
+    return toTodoDto(todo);
   }
 
   public async createTodo(input: CreateTodoInput) {
-    return todoRepository.create(input);
+    const todo = await todoRepository.create(input);
+
+    return toTodoDto(todo);
   }
 
   public async updateTodo(todoId: string, input: UpdateTodoInput) {
@@ -37,7 +42,7 @@ export class TodoService {
       throw createTodoNotFoundError();
     }
 
-    return todo;
+    return toTodoDto(todo);
   }
 
   public async deleteTodo(todoId: string) {
@@ -47,7 +52,7 @@ export class TodoService {
       throw createTodoNotFoundError();
     }
 
-    return deletedTodo;
+    return toDeleteTodoResponse(deletedTodo);
   }
 }
 

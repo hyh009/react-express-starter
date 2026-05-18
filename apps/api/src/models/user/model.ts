@@ -13,19 +13,3 @@ export type UserEntity = {
   createdAt: Date;
   updatedAt: Date;
 };
-
-export type PublicUser = {
-  id: string;
-  email: string;
-  username: string;
-  roles: UserRole[];
-};
-
-export function toPublicUser(user: UserEntity): PublicUser {
-  return {
-    id: user.id,
-    email: user.email,
-    username: user.username,
-    roles: [...user.roles],
-  };
-}

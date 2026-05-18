@@ -60,6 +60,11 @@ Repository
   +--> MongoDB model
   |
   v
+Domain mapper
+  |
+  +--> Entity -> public DTO
+  |
+  v
 Response
 ```
 
@@ -105,6 +110,9 @@ Business logic
 Domain and MongoDB models
   -> src/models/<domain>
 
+Domain entity-to-DTO mapping
+  -> src/models/<domain>/mapper.ts
+
 Data access
   -> src/repositories/<domain>
 
@@ -130,6 +138,7 @@ apps/api/
     models/
       <domain>/
         model.ts
+        mapper.ts
         mongo.ts
     repositories/
       <domain>/
